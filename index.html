@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FlowNarrate: Power Platform, narrated clearly</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #FAFAF7;
+    --ink: #1A1A17;
+    --ink-soft: #5C5C54;
+    --rule: #D8D6CC;
+    --succeeded: #2F6B3F;
+    --warning: #A66A1E;
+    --failed: #9E3B32;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Source Serif 4', serif;
+    font-size:17px;
+    line-height:1.65;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:inherit;}
+
+  nav{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:26px 56px;
+    border-bottom:1px solid var(--rule);
+  }
+  .brand{
+    font-family:'JetBrains Mono',monospace;
+    font-size:1rem;font-weight:600;
+    letter-spacing:0.02em;
+  }
+  .brand .dot{color:var(--succeeded);}
+  nav ul{display:flex;gap:34px;list-style:none;}
+  nav ul li a{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.8rem;text-decoration:none;color:var(--ink-soft);
+    text-transform:uppercase;letter-spacing:0.06em;
+  }
+  nav ul li a:hover{color:var(--ink);}
+
+  .hero{
+    padding:70px 56px 60px;
+    max-width:1100px;
+  }
+  .status-line{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    margin-bottom:26px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .status-dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--succeeded);
+    display:inline-block;
+  }
+  h1{
+    font-weight:500;
+    font-size:clamp(2.1rem, 4.4vw, 3.4rem);
+    line-height:1.18;
+    max-width:760px;
+    letter-spacing:-0.01em;
+  }
+  h1 .accent{color:var(--succeeded);font-style:italic;}
+  .hero p.sub{
+    margin-top:24px;
+    max-width:540px;
+    font-size:1.08rem;
+    color:var(--ink-soft);
+  }
+  .hero-ctas{
+    margin-top:36px;
+    display:flex;gap:14px;flex-wrap:wrap;
+  }
+  .btn{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.82rem;font-weight:500;
+    padding:12px 22px;
+    text-decoration:none;
+    display:inline-block;
+    letter-spacing:0.02em;
+  }
+  .btn-primary{background:var(--ink);color:var(--paper);}
+  .btn-primary:hover{background:var(--succeeded);}
+  .btn-secondary{border:1px solid var(--ink);color:var(--ink);}
+  .btn-secondary:hover{border-color:var(--ink-soft);color:var(--ink-soft);}
+
+  /* Signature: real flowchart diagram narrated below */
+  .flowchart{
+    margin-top:64px;
+    border:1px solid var(--rule);
+    padding:44px 40px;
+    background:
+      linear-gradient(var(--rule) 1px, transparent 1px),
+      linear-gradient(90deg, var(--rule) 1px, transparent 1px);
+    background-size:24px 24px;
+    background-color: #FCFCFA;
+  }
+  .fc-label{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.72rem;color:var(--ink-soft);
+    text-transform:uppercase;letter-spacing:0.08em;
+    margin-bottom:24px;
+  }
+  svg{overflow:visible;display:block;max-width:100%;}
+  .fc-node-text{font-family:'JetBrains Mono',monospace;font-size:12px;fill:var(--ink);}
+  .fc-connector{stroke:var(--ink-soft);stroke-width:1.2;fill:none;}
+  .narration{
+    margin-top:30px;
+    padding-top:26px;
+    border-top:1px dashed var(--rule);
+    font-size:1.05rem;
+    max-width:680px;
+  }
+  .narration .mark{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.75rem;
+    color:var(--succeeded);
+    display:block;margin-bottom:8px;
+  }
+
+  section{padding:72px 56px;border-bottom:1px solid var(--rule);}
+  .section-head{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    margin-bottom:40px;flex-wrap:wrap;gap:12px;
+  }
+  .section-head .num{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.78rem;color:var(--ink-soft);
+  }
+  .section-head h2{
+    font-weight:500;font-size:1.7rem;margin-top:6px;
+  }
+  .section-head p{color:var(--ink-soft);font-size:0.92rem;max-width:380px;font-family:'JetBrains Mono',monospace;line-height:1.5;}
+
+  .pillars{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    border-top:1px solid var(--rule);
+    border-left:1px solid var(--rule);
+  }
+  .pillar{
+    border-right:1px solid var(--rule);
+    border-bottom:1px solid var(--rule);
+    padding:28px 24px;
+  }
+  .pillar .tag{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.72rem;color:var(--succeeded);
+  }
+  .pillar h3{
+    font-weight:500;font-size:1.15rem;margin:10px 0 8px;
+  }
+  .pillar p{color:var(--ink-soft);font-size:0.9rem;}
+
+  .credentials{
+    display:flex;gap:56px;flex-wrap:wrap;align-items:center;
+  }
+  .credentials .credtext{flex:1;min-width:280px;}
+  .credentials h2{font-weight:500;font-size:1.5rem;margin-bottom:14px;}
+  .credentials p{color:var(--ink-soft);max-width:460px;}
+  .badges{display:flex;gap:14px;flex-wrap:wrap;}
+  .badge{
+    border:1px solid var(--ink);
+    padding:14px 18px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.78rem;
+    min-width:140px;
+  }
+  .badge .num{font-size:1.2rem;font-weight:600;display:block;margin-bottom:4px;color:var(--succeeded);}
+
+  .posts{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:1px;background:var(--rule);
+    border:1px solid var(--rule);
+  }
+  .post{background:var(--paper);padding:24px;}
+  .post .meta{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.68rem;color:var(--ink-soft);
+    text-transform:uppercase;letter-spacing:0.05em;
+    margin-bottom:12px;
+  }
+  .post h3{font-weight:500;font-size:1.08rem;margin-bottom:8px;line-height:1.35;}
+  .post p{color:var(--ink-soft);font-size:0.88rem;}
+
+  footer{
+    padding:34px 56px;
+    display:flex;justify-content:space-between;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.75rem;color:var(--ink-soft);
+    flex-wrap:wrap;gap:10px;
+  }
+
+  @media(max-width:640px){
+    nav, .hero, section, footer{padding-left:22px;padding-right:22px;}
+    nav ul{gap:18px;}
+    .flowchart{padding:28px 18px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">flow<span class="dot">·</span>narrate</div>
+  <ul>
+    <li><a href="#pillars">Read</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#">Training</a></li>
+  </ul>
+</nav>
+
+<section class="hero" style="border-bottom:none;">
+  <div class="status-line"><span class="status-dot"></span>SUCCEEDED · this flow ran without errors</div>
+  <h1>You can build a flow.<br>Can you <span class="accent">explain</span> it six months later?</h1>
+  <p class="sub">FlowNarrate takes real Power Automate flows and D365 configurations and writes down what most builders skip: the reasoning behind each step. Written by an AB-100 certified consultant and Microsoft Certified Trainer.</p>
+  <div class="hero-ctas">
+    <a href="#pillars" class="btn btn-primary">Read the first narration →</a>
+    <a href="#about" class="btn btn-secondary">Why this exists</a>
+  </div>
+
+  <div class="flowchart">
+    <div class="fc-label">Example, narrated below</div>
+    <svg width="640" height="140" viewBox="0 0 640 140">
+      <!-- trigger -->
+      <rect x="0" y="50" width="130" height="40" fill="none" stroke="#1A1A17" stroke-width="1.3"/>
+      <text x="65" y="74" text-anchor="middle" class="fc-node-text">Record created</text>
+      <!-- connector -->
+      <path d="M130,70 L175,70" class="fc-connector"/>
+      <polygon points="175,70 168,66 168,74" fill="#5C5C54"/>
+      <!-- decision diamond -->
+      <polygon points="245,40 315,70 245,100 175,70" fill="none" stroke="#1A1A17" stroke-width="1.3"/>
+      <text x="245" y="74" text-anchor="middle" class="fc-node-text">Priority = urgent?</text>
+      <!-- connector to yes -->
+      <path d="M315,70 L360,70" class="fc-connector"/>
+      <polygon points="360,70 353,66 353,74" fill="#5C5C54"/>
+      <text x="330" y="58" class="fc-node-text" font-size="10" fill="#2F6B3F">yes</text>
+      <!-- action yes -->
+      <rect x="360" y="50" width="140" height="40" fill="none" stroke="#2F6B3F" stroke-width="1.3"/>
+      <text x="430" y="74" text-anchor="middle" class="fc-node-text" fill="#2F6B3F">Route to on-call</text>
+      <!-- connector to no (down) -->
+      <path d="M245,100 L245,120 L360,120" class="fc-connector"/>
+      <polygon points="360,120 353,116 353,124" fill="#5C5C54"/>
+      <text x="270" y="115" class="fc-node-text" font-size="10" fill="#A66A1E">no</text>
+      <!-- action no -->
+      <rect x="360" y="102" width="140" height="36" fill="none" stroke="#A66A1E" stroke-width="1.3"/>
+      <text x="430" y="124" text-anchor="middle" class="fc-node-text" fill="#A66A1E">Add to standard queue</text>
+    </svg>
+
+    <div class="narration">
+      <span class="mark">→ narrated</span>
+      "When a new case comes in, the flow checks its priority. Urgent cases skip the queue and go straight to whoever's on call, and everything else waits its turn. The branch nobody documented: what counts as 'urgent' is a single dropdown value, set once, three departments ago."
+    </div>
+  </div>
+</section>
+
+<section id="pillars">
+  <div class="section-head">
+    <div>
+      <div class="num">01</div>
+      <h2>What gets narrated here</h2>
+    </div>
+    <p>SIX RECURRING FORMATS<br>EACH SOLVING A DIFFERENT DOCUMENTATION GAP</p>
+  </div>
+  <div class="pillars">
+    <div class="pillar">
+      <div class="tag">FLOW NARRATIONS</div>
+      <h3>Real flows, walked step by step</h3>
+      <p>What each action does and why it's there, using actual, anonymized flows.</p>
+    </div>
+    <div class="pillar">
+      <div class="tag">D365 EXPLAINERS</div>
+      <h3>Features explained for users</h3>
+      <p>Written for the people who use these systems daily, not the people who built them.</p>
+    </div>
+    <div class="pillar">
+      <div class="tag">CERTIFICATION CORNER</div>
+      <h3>AB-100 study notes</h3>
+      <p>Exam guidance from someone who actively teaches this material as an MCT.</p>
+    </div>
+    <div class="pillar">
+      <div class="tag">CASE STUDIES</div>
+      <h3>Problem, solution, outcome</h3>
+      <p>Real business problems, the flow or D365 fix, and what changed afterward.</p>
+    </div>
+    <div class="pillar">
+      <div class="tag">QUICK TIPS</div>
+      <h3>One idea, five minutes</h3>
+      <p>A single trick or setting, explained without the padding.</p>
+    </div>
+    <div class="pillar">
+      <div class="tag">AGENTIC AI</div>
+      <h3>Copilot Studio, narrated</h3>
+      <p>Multi-agent design and orchestration explained the same way as any other flow: what each agent does and why it's handing off.</p>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="credentials">
+    <div class="credtext">
+      <h2>Written by someone who has to explain this for a living</h2>
+      <p>Simone Palmer-Thompson is a Microsoft AI and Power Platform Solutions Architect: Agentic AI Architect (AB-100), Microsoft Certified Trainer, and Power Platform Functional Consultant (PL-200). Current work spans Dynamics 365 and Dataverse architecture, Copilot Studio multi-agent design, and building Power Platform governance frameworks (CoE, ALM, RBAC) for large public-sector environments. Previously a Lecturer in Digital and Cyber Technologies, authoring the technical curricula this blog's teaching voice comes from.</p>
+    </div>
+    <div class="badges">
+      <div class="badge"><span class="num">AB-100</span>Agentic AI Architect</div>
+      <div class="badge"><span class="num">MCT</span>Microsoft Certified Trainer</div>
+      <div class="badge"><span class="num">PL-200</span>Functional Consultant</div>
+    </div>
+  </div>
+</section>
+
+<section style="border-bottom:none;">
+  <div class="section-head">
+    <div>
+      <div class="num">02</div>
+      <h2>Start here</h2>
+    </div>
+    <p>THE FIRST FIVE POSTS</p>
+  </div>
+  <div class="posts">
+    <div class="post">
+      <div class="meta">Origin</div>
+      <h3>What is FlowNarrate?</h3>
+      <p>Why automation logic deserves to be told as clearly as it was built.</p>
+    </div>
+    <div class="post">
+      <div class="meta">Flow Narration</div>
+      <h3>Narrating a real approval flow, step by step</h3>
+      <p>A moderately complex flow, documented the way it should have been from day one.</p>
+    </div>
+    <div class="post">
+      <div class="meta">Opinion</div>
+      <h3>5 Power Automate mistakes I see constantly as an MCT</h3>
+      <p>Patterns that show up in nearly every training cohort.</p>
+    </div>
+    <div class="post">
+      <div class="meta">Certification Corner</div>
+      <h3>AB-100: what the exam actually tests</h3>
+      <p>Grounded in what shows up in practice, not just the objectives list.</p>
+    </div>
+    <div class="post">
+      <div class="meta">D365 Explainer</div>
+      <h3>The D365 feature everyone configures wrong</h3>
+      <p>A commonly misunderstood setting, narrated plainly.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>flownarrate.com</div>
+  <div>AB-100 Certified · Microsoft Certified Trainer</div>
+</footer>
+
+</body>
+</html>
