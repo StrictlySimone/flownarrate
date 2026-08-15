@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+  (function(){
+    try {
+      var saved = localStorage.getItem('flownarrate-theme');
+      if (saved === 'dark' || saved === 'light') {
+        document.documentElement.setAttribute('data-theme', saved);
+      }
+    } catch(e) { /* localStorage unavailable, fall back to OS preference via CSS */ }
+  })();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<title>FlowNarrate: Power Platform, narrated clearly</title>
+<meta name="description" content="Real Power Automate flows, D365 configurations, and Power Platform patterns explained in plain English, by an AB-100 certified consultant and Microsoft Certified Trainer.">
+<link rel="canonical" href="https://flownarrate.com/">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="FlowNarrate">
+<meta property="og:title" content="FlowNarrate: Power Platform, narrated clearly">
+<meta property="og:description" content="Real Power Automate flows, D365 configurations, and Power Platform patterns explained in plain English, by an AB-100 certified consultant and Microsoft Certified Trainer.">
+<meta property="og:url" content="https://flownarrate.com/">
+<meta property="og:image" content="https://flownarrate.com/images/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="FlowNarrate: Power Platform, narrated clearly">
+<meta name="twitter:description" content="Real Power Automate flows, D365 configurations, and Power Platform patterns explained in plain English, by an AB-100 certified consultant and Microsoft Certified Trainer.">
+<meta name="twitter:image" content="https://flownarrate.com/images/og-image.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #FBF3F0;
+    --panel: #FFFBF9;
+    --ink: #311847;
+    --ink-soft: #6B5877;
+    --rule: #E3D3DC;
+    --succeeded: #A01A7D;
+    --accent-hover: #A01A7D;
+    --bronze: #E09F7D;
+    --pink: #EF5D60;
+    --magenta: #EC4067;
+    --plum: #A01A7D;
+    --amethyst: #311847;
+    --warning: #A66A1E;
+    --failed: #9E3B32;
+  }
+  [data-theme="dark"]{
+    --paper: #1C1024;
+    --panel: #241531;
+    --ink: #F3E9EF;
+    --ink-soft: #C9AFC0;
+    --rule: #4A2F5E;
+    --succeeded: #F1728C;
+    --accent-hover: #EF5D60;
+    --warning: #E0A455;
+    --failed: #E2564A;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper: #1C1024;
+      --panel: #241531;
+      --ink: #F3E9EF;
+      --ink-soft: #C9AFC0;
+      --rule: #4A2F5E;
+      --succeeded: #F1728C;
+      --accent-hover: #EF5D60;
+      --warning: #E0A455;
+      --failed: #E2564A;
+    }
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Source Serif 4', serif;
+    font-size:17px;
+    line-height:1.65;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:inherit;}
+
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible{
+    outline:2px solid var(--succeeded);
+    outline-offset:2px;
+  }
+  .skip-link{
+    position:absolute;left:-9999px;top:0;
+    background:var(--ink);color:var(--paper);
+    padding:12px 20px;z-index:100;
+    font-family:'JetBrains Mono',monospace;font-size:0.85rem;
+    text-decoration:none;
+  }
+  .skip-link:focus{left:12px;top:12px;}
+  .sr-only{
+    position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+    overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
+  }
+
+  .mermaid-toggle{margin-top:22px;border-top:1px dashed var(--rule);padding-top:16px;}
+  .mermaid-toggle summary{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.78rem;color:var(--succeeded);
+    cursor:pointer;
+  }
+  .mermaid-code{
+    margin-top:12px;
+    background:#1A1A17;
+    color:#E8E6D8;
+    padding:14px 16px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.78rem;
+    line-height:1.6;
+    overflow-x:auto;
+    white-space:pre;
+  }
+  .copy-btn{
+    margin-top:10px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.75rem;
+    background:none;
+    border:1px solid var(--ink);
+    color:var(--ink);
+    padding:8px 14px;
+    cursor:pointer;
+  }
+  .copy-btn:hover{background:var(--ink);color:var(--paper);}
+
+  .expr-tool{
+    border:1px solid var(--rule);
+    padding:32px;
+    background:var(--panel);
+    max-width:720px;
+  }
+  .expr-field{margin-bottom:20px;}
+  .expr-field label, .expr-output label{
+    display:block;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.75rem;
+    color:var(--ink-soft);
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    margin-bottom:8px;
+  }
+  .expr-field select{
+    width:100%;
+    padding:12px;
+    font-family:'Source Serif 4',serif;
+    font-size:1rem;
+    border:1px solid var(--ink);
+    background:var(--paper);
+    color:var(--ink);
+  }
+  .expr-inputs{
+    display:grid;
+    gap:16px;
+    margin-bottom:24px;
+  }
+  .expr-inputs .expr-row label{
+    display:block;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.72rem;
+    color:var(--ink-soft);
+    margin-bottom:6px;
+  }
+  .expr-inputs .expr-row input{
+    width:100%;
+    padding:10px 12px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.9rem;
+    border:1px solid var(--rule);
+    background:var(--paper);
+    color:var(--ink);
+  }
+  .expr-note{
+    margin-top:18px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.75rem;
+    color:var(--ink-soft);
+    max-width:520px;
+  }
+
+  .filter-rows{display:grid;gap:12px;margin:20px 0;}
+  .filter-row{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr auto;
+    gap:8px;
+    align-items:center;
+  }
+  .filter-row input, .filter-row select{
+    padding:9px 10px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.85rem;
+    border:1px solid var(--rule);
+    background:var(--paper);
+    color:var(--ink);
+  }
+  .filter-row .remove-row{
+    background:none;
+    border:1px solid var(--rule);
+    color:var(--ink-soft);
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.85rem;
+    padding:8px 10px;
+    cursor:pointer;
+  }
+  .filter-row .remove-row:hover{border-color:#9E3B32;color:#9E3B32;}
+  @media(max-width:640px){
+    .filter-row{grid-template-columns:1fr;}
+  }
+
+  .tools-card{
+    border:1px solid var(--rule);
+    padding:36px;
+    background:var(--panel);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:32px;
+    flex-wrap:wrap;
+  }
+  .tools-card p{color:var(--ink-soft);max-width:480px;}
+
+  nav{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:26px 56px;
+    border-bottom:1px solid var(--rule);
+  }
+  .brand{
+    font-family:'JetBrains Mono',monospace;
+    font-size:1rem;font-weight:600;
+    letter-spacing:0.02em;
+  }
+  .brand .dot{color:var(--succeeded);}
+  nav ul{display:flex;gap:34px;list-style:none;}
+  nav ul li a{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.8rem;text-decoration:none;color:var(--ink-soft);
+    text-transform:uppercase;letter-spacing:0.06em;
+  }
+  nav ul li a:hover{color:var(--ink);}
+  .theme-toggle{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.8rem;
+    color:var(--ink-soft);
+    background:none;
+    border:1px solid var(--rule);
+    padding:6px 12px;
+    cursor:pointer;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+  }
+  .theme-toggle:hover{color:var(--ink);border-color:var(--ink-soft);}
+  body{transition:background-color .15s ease, color .15s ease;}
+  @media (prefers-reduced-motion: reduce){ body{transition:none;} }
+
+  .hero{
+    padding:56px 56px 0;
+    max-width:1240px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:40px;
+    align-items:start;
+  }
+  .hero-text{padding-top:14px;}
+  .status-line{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    margin-bottom:26px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .status-dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--succeeded);
+    display:inline-block;
+  }
+  h1{
+    font-weight:500;
+    font-size:clamp(2.1rem, 4.4vw, 3.4rem);
+    line-height:1.18;
+    max-width:760px;
+    letter-spacing:-0.01em;
+  }
+  h1 .accent{color:var(--magenta, #EC4067);font-style:italic;}
+  .hero p.sub{
+    margin-top:24px;
+    max-width:440px;
+    font-size:1.06rem;
+    color:var(--ink-soft);
+  }
+  .hero-ctas{
+    margin-top:36px;
+    display:flex;gap:14px;flex-wrap:wrap;
+  }
+  .btn{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.82rem;font-weight:500;
+    padding:12px 22px;
+    text-decoration:none;
+    display:inline-block;
+    letter-spacing:0.02em;
+  }
+  .btn-primary{background:var(--ink);color:var(--paper);}
+  .btn-primary:hover{background:var(--succeeded);}
+  .btn-secondary{border:1px solid var(--ink);color:var(--ink);}
+  .btn-secondary:hover{border-color:var(--ink-soft);color:var(--ink-soft);}
+
+  /* Signature: real flowchart diagram narrated below */
+  .flowchart{
+    border:1px solid var(--rule);
+    padding:32px 26px;
+    background:
+      linear-gradient(var(--rule) 1px, transparent 1px),
+      linear-gradient(90deg, var(--rule) 1px, transparent 1px);
+    background-size:24px 24px;
+    background-color: var(--panel);
+    margin-top:6px;
+  }
+  .fc-label{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.72rem;color:var(--ink-soft);
+    text-transform:uppercase;letter-spacing:0.08em;
+    margin-bottom:24px;
+  }
+  svg{overflow:visible;display:block;max-width:100%;}
+  .fc-node-text{font-family:'JetBrains Mono',monospace;font-size:12px;fill:var(--ink);}
+  .fc-connector{stroke:var(--ink-soft);stroke-width:1.2;fill:none;}
+  .narration{
+    margin-top:30px;
+    padding-top:26px;
+    border-top:1px dashed var(--rule);
+    font-size:1.05rem;
+    max-width:680px;
+  }
+  .narration .mark{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.75rem;
+    color:var(--succeeded);
+    display:block;margin-bottom:8px;
+  }
+
+  section{padding:72px 56px;border-bottom:1px solid var(--rule);}
+  .section-head{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    margin-bottom:40px;flex-wrap:wrap;gap:12px;
+  }
+  .section-head .num{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.78rem;color:var(--ink-soft);
+  }
+  .section-head h2{
+    font-weight:500;font-size:1.7rem;margin-top:6px;
+  }
+  .section-head p{color:var(--ink-soft);font-size:0.92rem;max-width:380px;font-family:'JetBrains Mono',monospace;line-height:1.5;}
+
+  .manifest{border-top:1px solid var(--rule);}
+  .mrow{
+    padding:26px 0;
+    border-bottom:1px solid var(--rule);
+  }
+  .mbody h3{
+    font-weight:500;font-size:1.2rem;margin-bottom:8px;
+    display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;
+  }
+  .mbody .mtag{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.68rem;color:var(--succeeded);
+    text-transform:uppercase;letter-spacing:0.05em;
+    font-weight:400;
+  }
+  .mbody p{color:var(--ink-soft);font-size:0.94rem;max-width:520px;}
+
+  .credentials{
+    display:flex;gap:56px;flex-wrap:wrap;align-items:center;
+  }
+  .credentials .credtext{flex:1;min-width:280px;}
+  .credentials h2{font-weight:500;font-size:1.5rem;margin-bottom:14px;}
+  .credentials p{color:var(--ink-soft);max-width:460px;}
+  .linkedin-link{
+    display:inline-block;
+    margin-top:16px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.82rem;
+    color:var(--succeeded);
+    text-decoration:none;
+  }
+  .linkedin-link:hover{text-decoration:underline;}
+  .badges{display:flex;gap:14px;flex-wrap:wrap;}
+  .badge{
+    border:1px solid var(--ink);
+    padding:14px 18px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.78rem;
+    min-width:140px;
+  }
+  .badge .num{font-size:1.2rem;font-weight:600;display:block;margin-bottom:4px;color:var(--succeeded);}
+
+  .posts{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:1px;background:var(--rule);
+    border:1px solid var(--rule);
+  }
+  .post{background:var(--paper);padding:24px;display:block;text-decoration:none;color:inherit;}
+  .post .meta{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.68rem;color:var(--ink-soft);
+    text-transform:uppercase;letter-spacing:0.05em;
+    margin-bottom:12px;
+  }
+  .post h3{font-weight:500;font-size:1.08rem;margin-bottom:8px;line-height:1.35;color:var(--ink);}
+  .post p{color:var(--ink-soft);font-size:0.88rem;}
+  .post-live{cursor:pointer;transition:background .15s;}
+  .post-live:hover{background:#F2F1EA;}
+  .post-live .meta{color:var(--succeeded);}
+  .post-soon{opacity:0.55;}
+
+  footer{
+    padding:34px 56px;
+    display:flex;justify-content:space-between;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.75rem;color:var(--ink-soft);
+    flex-wrap:wrap;gap:10px;
+  }
+
+  @media(max-width:900px){
+    .hero{grid-template-columns:1fr;padding-top:44px;}
+  }
+  @media(max-width:640px){
+    nav, section, footer{padding-left:22px;padding-right:22px;}
+    .hero{padding-left:22px;padding-right:22px;}
+    nav ul{gap:18px;}
+    .flowchart{padding:28px 18px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav>
+  <div class="brand">flow<span class="dot">·</span>narrate</div>
+  <ul>
+    <li><a href="#pillars">Read</a></li>
+    <li><a href="tools.html">Tools</a></li>
+    <li><a href="#about">About</a></li>
+    <li><button type="button" id="theme-toggle" class="theme-toggle" aria-pressed="false" onclick="toggleTheme()">Dark</button></li>
+  </ul>
+</nav>
+
+<main id="main">
+
+<section class="hero" style="border-bottom:none;">
+  <div class="hero-text">
+    <div class="status-line"><span class="status-dot"></span>SUCCEEDED · this flow ran without errors</div>
+    <h1>You can build a flow.<br>Can you <span class="accent">explain</span> it six months later?</h1>
+    <p class="sub">FlowNarrate takes real Power Automate flows and D365 configurations and writes down what most builders skip: the reasoning behind each step. Written by an AB-100 certified consultant and Microsoft Certified Trainer.</p>
+    <div class="hero-ctas">
+      <a href="what-is-flownarrate.html" class="btn btn-primary">Read the first narration →</a>
+      <a href="#about" class="btn btn-secondary">Why this exists</a>
+    </div>
+  </div>
+
+  <div class="flowchart">
+    <div class="fc-label">Example, narrated below</div>
+    <svg width="100%" height="140" viewBox="0 0 460 140" preserveAspectRatio="xMinYMin meet" role="img" aria-labelledby="fc-title fc-desc" style="max-width:420px;margin:0 auto;">
+      <title id="fc-title">Flowchart: case routing by priority</title>
+      <desc id="fc-desc">A new case comes in. If it's marked urgent, it goes straight to whoever's on call. Otherwise it joins the normal queue.</desc>
+      <!-- trigger -->
+      <rect x="0" y="50" width="110" height="40" fill="none" stroke="#1A1A17" stroke-width="1.3"/>
+      <text x="55" y="74" text-anchor="middle" class="fc-node-text" font-size="11">New case</text>
+      <!-- connector -->
+      <path d="M110,70 L150,70" class="fc-connector"/>
+      <polygon points="150,70 143,66 143,74" fill="#4B4B44"/>
+      <!-- decision diamond -->
+      <polygon points="215,40 280,70 215,100 150,70" fill="none" stroke="#1A1A17" stroke-width="1.3"/>
+      <text x="215" y="74" text-anchor="middle" class="fc-node-text" font-size="10">Is it urgent?</text>
+      <!-- connector to yes -->
+      <path d="M280,70 L320,70" class="fc-connector"/>
+      <polygon points="320,70 313,66 313,74" fill="#4B4B44"/>
+      <text x="292" y="58" class="fc-node-text" font-size="9" fill="#2F6B3F">yes</text>
+      <!-- action yes -->
+      <rect x="320" y="50" width="125" height="40" fill="none" stroke="#2F6B3F" stroke-width="1.3"/>
+      <text x="382" y="74" text-anchor="middle" class="fc-node-text" font-size="11" fill="#2F6B3F">Goes to on-call</text>
+      <!-- connector to no (down) -->
+      <path d="M215,100 L215,120 L320,120" class="fc-connector"/>
+      <polygon points="320,120 313,116 313,124" fill="#4B4B44"/>
+      <text x="235" y="115" class="fc-node-text" font-size="9" fill="#A66A1E">no</text>
+      <!-- action no -->
+      <rect x="320" y="102" width="125" height="36" fill="none" stroke="#A66A1E" stroke-width="1.3"/>
+      <text x="382" y="124" text-anchor="middle" class="fc-node-text" font-size="10" fill="#A66A1E">Joins the queue</text>
+    </svg>
+
+    <div class="narration">
+      <span class="mark">→ narrated</span>
+      "A new case comes in. If it's marked urgent, it goes straight to whoever's on call. Everything else joins the normal queue."
+    </div>
+
+    <details class="mermaid-toggle">
+      <summary>View as Mermaid (copyable)</summary>
+      <pre class="mermaid-code" id="mermaid-source" tabindex="0">flowchart LR
+    A[New case] --> B{Is it urgent?}
+    B -->|yes| C[Goes to on-call]
+    B -->|no| D[Joins the queue]</pre>
+      <button type="button" class="copy-btn" onclick="copyMermaid()">Copy Mermaid code</button>
+      <span id="copy-status" class="sr-only" aria-live="polite"></span>
+    </details>
+  </div>
+</section>
+
+<section id="pillars">
+  <div class="section-head">
+    <div>
+      <h2>What gets narrated here</h2>
+    </div>
+    <p>SIX RECURRING FORMATS<br>EACH SOLVING A DIFFERENT DOCUMENTATION GAP</p>
+  </div>
+  <div class="manifest">
+    <div class="mrow">
+      <div class="mbody">
+        <h3>Flow Narrations <span class="mtag">signature format</span></h3>
+        <p>Real flows, walked step by step. What each action does and why it's there, using actual, anonymized flows.</p>
+      </div>
+    </div>
+    <div class="mrow">
+      <div class="mbody">
+        <h3>D365 Explainers</h3>
+        <p>Features explained for the people who use these systems daily, not the people who built them.</p>
+      </div>
+    </div>
+    <div class="mrow">
+      <div class="mbody">
+        <h3>Certification Corner</h3>
+        <p>AB-100 study notes and exam guidance from someone who actively teaches this material as an MCT.</p>
+      </div>
+    </div>
+    <div class="mrow">
+      <div class="mbody">
+        <h3>Case Studies</h3>
+        <p>Real business problems, the flow or D365 fix, and what changed afterward.</p>
+      </div>
+    </div>
+    <div class="mrow">
+      <div class="mbody">
+        <h3>Quick Tips</h3>
+        <p>One trick or setting, explained without the padding.</p>
+      </div>
+    </div>
+    <div class="mrow">
+      <div class="mbody">
+        <h3>Agentic AI</h3>
+        <p>Copilot Studio multi-agent design and orchestration, explained the same way as any other flow: what each agent does and why it's handing off.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="tools-teaser">
+  <div class="tools-card">
+    <div>
+      <div class="section-head" style="border-bottom:none;margin-bottom:14px;padding-bottom:0;">
+        <div>
+          <h2>Free Power Platform tools</h2>
+        </div>
+      </div>
+      <p>Dynamic expressions, trigger and filter conditions, date formatting, JSON schemas, an Adaptive Card builder, a flow error handler, and more, all running in your browser. Pick your inputs, copy the result into your flow.</p>
+    </div>
+    <a href="tools.html" class="btn btn-primary">Open the tools →</a>
+  </div>
+</section>
+
+<section id="about">
+  <div class="credentials">
+    <div class="credtext">
+      <h2>Written by someone who has to explain this for a living</h2>
+      <p>Simone Palmer-Thompson is a Microsoft AI and Power Platform Solutions Architect: Agentic AI Architect (AB-100), Microsoft Certified Trainer, and Power Platform Functional Consultant (PL-200). Current work spans Dynamics 365 and Dataverse architecture, Copilot Studio multi-agent design, and building Power Platform governance frameworks for large public-sector environments.</p>
+      <a href="https://linkedin.com/in/sptgb" target="_blank" rel="noopener" class="linkedin-link">Connect on LinkedIn →</a>
+    </div>
+    <div class="badges">
+      <div class="badge"><span class="num">AB-100</span>Agentic AI Architect</div>
+      <div class="badge"><span class="num">MCT</span>Microsoft Certified Trainer</div>
+      <div class="badge"><span class="num">PL-200</span>Functional Consultant</div>
+    </div>
+  </div>
+</section>
+
+<section style="border-bottom:none;">
+  <div class="section-head">
+    <div>
+      <h2>Start here</h2>
+    </div>
+    <p>THE FIRST FIVE POSTS</p>
+  </div>
+  <div class="posts">
+    <a href="what-is-flownarrate.html" class="post post-live">
+      <div class="meta">Origin · <time datetime="2026-08-14">14 Aug 2026</time></div>
+      <h3>What is FlowNarrate?</h3>
+      <p>Why automation logic deserves to be told as clearly as it was built.</p>
+    </a>
+    <div class="post post-soon">
+      <div class="meta">Flow Narration · Coming soon</div>
+      <h3>Narrating a real approval flow, step by step</h3>
+      <p>A moderately complex flow, documented the way it should have been from day one.</p>
+    </div>
+    <div class="post post-soon">
+      <div class="meta">Opinion · Coming soon</div>
+      <h3>5 Power Automate mistakes I see constantly as an MCT</h3>
+      <p>Patterns that show up in nearly every training cohort.</p>
+    </div>
+    <div class="post post-soon">
+      <div class="meta">Certification Corner · Coming soon</div>
+      <h3>AB-100: what the exam actually tests</h3>
+      <p>Grounded in what shows up in practice, not just the objectives list.</p>
+    </div>
+    <div class="post post-soon">
+      <div class="meta">D365 Explainer · Coming soon</div>
+      <h3>The D365 feature everyone configures wrong</h3>
+      <p>A commonly misunderstood setting, narrated plainly.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div>flownarrate.com</div>
+  <div><a href="https://linkedin.com/in/sptgb" target="_blank" rel="noopener" style="color:inherit;">LinkedIn</a> · AB-100 Certified · Microsoft Certified Trainer</div>
+</footer>
+
+<script>
+  function copyMermaid(){
+    const text = document.getElementById('mermaid-source').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      document.getElementById('copy-status').textContent = 'Mermaid code copied to clipboard';
+    }).catch(() => {
+      document.getElementById('copy-status').textContent = 'Copy failed, select the text manually';
+    });
+  }
+
+  function currentTheme(){
+    var attr = document.documentElement.getAttribute("data-theme");
+    if (attr) return attr;
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+
+  function syncThemeButton(){
+    var btn = document.getElementById("theme-toggle");
+    if (!btn) return;
+    var theme = currentTheme();
+    btn.textContent = theme === "dark" ? "Light" : "Dark";
+    btn.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+  }
+
+  function toggleTheme(){
+    var next = currentTheme() === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    try { localStorage.setItem("flownarrate-theme", next); } catch(e) { /* ignore */ }
+    syncThemeButton();
+  }
+
+  syncThemeButton();
+</script>
+
+</body>
+</html>
