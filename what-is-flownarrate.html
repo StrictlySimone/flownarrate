@@ -84,11 +84,14 @@
     display:flex;justify-content:space-between;align-items:center;
     padding:26px 56px;
     border-bottom:1px solid var(--rule);
+    gap:16px;
+    flex-wrap:wrap;
   }
   .brand{
     font-family:'JetBrains Mono',monospace;
     font-size:1rem;font-weight:600;
     letter-spacing:0.02em;
+    white-space:nowrap;
     text-decoration:none;
     color:var(--ink);
   }
@@ -199,7 +202,7 @@
 
 <main id="main">
 <article>
-  <div class="meta">Origin · <time datetime="2026-08-14">14 Aug 2026</time></div>
+  <div class="meta">Origin · <time datetime="2026-08-15">15 Aug 2026</time></div>
   <h1>What is FlowNarrate?</h1>
 
   <p>If you've ever opened a Power Automate flow someone else built (no comments, no scope names, just twelve conditions deep and a "Compose 3" that does something nobody can explain) you already know why this blog exists.</p>
