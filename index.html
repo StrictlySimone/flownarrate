@@ -227,11 +227,14 @@
     display:flex;justify-content:space-between;align-items:center;
     padding:26px 56px;
     border-bottom:1px solid var(--rule);
+    gap:16px;
+    flex-wrap:wrap;
   }
   .brand{
     font-family:'JetBrains Mono',monospace;
     font-size:1rem;font-weight:600;
     letter-spacing:0.02em;
+    white-space:nowrap;
   }
   .brand .dot{color:var(--succeeded);}
   nav ul{display:flex;gap:34px;list-style:none;}
@@ -601,7 +604,7 @@
   </div>
   <div class="posts">
     <a href="what-is-flownarrate.html" class="post post-live">
-      <div class="meta">Origin · <time datetime="2026-08-14">14 Aug 2026</time></div>
+      <div class="meta">Origin · <time datetime="2026-08-15">15 Aug 2026</time></div>
       <h3>What is FlowNarrate?</h3>
       <p>Why automation logic deserves to be told as clearly as it was built.</p>
     </a>
