@@ -14,19 +14,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light dark">
-<title>FlowNarrate: Power Platform, narrated clearly</title>
-<meta name="description" content="Real Power Automate flows, D365 configurations, and Power Platform patterns explained in plain English, by an AB-100 certified consultant and Microsoft Certified Trainer.">
-<link rel="canonical" href="https://flownarrate.com/">
+<title>Tools: FlowNarrate</title>
+<meta name="description" content="Free browser-based tools for Power Fx expressions and filter conditions. No sign-in, nothing leaves your browser.">
+<link rel="canonical" href="https://flownarrate.com/tools.html">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="FlowNarrate">
-<meta property="og:title" content="FlowNarrate: Power Platform, narrated clearly">
-<meta property="og:description" content="Real Power Automate flows, D365 configurations, and Power Platform patterns explained in plain English, by an AB-100 certified consultant and Microsoft Certified Trainer.">
-<meta property="og:url" content="https://flownarrate.com/">
+<meta property="og:title" content="Power Platform Tools: FlowNarrate">
+<meta property="og:description" content="Free browser-based tools for Power Fx expressions, filter conditions, and more. No sign-in, nothing leaves your browser.">
+<meta property="og:url" content="https://flownarrate.com/tools.html">
 <meta property="og:image" content="https://flownarrate.com/images/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="FlowNarrate: Power Platform, narrated clearly">
-<meta name="twitter:description" content="Real Power Automate flows, D365 configurations, and Power Platform patterns explained in plain English, by an AB-100 certified consultant and Microsoft Certified Trainer.">
+<meta name="twitter:title" content="Power Platform Tools: FlowNarrate">
+<meta name="twitter:description" content="Free browser-based tools for Power Fx expressions, filter conditions, and more.">
 <meta name="twitter:image" content="https://flownarrate.com/images/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -211,17 +211,67 @@
     .filter-row{grid-template-columns:1fr;}
   }
 
-  .tools-card{
-    border:1px solid var(--rule);
-    padding:36px;
-    background:var(--panel);
+  .tools-layout{
     display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:32px;
-    flex-wrap:wrap;
+    align-items:flex-start;
+    gap:48px;
+    padding:0 56px;
   }
-  .tools-card p{color:var(--ink-soft);max-width:480px;}
+  .tools-content{flex:1;min-width:0;}
+  .tools-content section{padding-left:0;padding-right:0;}
+  .toc{
+    width:220px;
+    flex-shrink:0;
+    position:sticky;
+    top:24px;
+    max-height:calc(100vh - 48px);
+    overflow-y:auto;
+  }
+  .toc-heading{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.72rem;
+    color:var(--ink-soft);
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    margin-bottom:14px;
+    font-weight:500;
+  }
+  .toc ul{list-style:none;}
+  .toc li{margin-bottom:2px;}
+  .toc a{
+    display:block;
+    padding:7px 0 7px 14px;
+    border-left:2px solid var(--rule);
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.82rem;
+    color:var(--ink-soft);
+    text-decoration:none;
+    line-height:1.35;
+  }
+  .toc a:hover{color:var(--ink);border-left-color:var(--ink-soft);}
+  .toc a[aria-current="true"]{
+    color:var(--succeeded);
+    border-left-color:var(--succeeded);
+    font-weight:500;
+  }
+  @media(max-width:1023px){
+    .tools-layout{flex-direction:column;padding:0 22px;gap:0;}
+    .toc{
+      position:static;
+      width:100%;
+      max-height:none;
+      margin-bottom:32px;
+      padding-bottom:20px;
+      border-bottom:1px solid var(--rule);
+    }
+    .toc ul{display:flex;flex-wrap:wrap;gap:4px 16px;}
+    .toc li{margin-bottom:0;}
+    .toc a{border-left:none;padding:4px 0;}
+    .toc a[aria-current="true"]{border-left:none;text-decoration:underline;}
+  }
+  @media(max-width:640px){
+    .tools-layout{padding:0 22px;}
+  }
 
   nav{
     display:flex;justify-content:space-between;align-items:center;
@@ -362,8 +412,17 @@
 
   .manifest{border-top:1px solid var(--rule);}
   .mrow{
+    display:grid;
+    grid-template-columns:64px 1fr;
+    gap:24px;
     padding:26px 0;
     border-bottom:1px solid var(--rule);
+  }
+  .mnum{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.85rem;
+    color:var(--ink-soft);
+    padding-top:4px;
   }
   .mbody h3{
     font-weight:500;font-size:1.2rem;margin-bottom:8px;
@@ -383,15 +442,6 @@
   .credentials .credtext{flex:1;min-width:280px;}
   .credentials h2{font-weight:500;font-size:1.5rem;margin-bottom:14px;}
   .credentials p{color:var(--ink-soft);max-width:460px;}
-  .linkedin-link{
-    display:inline-block;
-    margin-top:16px;
-    font-family:'JetBrains Mono',monospace;
-    font-size:0.82rem;
-    color:var(--succeeded);
-    text-decoration:none;
-  }
-  .linkedin-link:hover{text-decoration:underline;}
   .badges{display:flex;gap:14px;flex-wrap:wrap;}
   .badge{
     border:1px solid var(--ink);
@@ -450,138 +500,1214 @@
 <a href="#main" class="skip-link">Skip to content</a>
 
 <nav>
-  <div class="brand">flow<span class="dot">·</span>narrate</div>
+  <a href="index.html" class="brand">flow<span class="dot">·</span>narrate</a>
   <ul>
-    <li><a href="#pillars">Read</a></li>
+    <li><a href="index.html#pillars">Read</a></li>
     <li><a href="tools.html">Tools</a></li>
-    <li><a href="#about">About</a></li>
+    <li><a href="index.html#about">About</a></li>
     <li><button type="button" id="theme-toggle" class="theme-toggle" aria-pressed="false" onclick="toggleTheme()">Dark</button></li>
   </ul>
 </nav>
 
 <main id="main">
 
-<section class="hero" style="border-bottom:none;">
+<section class="hero" style="border-bottom:none;grid-template-columns:1fr;max-width:720px;">
   <div class="hero-text">
-    <div class="status-line"><span class="status-dot"></span>SUCCEEDED · this flow ran without errors</div>
-    <h1>You can build a flow.<br>Can you <span class="accent">explain</span> it six months later?</h1>
-    <p class="sub">FlowNarrate takes real Power Automate flows and D365 configurations and writes down what most builders skip: the reasoning behind each step. Written by an AB-100 certified consultant and Microsoft Certified Trainer.</p>
-    <div class="hero-ctas">
-      <a href="what-is-flownarrate.html" class="btn btn-primary">Read the first narration →</a>
-      <a href="#about" class="btn btn-secondary">Why this exists</a>
-    </div>
-  </div>
-
-  <div class="flowchart">
-    <div class="fc-label">Example, narrated below</div>
-    <svg width="100%" height="140" viewBox="0 0 460 140" preserveAspectRatio="xMinYMin meet" role="img" aria-labelledby="fc-title fc-desc" style="max-width:420px;margin:0 auto;">
-      <title id="fc-title">Flowchart: case routing by priority</title>
-      <desc id="fc-desc">A new case comes in. If it's marked urgent, it goes straight to whoever's on call. Otherwise it joins the normal queue.</desc>
-      <!-- trigger -->
-      <rect x="0" y="50" width="110" height="40" fill="none" stroke="#1A1A17" stroke-width="1.3"/>
-      <text x="55" y="74" text-anchor="middle" class="fc-node-text" font-size="11">New case</text>
-      <!-- connector -->
-      <path d="M110,70 L150,70" class="fc-connector"/>
-      <polygon points="150,70 143,66 143,74" fill="#4B4B44"/>
-      <!-- decision diamond -->
-      <polygon points="215,40 280,70 215,100 150,70" fill="none" stroke="#1A1A17" stroke-width="1.3"/>
-      <text x="215" y="74" text-anchor="middle" class="fc-node-text" font-size="10">Is it urgent?</text>
-      <!-- connector to yes -->
-      <path d="M280,70 L320,70" class="fc-connector"/>
-      <polygon points="320,70 313,66 313,74" fill="#4B4B44"/>
-      <text x="292" y="58" class="fc-node-text" font-size="9" fill="#2F6B3F">yes</text>
-      <!-- action yes -->
-      <rect x="320" y="50" width="125" height="40" fill="none" stroke="#2F6B3F" stroke-width="1.3"/>
-      <text x="382" y="74" text-anchor="middle" class="fc-node-text" font-size="11" fill="#2F6B3F">Goes to on-call</text>
-      <!-- connector to no (down) -->
-      <path d="M215,100 L215,120 L320,120" class="fc-connector"/>
-      <polygon points="320,120 313,116 313,124" fill="#4B4B44"/>
-      <text x="235" y="115" class="fc-node-text" font-size="9" fill="#A66A1E">no</text>
-      <!-- action no -->
-      <rect x="320" y="102" width="125" height="36" fill="none" stroke="#A66A1E" stroke-width="1.3"/>
-      <text x="382" y="124" text-anchor="middle" class="fc-node-text" font-size="10" fill="#A66A1E">Joins the queue</text>
-    </svg>
-
-    <div class="narration">
-      <span class="mark">→ narrated</span>
-      "A new case comes in. If it's marked urgent, it goes straight to whoever's on call. Everything else joins the normal queue."
-    </div>
-
-    <details class="mermaid-toggle">
-      <summary>View as Mermaid (copyable)</summary>
-      <pre class="mermaid-code" id="mermaid-source" tabindex="0">flowchart LR
-    A[New case] --> B{Is it urgent?}
-    B -->|yes| C[Goes to on-call]
-    B -->|no| D[Joins the queue]</pre>
-      <button type="button" class="copy-btn" onclick="copyMermaid()">Copy Mermaid code</button>
-      <span id="copy-status" class="sr-only" aria-live="polite"></span>
-    </details>
+    <div class="status-line"><span class="status-dot"></span>RUNS ENTIRELY IN YOUR BROWSER</div>
+    <h1>Free Power Platform <span class="accent">tools</span></h1>
+    <p class="sub" style="max-width:600px;">Twelve tools covering expressions, conditions, JSON, dates, Adaptive Cards, error handling, and more, all without opening the app. Nothing you type here is sent anywhere.</p>
   </div>
 </section>
 
-<section id="pillars">
+<div class="tools-layout">
+<nav class="toc" aria-label="On this page">
+  <h2 class="toc-heading">On this page</h2>
+  <ul>
+    <li><a href="#expression-builder" data-toc>Dynamic Expressions</a></li>
+    <li><a href="#filter-builder" data-toc>Filter &amp; Trigger Conditions</a></li>
+    <li><a href="#date-formatter" data-toc>Date Formatter</a></li>
+    <li><a href="#column-formatting" data-toc>Column Formatting</a></li>
+    <li><a href="#svg-converter" data-toc>SVG to Image</a></li>
+    <li><a href="#json-schema" data-toc>JSON Schema Converter</a></li>
+    <li><a href="#json-loosener" data-toc>JSON Schema Loosener</a></li>
+    <li><a href="#adaptive-card" data-toc>Adaptive Card Builder</a></li>
+    <li><a href="#error-handler" data-toc>Flow Error Handler</a></li>
+    <li><a href="#html-table" data-toc>HTML Table Styler</a></li>
+    <li><a href="#odata-query" data-toc>OData Query</a></li>
+    <li><a href="#fetchxml-builder" data-toc>D365 FetchXML Builder</a></li>
+  </ul>
+</nav>
+<div class="tools-content">
+<section id="expression-builder">
   <div class="section-head">
     <div>
-      <h2>What gets narrated here</h2>
+      <h2>Dynamic Expressions</h2>
     </div>
-    <p>SIX RECURRING FORMATS<br>EACH SOLVING A DIFFERENT DOCUMENTATION GAP</p>
+    <p>BUILD CORRECT EXPRESSIONS<br>FOR TRIGGERS, ACTIONS, LOOPS, AND VARIABLES</p>
   </div>
-  <div class="manifest">
-    <div class="mrow">
-      <div class="mbody">
-        <h3>Flow Narrations <span class="mtag">signature format</span></h3>
-        <p>Real flows, walked step by step. What each action does and why it's there, using actual, anonymized flows.</p>
-      </div>
+
+  <div class="expr-tool">
+    <div class="expr-field">
+      <label for="expr-fn">Function</label>
+      <select id="expr-fn" onchange="renderExprInputs()">
+        <option value="addDays">addDays: shift a date forward or back</option>
+        <option value="formatDateTime">formatDateTime: display a date in a chosen format</option>
+        <option value="concat">concat: join text together</option>
+        <option value="if">if: return one value or another based on a condition</option>
+        <option value="coalesce">coalesce: return the first non-empty value</option>
+        <option value="substring">substring: pull part of a text value</option>
+        <option value="triggerOutput">triggerOutputs: read a value from the trigger</option>
+        <option value="actionOutput">actions: read a value from a previous action</option>
+        <option value="loopItem">items: read the current item in an Apply to each</option>
+        <option value="variable">variables: read a value from a flow variable</option>
+      </select>
     </div>
-    <div class="mrow">
-      <div class="mbody">
-        <h3>D365 Explainers</h3>
-        <p>Features explained for the people who use these systems daily, not the people who built them.</p>
-      </div>
+
+    <div id="expr-inputs" class="expr-inputs"></div>
+
+    <div class="expr-output">
+      <label for="expr-result">Expression</label>
+      <pre id="expr-result" class="mermaid-code" tabindex="0">addDays(utcNow(), 1)</pre>
+      <button type="button" class="copy-btn" onclick="copyExpr()">Copy expression</button>
+      <span id="expr-copy-status" class="sr-only" aria-live="polite"></span>
     </div>
-    <div class="mrow">
-      <div class="mbody">
-        <h3>Certification Corner</h3>
-        <p>AB-100 study notes and exam guidance from someone who actively teaches this material as an MCT.</p>
-      </div>
-    </div>
-    <div class="mrow">
-      <div class="mbody">
-        <h3>Case Studies</h3>
-        <p>Real business problems, the flow or D365 fix, and what changed afterward.</p>
-      </div>
-    </div>
-    <div class="mrow">
-      <div class="mbody">
-        <h3>Quick Tips</h3>
-        <p>One trick or setting, explained without the padding.</p>
-      </div>
-    </div>
-    <div class="mrow">
-      <div class="mbody">
-        <h3>Agentic AI</h3>
-        <p>Copilot Studio multi-agent design and orchestration, explained the same way as any other flow: what each agent does and why it's handing off.</p>
-      </div>
-    </div>
+
+    <p class="expr-note">This builds standard Power Fx / Power Automate expression syntax client-side, nothing is sent anywhere. Values default to sensible placeholders, replace them with your own dynamic content references.</p>
   </div>
 </section>
 
-<section id="tools-teaser">
-  <div class="tools-card">
+<section id="filter-builder">
+  <div class="section-head">
     <div>
-      <div class="section-head" style="border-bottom:none;margin-bottom:14px;padding-bottom:0;">
-        <div>
-          <h2>Free Power Platform tools</h2>
-        </div>
-      </div>
-      <p>Dynamic expressions, trigger and filter conditions, date formatting, JSON schemas, an Adaptive Card builder, a flow error handler, and more, all running in your browser. Pick your inputs, copy the result into your flow.</p>
+      <h2>Filter Conditions & Trigger Conditions</h2>
     </div>
-    <a href="tools.html" class="btn btn-primary">Open the tools →</a>
+    <p>ADD CONDITIONS, COMBINE WITH AND / OR<br>OUTPUT AS POWER FX OR A FLOW TRIGGER CONDITION</p>
+  </div>
+
+  <div class="expr-tool">
+    <div class="expr-field">
+      <label for="filter-target">Output for</label>
+      <select id="filter-target" onchange="updateFilterOutput()">
+        <option value="powerfx">Power Fx (Filter formula in an app)</option>
+        <option value="trigger">Power Automate trigger condition</option>
+      </select>
+    </div>
+
+    <div class="expr-field" id="filter-source-field">
+      <label for="filter-source">Data source name</label>
+      <input type="text" id="filter-source" value="Cases" oninput="updateFilterOutput()">
+    </div>
+
+    <div class="expr-field">
+      <label for="filter-logic">Combine conditions with</label>
+      <select id="filter-logic" onchange="updateFilterOutput()">
+        <option value="And">AND: every condition must be true</option>
+        <option value="Or">OR: any condition can be true</option>
+      </select>
+    </div>
+
+    <div id="filter-rows" class="filter-rows"></div>
+
+    <button type="button" class="copy-btn" onclick="addFilterRow()">+ Add condition</button>
+
+    <div class="expr-output" style="margin-top:24px;">
+      <label for="filter-result">Result</label>
+      <pre id="filter-result" class="mermaid-code" tabindex="0"></pre>
+      <button type="button" class="copy-btn" onclick="copyFilter()">Copy result</button>
+      <span id="filter-copy-status" class="sr-only" aria-live="polite"></span>
+    </div>
+
+    <p class="expr-note">Field names and values are placeholders, swap them for your actual columns. This runs entirely in your browser.</p>
   </div>
 </section>
 
-<section id="about">
-  <div class="credentials">
-    <div class="credtext">
-      <h2>Written by someone who has to explain this for a living</h2>
-      <p>Simone Palmer-Thompson is a Microsoft AI and Power Platform Solutions Architect: Agentic AI Architect (AB-100), Microsoft Certified Trainer, and Power Platform Functional Consultant (PL-200)
+<section id="date-formatter">
+  <div class="section-head">
+    <div>
+      <h2>Date Formatter</h2>
+    </div>
+    <p>PICK A SOURCE AND A FORMAT<br>GENERATE THE formatDateTime EXPRESSION</p>
+  </div>
+
+  <div class="expr-tool">
+    <div class="expr-field">
+      <label for="df-source">Dynamic source</label>
+      <select id="df-source" onchange="updateDateFormatter()">
+        <option value="utcNow()">Current time (utcNow)</option>
+        <option value="triggerBody()?['created']">Trigger body property</option>
+        <option value="triggerOutputs()?['headers']?['date']">Trigger header</option>
+        <option value="variables('MyDate')">A flow variable</option>
+        <option value="custom">Custom expression</option>
+      </select>
+    </div>
+    <div class="expr-field" id="df-custom-field" style="display:none;">
+      <label for="df-custom">Custom source expression</label>
+      <input type="text" id="df-custom" value="body('Get_item')?['Modified']" oninput="updateDateFormatter()">
+    </div>
+    <div class="expr-field">
+      <label for="df-format">Format</label>
+      <select id="df-format" onchange="updateDateFormatter()">
+        <option value="yyyy-MM-dd">2026-08-14 (yyyy-MM-dd)</option>
+        <option value="dd/MM/yyyy">14/08/2026 (dd/MM/yyyy)</option>
+        <option value="dddd, MMMM d">Friday, August 14 (dddd, MMMM d)</option>
+        <option value="HH:mm">14:05 (HH:mm, 24hr)</option>
+        <option value="hh:mm tt">02:05 PM (hh:mm tt, 12hr)</option>
+        <option value="custom">Custom format string</option>
+      </select>
+    </div>
+    <div class="expr-field" id="df-custom-format-field" style="display:none;">
+      <label for="df-custom-format">Custom format string</label>
+      <input type="text" id="df-custom-format" value="yyyy-MM-ddTHH:mm:ssZ" oninput="updateDateFormatter()">
+    </div>
+    <div class="expr-field">
+      <label for="df-timezone">Convert to time zone (optional)</label>
+      <input type="text" id="df-timezone" placeholder="e.g. GMT Standard Time, leave blank to skip" oninput="updateDateFormatter()">
+    </div>
+
+    <div class="expr-output">
+      <label for="df-result">Expression</label>
+      <pre id="df-result" class="mermaid-code" tabindex="0"></pre>
+      <button type="button" class="copy-btn" onclick="copyDateFormatter()">Copy expression</button>
+      <span id="df-copy-status" class="sr-only" aria-live="polite"></span>
+    </div>
+  </div>
+</section>
+
+<section id="column-formatting">
+  <div class="section-head">
+    <div>
+      <h2>SharePoint column formatting</h2>
+    </div>
+    <p>CONDITIONAL BACKGROUND Colour<br>PASTE STRAIGHT INTO COLUMN FORMATTING</p>
+  </div>
+
+  <div class="expr-tool">
+    <div class="expr-field">
+      <label for="cf-field">Column internal name</label>
+      <input type="text" id="cf-field" value="Priority" oninput="updateColumnFormat()">
+    </div>
+    <div class="filter-row" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:16px;">
+      <select id="cf-operator" aria-label="Operator" onchange="updateColumnFormat()">
+        <option value="==">equals</option>
+        <option value="!=">not equals</option>
+        <option value=">">greater than</option>
+        <option value="<">less than</option>
+      </select>
+      <input type="text" id="cf-value" placeholder="Value to match" value="Urgent" oninput="updateColumnFormat()" aria-label="Value to match">
+      <input type="color" id="cf-color" value="#f8d7da" onchange="updateColumnFormat()" aria-label="Background colour" style="height:38px;">
+    </div>
+
+    <div class="expr-output">
+      <label for="cf-result">Column formatting JSON</label>
+      <pre id="cf-result" class="mermaid-code" tabindex="0"></pre>
+      <button type="button" class="copy-btn" onclick="copyColumnFormat()">Copy JSON</button>
+      <span id="cf-copy-status" class="sr-only" aria-live="polite"></span>
+    </div>
+
+    <p class="expr-note">Paste this into a SharePoint list column's "Format this column" → Advanced mode.</p>
+  </div>
+</section>
+
+<section id="svg-converter">
+  <div class="section-head">
+    <div>
+      <h2>SVG to Power Apps image</h2>
+    </div>
+    <p>PASTE RAW SVG MARKUP<br>GET A DATA URI FOR THE IMAGE PROPERTY</p>
+  </div>
+
+  <div class="expr-tool">
+    <div class="expr-field">
+      <label for="svg-input">SVG markup</label>
+      <textarea id="svg-input" oninput="updateSvgOutput()" rows="4" style="width:100%;padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:0.85rem;border:1px solid var(--rule);background:var(--paper);color:var(--ink);">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"&gt;&lt;circle cx="12" cy="12" r="10" fill="#2F6B3F"/&gt;&lt;/svg&gt;</textarea>
+    </div>
+
+    <div class="expr-output">
+      <label for="svg-result">Image property value</label>
+      <pre id="svg-result" class="mermaid-code" tabindex="0"></pre>
+      <button type="button" class="copy-btn" onclick="copySvg()">Copy data URI</button>
+      <span id="svg-copy-status" class="sr-only" aria-live="polite"></span>
+    </div>
+
+    <p class="expr-note">Paste the result directly into a Power Apps Image control's Image property, or store it in a variable first.</p>
+  </div>
+</section>
+
+<section id="json-schema">
+  <div class="section-head">
+    <div>
+      <h2>JSON Schema Converter</h2>
+    </div>
+    <p>PASTE A SAMPLE PAYLOAD<br>GET THE SCHEMA FOR A PARSE JSON ACTION</p>
+  </div>
+
+  <div class="expr-tool">
+    <div class="expr-field">
+      <label for="json-input">Sample JSON</label>
+      <textarea id="json-input" oninput="updateJsonSchema()" rows="6" style="width:100%;padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:0.85rem;border:1px solid var(--rule);background:var(--paper);color:var(--ink);">{
+  "caseNumber": "CASE-1029",
+  "priority": "Urgent",
+  "assignedTo": "on-call@example.com",
+  "resolved": false,
+  "tags": ["billing", "escalated"]
+}</textarea>
+    </div>
+
+    <div class="expr-output">
+      <label for="json-schema-result">Schema</label>
+      <pre id="json-schema-result" class="mermaid-code" tabindex="0"></pre>
+      <button type="button" class="copy-btn" onclick="copyJsonSchema()">Copy schema</button>
+      <span id="json-schema-copy-status" class="sr-only" aria-live="polite"></span>
+    </div>
+
+    <p class="expr-note" id="json-error"></p>
+    <p class="expr-note">Tip: this generates the basic type structure. For extra validation, add a "format" key to any string property, for example "format": "email" or "format": "date", and a "description" key to document what the field is for. Neither is added automatically here, but both are valid in the schema and worth adding by hand for fields that matter.</p>
+  </div>
+</section>
+
+<section id="json-loosener">
+  <div class="section-head">
+    <div>
+      <h2>JSON Schema Loosener</h2>
+    </div>
+    <p>PASTE AN EXISTING SCHEMA<br>MAKE PARSE JSON RESILIENT TO MISSING OR NULL VALUES</p>
+  </div>
+
+  <div class="expr-tool">
+    <div class="expr-field">
+      <label for="loosen-input">Existing Parse JSON schema</label>
+      <textarea id="loosen-input" oninput="updateLoosenedSchema()" rows="8" style="width:100%;padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:0.85rem;border:1px solid var(--rule);background:var(--paper);color:var(--ink);">{
+  "type": "object",
+  "properties": {
+    "caseNumber": { "type": "string" },
+    "priority": { "type": "string" },
+    "resolved": { "type": "boolean" }
+  },
+  "required": ["caseNumber", "priority", "resolved"]
+}</textarea>
+    </div>
+
+    <div class="expr-output">
+      <label for="loosen-result">Loosened schema</label>
+      <pre id="loosen-result" class="mermaid-code" tabindex="0"></pre>
+      <button type="button" class="copy-btn" onclick="copyLoosenedSchema()">Copy schema</button>
+      <span id="loosen-copy-status" class="sr-only" aria-live="polite"></span>
+    </div>
+
+    <p class="expr-note" id="loosen-error">Removes every "required" array and allows null on every property type, so the action stops throwing when a field is missing.</p>
+  </div>
+</section>
+
+<section id="adaptive-card">
+  <div class="section-head">
+    <div>
+      <h2>Adaptive Card Builder</h2>
+    </div>
+    <p>TITLE, BODY TEXT, APPROVE / REJECT BUTTONS<br>OUTPUT CARD JSON FOR TEAMS OR APPROVALS</p>
+  </div>
+
+  <div class="expr-tool">
+    <div class="expr-field">
+      <label for="ac-title">Card title</label>
+      <input type="text" id="ac-title" value="Approval needed: CASE-1029" oninput="updateAdaptiveCard()">
+    </div>
+    <div class="expr-field">
+      <label for="ac-body">Body text</label>
+      <textarea id="ac-body" oninput="updateAdaptiveCard()" rows="2" style="width:100%;padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:0.85rem;border:1px solid var(--rule);background:var(--paper);color:var(--ink);">Priority is Urgent, assigned to on-call. Approve to route it forward.</textarea>
+    </div>
+    <div class="expr-field">
+      <label><input type="checkbox" id="ac-buttons" checked onchange="updateAdaptiveCard()"> Include Approve / Reject action buttons</label>
+    </div>
+
+    <div class="expr-output">
+      <label for="ac-result">Card JSON</label>
+      <pre id="ac-result" class="mermaid-code" tabindex="0"></pre>
+      <button type="button" class="copy-btn" onclick="copyAdaptiveCard()">Copy card JSON</button>
+      <span id="ac-copy-status" class="sr-only" aria-live="polite"></span>
+    </div>
+
+    <p class="expr-note">Paste this into a "Post card" action's Card body, or a Power Automate approval's custom card.</p>
+  </div>
+</section>
+
+<section id="error-handler">
+  <div class="section-head">
+    <div>
+      <h2>Flow Error Handler</h2>
+    </div>
+    <p>RUN-AFTER SETTINGS, ERROR EXPRESSIONS<br>AND A NOTIFICATION BODY, FROM ONE SCOPE NAME</p>
+  </div>
+
+  <div class="expr-tool">
+    <div class="expr-field">
+      <label for="eh-scope">Scope name (as shown in the flow)</label>
+      <input type="text" id="eh-scope" value="Try_scope" oninput="updateErrorHandler()">
+    </div>
+    <div class="expr-field">
+      <label>Run the error-handling action after</label>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:0.8rem;">
+        <label><input type="checkbox" value="Failed" checked onchange="updateErrorHandler()"> Failed</label>
+        <label><input type="checkbox" value="Skipped" checked onchange="updateErrorHandler()"> Skipped</label>
+        <label><input type="checkbox" value="TimedOut" checked onchange="updateErrorHandler()"> Timed out</label>
+      </div>
+    </div>
+
+    <div class="expr-output">
+      <label for="eh-runafter">Configure run after (paste onto the Catch scope)</label>
+      <pre id="eh-runafter" class="mermaid-code" tabindex="0"></pre>
+    </div>
+    <div class="expr-output">
+      <label for="eh-error">Error detail expression</label>
+      <pre id="eh-error" class="mermaid-code" tabindex="0"></pre>
+    </div>
+    <div class="expr-output">
+      <label for="eh-message">Notification body</label>
+      <pre id="eh-message" class="mermaid-code" tabindex="0"></pre>
+      <button type="button" class="copy-btn" onclick="copyErrorHandler()">Copy all three</button>
+      <span id="eh-copy-status" class="sr-only" aria-live="polite"></span>
+    </div>
+
+    <p class="expr-note">Structure your flow as a Try scope, then a Catch scope configured with "run after" set to these statuses on the Try scope.</p>
+  </div>
+</section>
+
+<section id="html-table">
+  <div class="section-head">
+    <div>
+      <h2>HTML Table Styler</h2>
+    </div>
+    <p>COLUMN HEADERS AND AN ACCENT Colour<br>BULLETPROOF INLINE-STYLED EMAIL TABLE</p>
+  </div>
+
+  <div class="expr-tool">
+    <div class="expr-field">
+      <label for="ht-columns">Column headers (comma separated)</label>
+      <input type="text" id="ht-columns" value="Case, Priority, Assigned to" oninput="updateHtmlTable()">
+    </div>
+    <div class="expr-field">
+      <label for="ht-color">Header accent colour</label>
+      <input type="color" id="ht-color" value="#1a1a17" onchange="updateHtmlTable()" style="height:38px;">
+    </div>
+    <div class="expr-field">
+      <label for="ht-rows">Number of placeholder body rows</label>
+      <input type="number" id="ht-rows" value="1" min="0" max="10" oninput="updateHtmlTable()">
+    </div>
+
+    <div class="expr-output">
+      <label for="ht-result">HTML</label>
+      <pre id="ht-result" class="mermaid-code" tabindex="0"></pre>
+      <button type="button" class="copy-btn" onclick="copyHtmlTable()">Copy HTML</button>
+      <span id="ht-copy-status" class="sr-only" aria-live="polite"></span>
+    </div>
+
+    <p class="expr-note">Paste into a "Send an email" action's HTML body. Replace placeholder cells with your dynamic content, or wrap the row in an Apply to each.</p>
+  </div>
+</section>
+
+<section id="odata-query">
+  <div class="section-head">
+    <div>
+      <h2>OData Query</h2>
+    </div>
+    <p>ADD CONDITIONS, COMBINE WITH AND / OR<br>PLUS $select, $orderby, AND $top</p>
+  </div>
+
+  <div class="expr-tool">
+    <div class="expr-field">
+      <label for="odata-logic">Combine conditions with</label>
+      <select id="odata-logic" onchange="updateOdataQuery()">
+        <option value="and">AND: every condition must be true</option>
+        <option value="or">OR: any condition can be true</option>
+      </select>
+    </div>
+
+    <div id="odata-rows" class="filter-rows"></div>
+    <button type="button" class="copy-btn" onclick="addOdataRow()">+ Add condition</button>
+
+    <div class="expr-field" style="margin-top:20px;">
+      <label for="odata-select">$select (comma separated, optional)</label>
+      <input type="text" id="odata-select" placeholder="Title, Priority, Modified" oninput="updateOdataQuery()">
+    </div>
+    <div class="expr-field">
+      <label for="odata-orderby">$orderby (optional)</label>
+      <input type="text" id="odata-orderby" placeholder="Modified desc" oninput="updateOdataQuery()">
+    </div>
+    <div class="expr-field">
+      <label for="odata-top">$top (optional)</label>
+      <input type="number" id="odata-top" placeholder="50" oninput="updateOdataQuery()">
+    </div>
+
+    <div class="expr-output">
+      <label for="odata-result">Query</label>
+      <pre id="odata-result" class="mermaid-code" tabindex="0"></pre>
+      <button type="button" class="copy-btn" onclick="copyOdataQuery()">Copy query</button>
+      <span id="odata-copy-status" class="sr-only" aria-live="polite"></span>
+    </div>
+
+    <p class="expr-note">This builds a single AND/OR group, not nested groups within groups. For deeper nesting, combine two of these queries manually.</p>
+  </div>
+</section>
+
+<section id="fetchxml-builder" style="border-bottom:none;">
+  <div class="section-head">
+    <div>
+      <h2>D365 FetchXML Builder</h2>
+    </div>
+    <p>DATAVERSE'S OWN QUERY LANGUAGE<br>NOT AN OData TRANSLATION, THE REAL SYNTAX ADVANCED FIND USES</p>
+  </div>
+
+  <div class="expr-tool">
+    <div class="expr-field">
+      <label for="fx-entity">Entity logical name</label>
+      <input type="text" id="fx-entity" value="incident" oninput="updateFetchXml()">
+    </div>
+    <div class="expr-field">
+      <label for="fx-attributes">Columns to return (comma separated, blank for all)</label>
+      <input type="text" id="fx-attributes" value="title, prioritycode, ownerid" oninput="updateFetchXml()">
+    </div>
+    <div class="expr-field">
+      <label for="fx-logic">Combine filter conditions with</label>
+      <select id="fx-logic" onchange="updateFetchXml()">
+        <option value="and">AND: every condition must be true</option>
+        <option value="or">OR: any condition can be true</option>
+      </select>
+    </div>
+
+    <div id="fx-rows" class="filter-rows"></div>
+    <button type="button" class="copy-btn" onclick="addFetchXmlRow()">+ Add condition</button>
+
+    <div class="expr-field" style="margin-top:20px;">
+      <label for="fx-orderby">Order by (attribute name, optional)</label>
+      <input type="text" id="fx-orderby" placeholder="createdon" oninput="updateFetchXml()">
+    </div>
+    <div class="expr-field">
+      <label><input type="checkbox" id="fx-descending" onchange="updateFetchXml()"> Descending</label>
+    </div>
+    <div class="expr-field">
+      <label for="fx-top">Row limit (optional)</label>
+      <input type="number" id="fx-top" placeholder="50" oninput="updateFetchXml()">
+    </div>
+
+    <div class="expr-output">
+      <label for="fx-result">FetchXML</label>
+      <pre id="fx-result" class="mermaid-code" tabindex="0"></pre>
+      <button type="button" class="copy-btn" onclick="copyFetchXml()">Copy FetchXML</button>
+      <span id="fx-copy-status" class="sr-only" aria-live="polite"></span>
+    </div>
+
+    <p class="expr-note">Use this in a "List rows" action's Fetch XML Query field, a custom report, or the FetchXML tab of Advanced Find. Field operators here cover the common cases, FetchXML supports more (like-x, between, on-x) that you may still need to add by hand.</p>
+  </div>
+</section>
+
+</div>
+</div>
+
+</main>
+
+<footer>
+  <div>flownarrate.com</div>
+  <div><a href="https://linkedin.com/in/sptgb" target="_blank" rel="noopener" style="color:inherit;">LinkedIn</a> · AB-100 Certified · Microsoft Certified Trainer</div>
+</footer>
+
+<script>
+  const exprDefs = {
+    addDays: {
+      fields: [
+        {key:'ts', label:'Timestamp (defaults to now)', value:'utcNow()'},
+        {key:'days', label:'Number of days to add', value:'1'}
+      ],
+      build: v => `addDays(${v.ts}, ${v.days})`
+    },
+    formatDateTime: {
+      fields: [
+        {key:'ts', label:'Timestamp', value:'utcNow()'},
+        {key:'format', label:'Format string', value:"'yyyy-MM-dd'"}
+      ],
+      build: v => `formatDateTime(${v.ts}, ${v.format})`
+    },
+    concat: {
+      fields: [
+        {key:'a', label:'First value', value:"'Case #'"},
+        {key:'b', label:'Second value', value:"triggerBody()?['caseNumber']"}
+      ],
+      build: v => `concat(${v.a}, ${v.b})`
+    },
+    if: {
+      fields: [
+        {key:'cond', label:'Condition', value:"equals(triggerBody()?['priority'], 'Urgent')"},
+        {key:'yes', label:'Value if true', value:"'On-call'"},
+        {key:'no', label:'Value if false', value:"'Standard queue'"}
+      ],
+      build: v => `if(${v.cond}, ${v.yes}, ${v.no})`
+    },
+    coalesce: {
+      fields: [
+        {key:'a', label:'First value (checked first)', value:"triggerBody()?['assignedTo']"},
+        {key:'b', label:'Fallback value', value:"'Unassigned'"}
+      ],
+      build: v => `coalesce(${v.a}, ${v.b})`
+    },
+    substring: {
+      fields: [
+        {key:'text', label:'Text value', value:"triggerBody()?['caseNumber']"},
+        {key:'start', label:'Start index', value:'0'},
+        {key:'len', label:'Length', value:'4'}
+      ],
+      build: v => `substring(${v.text}, ${v.start}, ${v.len})`
+    },
+    triggerOutput: {
+      fields: [
+        {key:'path', label:'Property name from the trigger body', value:'caseNumber'}
+      ],
+      build: v => `triggerBody()?['${v.path}']`
+    },
+    actionOutput: {
+      fields: [
+        {key:'action', label:'Action name (as shown in the flow)', value:'Get_item'},
+        {key:'path', label:'Property name from that action output', value:'Title'}
+      ],
+      build: v => `body('${v.action}')?['${v.path}']`
+    },
+    loopItem: {
+      fields: [
+        {key:'path', label:'Property name on the current item (leave blank for the whole item)', value:'Id'}
+      ],
+      build: v => v.path ? `items('Apply_to_each')?['${v.path}']` : `items('Apply_to_each')`
+    },
+    variable: {
+      fields: [
+        {key:'name', label:'Variable name', value:'RetryCount'}
+      ],
+      build: v => `variables('${v.name}')`
+    }
+  };
+
+  function renderExprInputs(){
+    const fn = document.getElementById('expr-fn').value;
+    const def = exprDefs[fn];
+    const container = document.getElementById('expr-inputs');
+    container.innerHTML = '';
+    def.fields.forEach(f => {
+      const row = document.createElement('div');
+      row.className = 'expr-row';
+      const label = document.createElement('label');
+      label.setAttribute('for', 'expr-input-' + f.key);
+      label.textContent = f.label;
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.id = 'expr-input-' + f.key;
+      input.value = f.value;
+      input.addEventListener('input', updateExprOutput);
+      row.appendChild(label);
+      row.appendChild(input);
+      container.appendChild(row);
+    });
+    updateExprOutput();
+  }
+
+  function updateExprOutput(){
+    const fn = document.getElementById('expr-fn').value;
+    const def = exprDefs[fn];
+    const values = {};
+    def.fields.forEach(f => {
+      values[f.key] = document.getElementById('expr-input-' + f.key).value || f.value;
+    });
+    document.getElementById('expr-result').textContent = def.build(values);
+  }
+
+  function copyExpr(){
+    const text = document.getElementById('expr-result').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      document.getElementById('expr-copy-status').textContent = 'Expression copied to clipboard';
+    }).catch(() => {
+      document.getElementById('expr-copy-status').textContent = 'Copy failed, select the text manually';
+    });
+  }
+
+  renderExprInputs();
+
+  // --- Filter / condition builder ---
+  let filterRowId = 0;
+  const operators = ['equals','not equals','greater than','less than','contains'];
+
+  function addFilterRow(field, op, value){
+    filterRowId++;
+    const id = filterRowId;
+    const row = document.createElement('div');
+    row.className = 'filter-row';
+    row.id = 'filter-row-' + id;
+    row.innerHTML = `
+      <input type="text" placeholder="Field name" value="${field || ''}" aria-label="Field name" oninput="updateFilterOutput()">
+      <select aria-label="Operator" onchange="updateFilterOutput()">
+        ${operators.map(o => `<option value="${o}" ${o === op ? 'selected' : ''}>${o}</option>`).join('')}
+      </select>
+      <input type="text" placeholder="Value" value="${value || ''}" aria-label="Value" oninput="updateFilterOutput()">
+      <button type="button" class="remove-row" onclick="removeFilterRow(${id})" aria-label="Remove this condition">Remove</button>
+    `;
+    document.getElementById('filter-rows').appendChild(row);
+    updateFilterOutput();
+  }
+
+  function removeFilterRow(id){
+    const row = document.getElementById('filter-row-' + id);
+    if (row) row.remove();
+    updateFilterOutput();
+  }
+
+  function opToPowerFx(op, field, value){
+    const v = isNaN(value) || value === '' ? `"${value}"` : value;
+    switch(op){
+      case 'equals': return `${field} = ${v}`;
+      case 'not equals': return `${field} <> ${v}`;
+      case 'greater than': return `${field} > ${v}`;
+      case 'less than': return `${field} < ${v}`;
+      case 'contains': return `${field} in ${v}`;
+      default: return `${field} = ${v}`;
+    }
+  }
+
+  function opToTrigger(op, field, value){
+    const v = isNaN(value) || value === '' ? `'${value}'` : value;
+    switch(op){
+      case 'equals': return `equals(triggerBody()?['${field}'], ${v})`;
+      case 'not equals': return `not(equals(triggerBody()?['${field}'], ${v}))`;
+      case 'greater than': return `greater(triggerBody()?['${field}'], ${v})`;
+      case 'less than': return `less(triggerBody()?['${field}'], ${v})`;
+      case 'contains': return `contains(triggerBody()?['${field}'], ${v})`;
+      default: return `equals(triggerBody()?['${field}'], ${v})`;
+    }
+  }
+
+  function updateFilterOutput(){
+    const target = document.getElementById('filter-target').value;
+    const source = document.getElementById('filter-source').value || 'DataSource';
+    const logic = document.getElementById('filter-logic').value;
+    document.getElementById('filter-source-field').style.display = target === 'powerfx' ? 'block' : 'none';
+
+    const rows = Array.from(document.querySelectorAll('.filter-row'));
+    if (rows.length === 0){
+      document.getElementById('filter-result').textContent = target === 'powerfx'
+        ? `Filter(${source}, true)`
+        : `@${logic.toLowerCase()}()`;
+      return;
+    }
+
+    const parts = rows.map(row => {
+      const [fieldInput, opSelect, valueInput] = row.querySelectorAll('input, select');
+      const field = fieldInput.value || 'FieldName';
+      const op = opSelect.value;
+      const value = valueInput.value;
+      return target === 'powerfx' ? opToPowerFx(op, field, value) : opToTrigger(op, field, value);
+    });
+
+    if (target === 'powerfx'){
+      const combined = parts.length === 1 ? parts[0] : `${logic}(${parts.join(', ')})`;
+      document.getElementById('filter-result').textContent = `Filter(${source}, ${combined})`;
+    } else {
+      const combined = parts.length === 1 ? parts[0] : `@${logic.toLowerCase()}(${parts.join(', ')})`;
+      document.getElementById('filter-result').textContent = parts.length === 1 ? `@${parts[0]}` : combined;
+    }
+  }
+
+  function copyFilter(){
+    const text = document.getElementById('filter-result').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      document.getElementById('filter-copy-status').textContent = 'Result copied to clipboard';
+    }).catch(() => {
+      document.getElementById('filter-copy-status').textContent = 'Copy failed, select the text manually';
+    });
+  }
+
+  addFilterRow('Priority', 'equals', 'Urgent');
+  addFilterRow('Status', 'not equals', 'Closed');
+
+  // --- SharePoint column formatting ---
+  function updateColumnFormat(){
+    const field = document.getElementById('cf-field').value || 'FieldName';
+    const op = document.getElementById('cf-operator').value;
+    const value = document.getElementById('cf-value').value;
+    const color = document.getElementById('cf-color').value;
+    const json = {
+      "$schema": "https://developer.microsoft.com/json-schemas/sp/v2/column-formatting.schema.json",
+      "elmType": "div",
+      "style": {
+        "background-color": `=if([$${field}] ${op} '${value}', '${color}', '')`,
+        "padding": "5px"
+      },
+      "txtContent": "@currentField"
+    };
+    document.getElementById('cf-result').textContent = JSON.stringify(json, null, 2);
+  }
+
+  function copyColumnFormat(){
+    const text = document.getElementById('cf-result').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      document.getElementById('cf-copy-status').textContent = 'JSON copied to clipboard';
+    }).catch(() => {
+      document.getElementById('cf-copy-status').textContent = 'Copy failed, select the text manually';
+    });
+  }
+
+  // --- SVG to Power Apps image data URI ---
+  function updateSvgOutput(){
+    const svg = document.getElementById('svg-input').value.trim();
+    let result;
+    try {
+      const encoded = btoa(unescape(encodeURIComponent(svg)));
+      result = `"data:image/svg+xml;base64,${encoded}"`;
+    } catch(e){
+      result = 'Could not encode this SVG, check the markup is valid.';
+    }
+    document.getElementById('svg-result').textContent = result;
+  }
+
+  function copySvg(){
+    const text = document.getElementById('svg-result').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      document.getElementById('svg-copy-status').textContent = 'Data URI copied to clipboard';
+    }).catch(() => {
+      document.getElementById('svg-copy-status').textContent = 'Copy failed, select the text manually';
+    });
+  }
+
+  updateColumnFormat();
+  updateSvgOutput();
+
+  // --- Parse JSON schema generator ---
+  function inferSchema(value){
+    if (value === null) return { type: "string" };
+    if (Array.isArray(value)) {
+      return {
+        type: "array",
+        items: value.length ? inferSchema(value[0]) : {}
+      };
+    }
+    switch (typeof value){
+      case 'string': return { type: "string" };
+      case 'number': return { type: "number" };
+      case 'boolean': return { type: "boolean" };
+      case 'object': {
+        const properties = {};
+        Object.keys(value).forEach(k => { properties[k] = inferSchema(value[k]); });
+        return { type: "object", properties };
+      }
+      default: return { type: "string" };
+    }
+  }
+
+  function updateJsonSchema(){
+    const raw = document.getElementById('json-input').value;
+    const errorEl = document.getElementById('json-error');
+    try {
+      const parsed = JSON.parse(raw);
+      const schema = inferSchema(parsed);
+      document.getElementById('json-schema-result').textContent = JSON.stringify(schema, null, 2);
+      errorEl.textContent = '';
+    } catch(e){
+      errorEl.textContent = 'That is not valid JSON, the schema will update once it parses.';
+    }
+  }
+
+  function copyJsonSchema(){
+    const text = document.getElementById('json-schema-result').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      document.getElementById('json-schema-copy-status').textContent = 'Schema copied to clipboard';
+    }).catch(() => {
+      document.getElementById('json-schema-copy-status').textContent = 'Copy failed, select the text manually';
+    });
+  }
+
+
+  updateJsonSchema();
+
+  // --- Date Formatter ---
+  function updateDateFormatter(){
+    const sourceSel = document.getElementById('df-source').value;
+    document.getElementById('df-custom-field').style.display = sourceSel === 'custom' ? 'block' : 'none';
+    const source = sourceSel === 'custom' ? document.getElementById('df-custom').value : sourceSel;
+
+    const formatSel = document.getElementById('df-format').value;
+    document.getElementById('df-custom-format-field').style.display = formatSel === 'custom' ? 'block' : 'none';
+    const format = formatSel === 'custom' ? document.getElementById('df-custom-format').value : formatSel;
+
+    const timezone = document.getElementById('df-timezone').value.trim();
+
+    let expr = timezone
+      ? `formatDateTime(convertTimeZone(${source}, 'UTC', '${timezone}'), '${format}')`
+      : `formatDateTime(${source}, '${format}')`;
+
+    document.getElementById('df-result').textContent = expr;
+  }
+
+  function copyDateFormatter(){
+    const text = document.getElementById('df-result').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      document.getElementById('df-copy-status').textContent = 'Expression copied to clipboard';
+    }).catch(() => {
+      document.getElementById('df-copy-status').textContent = 'Copy failed, select the text manually';
+    });
+  }
+
+  // --- JSON Schema Loosener ---
+  function loosenSchema(node){
+    if (node === null || typeof node !== 'object') return node;
+    if (Array.isArray(node)) return node.map(loosenSchema);
+
+    const result = {};
+    Object.keys(node).forEach(key => {
+      if (key === 'required') return; // strip required arrays entirely
+      if (key === 'type'){
+        const t = node[key];
+        if (Array.isArray(t)) {
+          result[key] = t.includes('null') ? t : [...t, 'null'];
+        } else if (t !== 'null') {
+          result[key] = [t, 'null'];
+        } else {
+          result[key] = t;
+        }
+      } else if (key === 'properties' || key === 'items') {
+        result[key] = loosenSchema(node[key]);
+      } else {
+        result[key] = node[key];
+      }
+    });
+    return result;
+  }
+
+  function updateLoosenedSchema(){
+    const raw = document.getElementById('loosen-input').value;
+    const errorEl = document.getElementById('loosen-error');
+    try {
+      const parsed = JSON.parse(raw);
+      const loosened = loosenSchema(parsed);
+      document.getElementById('loosen-result').textContent = JSON.stringify(loosened, null, 2);
+      errorEl.textContent = 'Removes every "required" array and allows null on every property type, so the action stops throwing when a field is missing.';
+    } catch(e){
+      errorEl.textContent = 'That is not valid JSON, paste a schema (the output of the JSON Schema Converter above works directly).';
+    }
+  }
+
+  function copyLoosenedSchema(){
+    const text = document.getElementById('loosen-result').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      document.getElementById('loosen-copy-status').textContent = 'Schema copied to clipboard';
+    }).catch(() => {
+      document.getElementById('loosen-copy-status').textContent = 'Copy failed, select the text manually';
+    });
+  }
+
+  // --- Adaptive Card Builder ---
+  function updateAdaptiveCard(){
+    const title = document.getElementById('ac-title').value || 'Title';
+    const body = document.getElementById('ac-body').value || '';
+    const includeButtons = document.getElementById('ac-buttons').checked;
+
+    const card = {
+      type: "AdaptiveCard",
+      "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+      version: "1.4",
+      body: [
+        { type: "TextBlock", text: title, weight: "Bolder", size: "Medium", wrap: true },
+        { type: "TextBlock", text: body, wrap: true }
+      ]
+    };
+    if (includeButtons){
+      card.actions = [
+        { type: "Action.Submit", title: "Approve", data: { action: "approve" } },
+        { type: "Action.Submit", title: "Reject", data: { action: "reject" } }
+      ];
+    }
+    document.getElementById('ac-result').textContent = JSON.stringify(card, null, 2);
+  }
+
+  function copyAdaptiveCard(){
+    const text = document.getElementById('ac-result').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      document.getElementById('ac-copy-status').textContent = 'Card JSON copied to clipboard';
+    }).catch(() => {
+      document.getElementById('ac-copy-status').textContent = 'Copy failed, select the text manually';
+    });
+  }
+
+  // --- Flow Error Handler ---
+  function updateErrorHandler(){
+    const scope = document.getElementById('eh-scope').value || 'Try_scope';
+    const statuses = Array.from(document.querySelectorAll('#error-handler input[type=checkbox]:checked')).map(el => el.value);
+
+    const runAfter = { runAfter: { [scope]: statuses.length ? statuses : ['Failed'] } };
+    document.getElementById('eh-runafter').textContent = JSON.stringify(runAfter, null, 2);
+
+    const errorExpr = `coalesce(result('${scope}')[0]?['error']?['message'], 'Unknown error in ${scope}')`;
+    document.getElementById('eh-error').textContent = errorExpr;
+
+    const message = `The flow failed in "${scope}".\\n\\nError: @{${errorExpr}}\\nRun: @{workflow()?['run']?['name']}`;
+    document.getElementById('eh-message').textContent = message;
+  }
+
+  function copyErrorHandler(){
+    const text = [
+      document.getElementById('eh-runafter').textContent,
+      document.getElementById('eh-error').textContent,
+      document.getElementById('eh-message').textContent
+    ].join('\n\n');
+    navigator.clipboard.writeText(text).then(() => {
+      document.getElementById('eh-copy-status').textContent = 'All three copied to clipboard';
+    }).catch(() => {
+      document.getElementById('eh-copy-status').textContent = 'Copy failed, select the text manually';
+    });
+  }
+
+  // --- HTML Table Styler ---
+  function updateHtmlTable(){
+    const columns = document.getElementById('ht-columns').value.split(',').map(c => c.trim()).filter(Boolean);
+    const color = document.getElementById('ht-color').value;
+    const rowCount = parseInt(document.getElementById('ht-rows').value) || 0;
+
+    const thStyle = `background-color:${color};color:#ffffff;padding:10px 14px;text-align:left;font-family:Arial,sans-serif;font-size:14px;border:1px solid ${color};`;
+    const tdStyle = `padding:10px 14px;font-family:Arial,sans-serif;font-size:14px;border:1px solid #dddddd;`;
+
+    let html = `<table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse;width:100%;">\n  <tr>\n`;
+    columns.forEach(c => { html += `    <th style="${thStyle}">${c}</th>\n`; });
+    html += `  </tr>\n`;
+    for (let r = 0; r < rowCount; r++){
+      html += `  <tr>\n`;
+      columns.forEach(() => { html += `    <td style="${tdStyle}">&nbsp;</td>\n`; });
+      html += `  </tr>\n`;
+    }
+    html += `</table>`;
+
+    document.getElementById('ht-result').textContent = html;
+  }
+
+  function copyHtmlTable(){
+    const text = document.getElementById('ht-result').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      document.getElementById('ht-copy-status').textContent = 'HTML copied to clipboard';
+    }).catch(() => {
+      document.getElementById('ht-copy-status').textContent = 'Copy failed, select the text manually';
+    });
+  }
+
+  // --- OData Query ---
+  let odataRowId = 0;
+  const odataOperators = { 'equals':'eq', 'not equals':'ne', 'greater than':'gt', 'less than':'lt', 'contains':'substringof' };
+
+  function addOdataRow(field, op, value){
+    odataRowId++;
+    const id = odataRowId;
+    const row = document.createElement('div');
+    row.className = 'filter-row';
+    row.id = 'odata-row-' + id;
+    row.innerHTML = `
+      <input type="text" placeholder="Field name" value="${field || ''}" aria-label="Field name" oninput="updateOdataQuery()">
+      <select aria-label="Operator" onchange="updateOdataQuery()">
+        ${Object.keys(odataOperators).map(o => `<option value="${o}" ${o === op ? 'selected' : ''}>${o}</option>`).join('')}
+      </select>
+      <input type="text" placeholder="Value" value="${value || ''}" aria-label="Value" oninput="updateOdataQuery()">
+      <button type="button" class="remove-row" onclick="removeOdataRow(${id})" aria-label="Remove this condition">Remove</button>
+    `;
+    document.getElementById('odata-rows').appendChild(row);
+    updateOdataQuery();
+  }
+
+  function removeOdataRow(id){
+    const row = document.getElementById('odata-row-' + id);
+    if (row) row.remove();
+    updateOdataQuery();
+  }
+
+  function updateOdataQuery(){
+    const logic = document.getElementById('odata-logic').value;
+    const rows = Array.from(document.querySelectorAll('#odata-rows .filter-row'));
+
+    const parts = rows.map(row => {
+      const [fieldInput, opSelect, valueInput] = row.querySelectorAll('input, select');
+      const field = fieldInput.value || 'FieldName';
+      const op = opSelect.value;
+      const value = valueInput.value;
+      const odataOp = odataOperators[op] || 'eq';
+      const isNumeric = value !== '' && !isNaN(value);
+      if (odataOp === 'substringof'){
+        return `substringof('${value}', ${field})`;
+      }
+      return `${field} ${odataOp} ${isNumeric ? value : `'${value}'`}`;
+    });
+
+    let query = '';
+    if (parts.length){
+      query += `$filter=${parts.join(` ${logic} `)}`;
+    }
+    const select = document.getElementById('odata-select').value.trim();
+    const orderby = document.getElementById('odata-orderby').value.trim();
+    const top = document.getElementById('odata-top').value.trim();
+
+    if (select) query += (query ? '&' : '') + `$select=${select.split(',').map(s=>s.trim()).join(',')}`;
+    if (orderby) query += (query ? '&' : '') + `$orderby=${orderby}`;
+    if (top) query += (query ? '&' : '') + `$top=${top}`;
+
+    document.getElementById('odata-result').textContent = query || 'Add at least one condition, or set $select / $top / $orderby.';
+  }
+
+  function copyOdataQuery(){
+    const text = document.getElementById('odata-result').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      document.getElementById('odata-copy-status').textContent = 'Query copied to clipboard';
+    }).catch(() => {
+      document.getElementById('odata-copy-status').textContent = 'Copy failed, select the text manually';
+    });
+  }
+
+  updateDateFormatter();
+  updateLoosenedSchema();
+  updateAdaptiveCard();
+  updateErrorHandler();
+  updateHtmlTable();
+  addOdataRow('Priority', 'equals', 'Urgent');
+
+  // --- D365 FetchXML Builder ---
+  let fxRowId = 0;
+  const fxOperators = { 'equals':'eq', 'not equals':'ne', 'greater than':'gt', 'less than':'lt', 'contains':'like' };
+
+  function addFetchXmlRow(field, op, value){
+    fxRowId++;
+    const id = fxRowId;
+    const row = document.createElement('div');
+    row.className = 'filter-row';
+    row.id = 'fx-row-' + id;
+    row.innerHTML = `
+      <input type="text" placeholder="Attribute name" value="${field || ''}" aria-label="Attribute name" oninput="updateFetchXml()">
+      <select aria-label="Operator" onchange="updateFetchXml()">
+        ${Object.keys(fxOperators).map(o => `<option value="${o}" ${o === op ? 'selected' : ''}>${o}</option>`).join('')}
+      </select>
+      <input type="text" placeholder="Value" value="${value || ''}" aria-label="Value" oninput="updateFetchXml()">
+      <button type="button" class="remove-row" onclick="removeFetchXmlRow(${id})" aria-label="Remove this condition">Remove</button>
+    `;
+    document.getElementById('fx-rows').appendChild(row);
+    updateFetchXml();
+  }
+
+  function removeFetchXmlRow(id){
+    const row = document.getElementById('fx-row-' + id);
+    if (row) row.remove();
+    updateFetchXml();
+  }
+
+  function escapeXml(str){
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function updateFetchXml(){
+    const entity = document.getElementById('fx-entity').value || 'entity';
+    const attrsRaw = document.getElementById('fx-attributes').value.trim();
+    const logic = document.getElementById('fx-logic').value;
+    const orderby = document.getElementById('fx-orderby').value.trim();
+    const descending = document.getElementById('fx-descending').checked;
+    const top = document.getElementById('fx-top').value.trim();
+
+    const rows = Array.from(document.querySelectorAll('#fx-rows .filter-row'));
+
+    let xml = `<fetch${top ? ` top="${escapeXml(top)}"` : ''}>\n`;
+    xml += `  <entity name="${escapeXml(entity)}">\n`;
+
+    if (attrsRaw){
+      attrsRaw.split(',').map(a => a.trim()).filter(Boolean).forEach(attr => {
+        xml += `    <attribute name="${escapeXml(attr)}" />\n`;
+      });
+    } else {
+      xml += `    <all-attributes />\n`;
+    }
+
+    if (orderby){
+      xml += `    <order attribute="${escapeXml(orderby)}"${descending ? ' descending="true"' : ''} />\n`;
+    }
+
+    if (rows.length){
+      xml += `    <filter type="${logic}">\n`;
+      rows.forEach(row => {
+        const [fieldInput, opSelect, valueInput] = row.querySelectorAll('input, select');
+        const field = fieldInput.value || 'attributename';
+        const op = fxOperators[opSelect.value] || 'eq';
+        const value = valueInput.value;
+        xml += `      <condition attribute="${escapeXml(field)}" operator="${op}" value="${escapeXml(value)}" />\n`;
+      });
+      xml += `    </filter>\n`;
+    }
+
+    xml += `  </entity>\n`;
+    xml += `</fetch>`;
+
+    document.getElementById('fx-result').textContent = xml;
+  }
+
+  function copyFetchXml(){
+    const text = document.getElementById('fx-result').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      document.getElementById('fx-copy-status').textContent = 'FetchXML copied to clipboard';
+    }).catch(() => {
+      document.getElementById('fx-copy-status').textContent = 'Copy failed, select the text manually';
+    });
+  }
+
+  addFetchXmlRow('prioritycode', 'equals', '1');
+
+  function currentTheme(){
+    var attr = document.documentElement.getAttribute("data-theme");
+    if (attr) return attr;
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+
+  function syncThemeButton(){
+    var btn = document.getElementById("theme-toggle");
+    if (!btn) return;
+    var theme = currentTheme();
+    btn.textContent = theme === "dark" ? "Light" : "Dark";
+    btn.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+  }
+
+  function toggleTheme(){
+    var next = currentTheme() === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    try { localStorage.setItem("flownarrate-theme", next); } catch(e) { /* ignore */ }
+    syncThemeButton();
+  }
+
+  syncThemeButton();
+
+  // --- Table of contents active-section tracking ---
+  (function(){
+    var tocLinks = Array.from(document.querySelectorAll('.toc a[data-toc]'));
+    if (!tocLinks.length) return;
+    var sections = tocLinks.map(function(a){
+      return document.getElementById(a.getAttribute('href').slice(1));
+    }).filter(Boolean);
+
+    function setCurrent(id){
+      tocLinks.forEach(function(a){
+        var isCurrent = a.getAttribute('href') === '#' + id;
+        a.setAttribute('aria-current', isCurrent ? 'true' : 'false');
+      });
+    }
+
+    if ('IntersectionObserver' in window){
+      var observer = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if (entry.isIntersecting){
+            setCurrent(entry.target.id);
+          }
+        });
+      }, { rootMargin: '-15% 0px -70% 0px' });
+      sections.forEach(function(s){ observer.observe(s); });
+    }
+
+    tocLinks.forEach(function(a){
+      a.addEventListener('click', function(){
+        setCurrent(a.getAttribute('href').slice(1));
+      });
+    });
+
+    if (sections[0]) setCurrent(sections[0].id);
+  })();
+</script>
+
+</body>
+</html>
