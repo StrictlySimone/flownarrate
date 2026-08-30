@@ -264,10 +264,7 @@
     var next = currentTheme() === "dark" ? "light" : "dark";
     document.documentElement.setAttribute("data-theme", next);
     try { localStorage.setItem("flownarrate-theme", next); } catch(e) {}
-    var yearEl = document.getElementById('copyright-year');
-  if (yearEl) yearEl.textContent = new Date().getFullYear();
-
-  syncThemeButton();
+    syncThemeButton();
   }
   function toggleNav(){
     var links = document.getElementById('nav-links');
@@ -281,6 +278,8 @@
       document.getElementById('nav-toggle').setAttribute('aria-expanded', 'false');
     });
   });
+  var yearEl = document.getElementById('copyright-year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
   syncThemeButton();
 </script>
 </body>
