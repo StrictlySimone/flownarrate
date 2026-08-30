@@ -384,7 +384,7 @@
   <h2>Step by step: what each part does and why</h2>
 
   <h3>1. The trigger</h3>
-  <p>A row is added to an Expense Claims table in Dataverse. This matters more than it looks: triggering off the record rather than a form submission means anything that creates a valid claim (a mobile app, a bulk import, a future integration) starts the same approval, instead of the logic living inside one form.</p>
+  <p>The trigger is Dataverse's <span class="mono">When a row is added, modified, or deleted</span> trigger, configured for Added only, on the Expense Claims table. This matters more than it looks: triggering off the record rather than a form submission means anything that creates a valid claim (a mobile app, a bulk import, a future integration) starts the same approval, instead of the logic living inside one form.</p>
 
   <h3>2. The threshold condition</h3>
   <p>One condition checks the claim amount against a fixed value. The value itself isn't the interesting part; the reason it exists is: below it, a manager has enough context and authority to decide alone. Above it, the org wants a second, more senior set of eyes. Whenever you see a threshold like this in a flow, ask what decision it's actually encoding. It's rarely just "money."</p>
