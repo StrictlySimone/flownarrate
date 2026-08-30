@@ -398,16 +398,22 @@
   <h3>3. The approval action, assigned conditionally</h3>
   <p>Both branches use the same Approvals action, just with a different assignee. Keeping the approval step identical across branches (instead of duplicating separate approval logic per branch) is deliberate. When both branches later need a third field on the approval card, you change it once.</p>
 
-  <h3>4. The escalation, running in parallel</h3>
+  <h3>4. Checking before you assign, not after</h3>
+  <p>The approval and escalation steps as built so far are honest but passive: assign the approval, start a clock, react if nobody answers. A version that's had a few more iterations checks something first, before the approval task even gets created: is the person about to be assigned actually around. (This step doesn't appear in the diagram above or the flow definition below; picture it as its own scope inserted between step 3 and the approval task.)</p>
+  <p>Two Office 365 actions do the actual work. <span class="mono">Office 365 Outlook &rarr; Get automatic reply settings</span> checks whether the intended approver currently has an out-of-office auto-reply switched on, and for what date range. <span class="mono">Office 365 Users &rarr; Get manager (V2)</span> resolves that person's manager dynamically, instead of a second hardcoded name sitting next to the first one.</p>
+  <p>The logic sits between step 3 and the approval task itself: work out who the approver should be (finance director or manager, from the threshold branch), check their automatic reply settings, and if today falls inside an active out-of-office window, assign the approval to their manager instead, with a note on the approval card explaining why it was rerouted so nobody's confused when the wrong name shows up.</p>
+  <p>It's worth being as honest about the limits of this as the rest of the flow. It only catches people who've actually turned an auto-reply on, which is far from everyone. It doesn't help if the manager is also out. And it's an extra connector call on every single approval: a fine trade for something this frequent, but worth knowing you're paying it. A stored "backup approver" field that someone maintains deliberately is more reliable than inferring availability from a mailbox setting, slower to build, but it doesn't depend on people remembering to turn something on before they leave.</p>
+
+  <h3>5. The escalation, running in parallel</h3>
   <p>This is the part people build second, if they build it at all. A delay runs alongside the approval wait. If the delay finishes first, the flow sends a reminder rather than a decision, and restarts the wait. This is a race-condition pattern, not a branch off the approval: the approval task and the delay run at the same time, and whichever finishes first decides what happens next.</p>
   <p>Auto-approving after a timeout is tempting because it "unblocks" things, but it quietly moves the approval authority from a person to a clock. A reminder keeps the decision where it belongs and just makes silence louder.</p>
 
-  <h3>5. Outcome handling</h3>
+  <h3>6. Outcome handling</h3>
   <p>Approved and rejected both do the same two things: update the Dataverse row's status field, and notify the submitter. The only difference is the message and whether a rejection reason gets attached. Two near-identical branches doing almost the same thing is a normal, honest shape for a flow. Don't over-engineer it into one clever branch just to avoid repetition.</p>
 
   <h2>Where flows like this quietly break</h2>
   <ul>
-    <li><strong>The approver is out.</strong> No delegate, no backup assignee. The escalation reminds the same absent person, forever.</li>
+    <li><strong>The approver is out, and nobody turned on automatic replies.</strong> The out-of-office check only catches people who've actually set an auto-reply. If they haven't, the escalation still reminds the same absent person, forever.</li>
     <li><strong>The threshold is hardcoded.</strong> Finance changes the policy from $500 to $750 and now someone has to open the flow (not a settings table) to update it.</li>
     <li><strong>Escalation reminds, but never re-routes.</strong> After the third reminder with no response, nothing hands the decision to someone else. A one-way escalation eventually becomes a stuck flow.</li>
     <li><strong>The rejection path is thinner than the approval path.</strong> It's common to see a rejection notification with no reason field required, which means the submitter gets a "no" with nothing to act on.</li>
