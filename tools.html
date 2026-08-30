@@ -1626,7 +1626,10 @@
     var next = currentTheme() === "dark" ? "light" : "dark";
     document.documentElement.setAttribute("data-theme", next);
     try { localStorage.setItem("flownarrate-theme", next); } catch(e) { /* ignore */ }
-    function toggleNav(){
+    syncThemeButton();
+  }
+
+  function toggleNav(){
     var links = document.getElementById('nav-links');
     var btn = document.getElementById('nav-toggle');
     var isOpen = links.classList.toggle('open');
@@ -1644,9 +1647,6 @@
 
   var yearEl = document.getElementById('copyright-year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
-
-  syncThemeButton();
-  }
 
   syncThemeButton();
 
