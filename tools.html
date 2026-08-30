@@ -78,6 +78,8 @@
     font-family:'Source Serif 4', serif;
     font-size:17px;
     line-height:1.65;
+    overflow-x:hidden;
+    width:100%;
   }
   .mono{font-family:'JetBrains Mono',monospace;}
   a{color:inherit;}
@@ -209,65 +211,6 @@
   .filter-row .remove-row:hover{border-color:#9E3B32;color:#9E3B32;}
   @media(max-width:640px){
     .filter-row{grid-template-columns:1fr;}
-  }
-
-  .tools-layout{
-    display:flex;
-    align-items:flex-start;
-    gap:48px;
-    padding:0 56px;
-  }
-  .tools-content{flex:1;min-width:0;}
-  .tools-content section{padding-left:0;padding-right:0;}
-  .toc{
-    width:220px;
-    flex-shrink:0;
-    position:sticky;
-    top:24px;
-    max-height:calc(100vh - 48px);
-    overflow-y:auto;
-  }
-  .toc-heading{
-    font-family:'JetBrains Mono',monospace;
-    font-size:0.72rem;
-    color:var(--ink-soft);
-    text-transform:uppercase;
-    letter-spacing:0.06em;
-    margin-bottom:14px;
-    font-weight:500;
-  }
-  .toc ul{list-style:none;}
-  .toc li{margin-bottom:2px;}
-  .toc a{
-    display:block;
-    padding:7px 0 7px 14px;
-    border-left:2px solid var(--rule);
-    font-family:'JetBrains Mono',monospace;
-    font-size:0.82rem;
-    color:var(--ink-soft);
-    text-decoration:none;
-    line-height:1.35;
-  }
-  .toc a:hover{color:var(--ink);border-left-color:var(--ink-soft);}
-  .toc a[aria-current="true"]{
-    color:var(--succeeded);
-    border-left-color:var(--succeeded);
-    font-weight:500;
-  }
-  @media(max-width:767px){
-    .tools-layout{flex-direction:column;padding:0 22px;gap:0;}
-    .toc{
-      position:static;
-      width:100%;
-      max-height:200px;
-      overflow-y:auto;
-      margin-bottom:32px;
-      padding-bottom:12px;
-      border-bottom:1px solid var(--rule);
-    }
-  }
-  @media(max-width:640px){
-    .tools-layout{padding:0 22px;}
   }
 
   nav{
@@ -516,25 +459,6 @@
   </div>
 </section>
 
-<div class="tools-layout">
-<nav class="toc" aria-label="On this page">
-  <h2 class="toc-heading">On this page</h2>
-  <ul>
-    <li><a href="#expression-builder" data-toc>Dynamic Expressions</a></li>
-    <li><a href="#filter-builder" data-toc>Filter &amp; Trigger Conditions</a></li>
-    <li><a href="#date-formatter" data-toc>Date Formatter</a></li>
-    <li><a href="#column-formatting" data-toc>Column Formatting</a></li>
-    <li><a href="#svg-converter" data-toc>SVG to Image</a></li>
-    <li><a href="#json-schema" data-toc>JSON Schema Converter</a></li>
-    <li><a href="#json-loosener" data-toc>JSON Schema Loosener</a></li>
-    <li><a href="#adaptive-card" data-toc>Adaptive Card Builder</a></li>
-    <li><a href="#error-handler" data-toc>Flow Error Handler</a></li>
-    <li><a href="#html-table" data-toc>HTML Table Styler</a></li>
-    <li><a href="#odata-query" data-toc>OData Query</a></li>
-    <li><a href="#fetchxml-builder" data-toc>D365 FetchXML Builder</a></li>
-  </ul>
-</nav>
-<div class="tools-content">
 <section id="expression-builder">
   <div class="section-head">
     <div>
@@ -995,9 +919,6 @@
     <p class="expr-note">Use this in a "List rows" action's Fetch XML Query field, a custom report, or the FetchXML tab of Advanced Find. Field operators here cover the common cases, FetchXML supports more (like-x, between, on-x) that you may still need to add by hand.</p>
   </div>
 </section>
-
-</div>
-</div>
 
 </main>
 
@@ -1670,50 +1591,6 @@
 
   syncThemeButton();
 
-  // TEMPORARY DIAGNOSTIC — remove after checking viewport width
-  (function(){
-    var badge = document.createElement('div');
-    badge.style.cssText = 'position:fixed;top:8px;right:8px;background:#000;color:#0f0;font-family:monospace;font-size:14px;padding:8px 12px;z-index:99999;border-radius:4px;';
-    function update(){ badge.textContent = 'viewport: ' + window.innerWidth + 'px | css-version: vertical-box-v2'; }
-    update();
-    window.addEventListener('resize', update);
-    document.body.appendChild(badge);
-  })();
-
-  // --- Table of contents active-section tracking ---
-  (function(){
-    var tocLinks = Array.from(document.querySelectorAll('.toc a[data-toc]'));
-    if (!tocLinks.length) return;
-    var sections = tocLinks.map(function(a){
-      return document.getElementById(a.getAttribute('href').slice(1));
-    }).filter(Boolean);
-
-    function setCurrent(id){
-      tocLinks.forEach(function(a){
-        var isCurrent = a.getAttribute('href') === '#' + id;
-        a.setAttribute('aria-current', isCurrent ? 'true' : 'false');
-      });
-    }
-
-    if ('IntersectionObserver' in window){
-      var observer = new IntersectionObserver(function(entries){
-        entries.forEach(function(entry){
-          if (entry.isIntersecting){
-            setCurrent(entry.target.id);
-          }
-        });
-      }, { rootMargin: '-15% 0px -70% 0px' });
-      sections.forEach(function(s){ observer.observe(s); });
-    }
-
-    tocLinks.forEach(function(a){
-      a.addEventListener('click', function(){
-        setCurrent(a.getAttribute('href').slice(1));
-      });
-    });
-
-    if (sections[0]) setCurrent(sections[0].id);
-  })();
 </script>
 
 </body>
