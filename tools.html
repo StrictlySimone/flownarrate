@@ -1670,6 +1670,16 @@
 
   syncThemeButton();
 
+  // TEMPORARY DIAGNOSTIC — remove after checking viewport width
+  (function(){
+    var badge = document.createElement('div');
+    badge.style.cssText = 'position:fixed;top:8px;right:8px;background:#000;color:#0f0;font-family:monospace;font-size:14px;padding:8px 12px;z-index:99999;border-radius:4px;';
+    function update(){ badge.textContent = 'viewport: ' + window.innerWidth + 'px | css-version: vertical-box-v2'; }
+    update();
+    window.addEventListener('resize', update);
+    document.body.appendChild(badge);
+  })();
+
   // --- Table of contents active-section tracking ---
   (function(){
     var tocLinks = Array.from(document.querySelectorAll('.toc a[data-toc]'));
