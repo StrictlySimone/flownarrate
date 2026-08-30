@@ -14,6 +14,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 fill=%27%23311847%27/%3E%3Ctext x=%2716%27 y=%2723%27 font-family=%27monospace%27 font-size=%2718%27 font-weight=%27700%27 fill=%27%23EC4067%27 text-anchor=%27middle%27%3Efn%3C/text%3E%3C/svg%3E">
 <title>Tools: FlowNarrate</title>
 <meta name="description" content="Free browser-based tools for Power Fx expressions and filter conditions. No sign-in, nothing leaves your browser.">
 <link rel="canonical" href="https://flownarrate.com/tools.html">
@@ -234,6 +235,42 @@
     text-transform:uppercase;letter-spacing:0.06em;
   }
   nav ul li a:hover{color:var(--ink);}
+  .nav-toggle{
+    display:none;
+    flex-direction:column;
+    justify-content:center;
+    gap:5px;
+    background:none;
+    border:none;
+    cursor:pointer;
+    padding:8px;
+  }
+  .nav-toggle span{
+    display:block;
+    width:22px;
+    height:2px;
+    background:var(--ink);
+  }
+  @media(max-width:680px){
+    .nav-toggle{display:flex;}
+    nav{flex-wrap:nowrap;}
+    #nav-links{
+      display:none;
+      flex-direction:column;
+      align-items:flex-start;
+      gap:16px;
+      width:100%;
+      position:absolute;
+      top:100%;
+      left:0;
+      background:var(--paper);
+      border-bottom:1px solid var(--rule);
+      padding:20px 22px;
+      z-index:50;
+    }
+    #nav-links.open{display:flex;}
+    nav{position:relative;}
+  }
   .theme-toggle{
     font-family:'JetBrains Mono',monospace;
     font-size:0.8rem;
@@ -441,7 +478,10 @@
 
 <nav>
   <a href="index.html" class="brand">flow<span class="dot">·</span>narrate</a>
-  <ul>
+  <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menu" onclick="toggleNav()">
+    <span></span><span></span><span></span>
+  </button>
+  <ul id="nav-links">
     <li><a href="index.html#pillars">Read</a></li>
     <li><a href="tools.html">Tools</a></li>
     <li><a href="index.html#about">About</a></li>
@@ -923,8 +963,8 @@
 </main>
 
 <footer>
-  <div>flownarrate.com</div>
-  <div><a href="https://linkedin.com/in/sptgb" target="_blank" rel="noopener" style="color:inherit;">LinkedIn</a> · AB-100 Certified · Microsoft Certified Trainer</div>
+  <div><a href="index.html" style="color:inherit;">flownarrate.com</a> &middot; &copy; <span id="copyright-year"></span></div>
+  <div><a href="privacy.html" style="color:inherit;">Privacy</a> · <a href="https://linkedin.com/in/sptgb" target="_blank" rel="noopener" style="color:inherit;">LinkedIn</a> · AB-100 Certified · Microsoft Certified Trainer</div>
 </footer>
 
 <script>
@@ -1586,7 +1626,26 @@
     var next = currentTheme() === "dark" ? "light" : "dark";
     document.documentElement.setAttribute("data-theme", next);
     try { localStorage.setItem("flownarrate-theme", next); } catch(e) { /* ignore */ }
-    syncThemeButton();
+    function toggleNav(){
+    var links = document.getElementById('nav-links');
+    var btn = document.getElementById('nav-toggle');
+    var isOpen = links.classList.toggle('open');
+    btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  }
+
+  document.querySelectorAll('#nav-links a').forEach(function(link){
+    link.addEventListener('click', function(){
+      var links = document.getElementById('nav-links');
+      var btn = document.getElementById('nav-toggle');
+      links.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  var yearEl = document.getElementById('copyright-year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+  syncThemeButton();
   }
 
   syncThemeButton();
