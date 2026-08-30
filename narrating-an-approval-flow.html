@@ -270,14 +270,6 @@
     overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
   }
 
-  .json-panel{margin:0 0 32px;}
-  .json-note{
-    font-family:'JetBrains Mono',monospace;
-    font-size:0.78rem;
-    color:var(--warning);
-    margin-bottom:12px;
-  }
-
   .back{
     display:inline-block;
     margin-top:48px;
@@ -399,7 +391,7 @@
   <p>Both branches use the same Approvals action, just with a different assignee. Keeping the approval step identical across branches (instead of duplicating separate approval logic per branch) is deliberate. When both branches later need a third field on the approval card, you change it once.</p>
 
   <h3>4. Checking before you assign, not after</h3>
-  <p>The approval and escalation steps as built so far are honest but passive: assign the approval, start a clock, react if nobody answers. A version that's had a few more iterations checks something first, before the approval task even gets created: is the person about to be assigned actually around. (This step doesn't appear in the diagram above or the flow definition below; picture it as its own scope inserted between step 3 and the approval task.)</p>
+  <p>The approval and escalation steps as built so far are honest but passive: assign the approval, start a clock, react if nobody answers. A version that's had a few more iterations checks something first, before the approval task even gets created: is the person about to be assigned actually around. (This step doesn't appear in the diagram above; picture it as its own scope inserted between step 3 and the approval task.)</p>
   <p>Two Office 365 actions do the actual work. <span class="mono">Office 365 Outlook &rarr; Get automatic reply settings</span> checks whether the intended approver currently has an out-of-office auto-reply switched on, and for what date range. <span class="mono">Office 365 Users &rarr; Get manager (V2)</span> resolves that person's manager dynamically, instead of a second hardcoded name sitting next to the first one.</p>
   <p>The logic sits between step 3 and the approval task itself: work out who the approver should be (finance director or manager, from the threshold branch), check their automatic reply settings, and if today falls inside an active out-of-office window, assign the approval to their manager instead, with a note on the approval card explaining why it was rerouted so nobody's confused when the wrong name shows up.</p>
   <p>It's worth being as honest about the limits of this as the rest of the flow. It only catches people who've actually turned an auto-reply on, which is far from everyone. It doesn't help if the manager is also out. And it's an extra connector call on every single approval: a fine trade for something this frequent, but worth knowing you're paying it. A stored "backup approver" field that someone maintains deliberately is more reliable than inferring availability from a mailbox setting, slower to build, but it doesn't depend on people remembering to turn something on before they leave.</p>
@@ -420,135 +412,6 @@
     <li><strong>No audit trail beyond the approval history.</strong> If the Dataverse row's status changes outside the flow (a direct edit, a data fix), the flow's approval record and the record's actual status can silently disagree.</li>
   </ul>
   <p>None of these are exotic failures. They're the ordinary ways an approval flow drifts from what it was supposed to guarantee, and they're exactly the kind of thing that's obvious in five minutes to whoever built the flow and invisible to whoever inherits it.</p>
-
-  <h2>Copy the flow definition</h2>
-  <p>Power Automate stores every flow as a JSON definition you can view and edit under <span class="mono">Edit → Advanced mode</span> (the "code view"). Below is the shape of this flow's definition: trigger, the threshold condition, the approval-plus-escalation scope, and the two outcome branches.</p>
-  <div class="json-panel">
-    <p class="json-note">This isn't a one-click import. Connection references, table names, and GUIDs are placeholders, IDs are illustrative, and inputs are simplified for readability. Paste it into code view as a starting structure, then reconnect your Dataverse and Approvals connections and swap in your own table and field names.</p>
-    <details class="mermaid-toggle" open>
-      <summary>View flow definition JSON (copyable)</summary>
-      <pre class="code-block" id="json-source" tabindex="0">{
-  "definition": {
-    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
-    "triggers": {
-      "When_a_row_is_added": {
-        "type": "OpenApiConnectionWebhook",
-        "inputs": {
-          "host": { "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps" },
-          "parameters": {
-            "subscriptionRequest/message": 1,
-            "subscriptionRequest/entityname": "cr_expenseclaim"
-          }
-        }
-      }
-    },
-    "actions": {
-      "Over_threshold": {
-        "type": "If",
-        "expression": {
-          "greater": [
-            "@triggerOutputs()?['body/cr_amount']",
-            500
-          ]
-        },
-        "actions": {
-          "Start_and_wait_-_Finance_Director": {
-            "type": "OpenApiConnection",
-            "inputs": {
-              "host": { "apiId": "/providers/Microsoft.PowerApps/apis/shared_approvals" },
-              "parameters": {
-                "approvalType": "Approve/Reject",
-                "title": "Expense claim over threshold",
-                "assignedTo": "<finance-director-upn>",
-                "details": "@triggerOutputs()?['body/cr_description']"
-              }
-            },
-            "runAfter": {}
-          }
-        },
-        "else": {
-          "actions": {
-            "Start_and_wait_-_Manager": {
-              "type": "OpenApiConnection",
-              "inputs": {
-                "host": { "apiId": "/providers/Microsoft.PowerApps/apis/shared_approvals" },
-                "parameters": {
-                  "approvalType": "Approve/Reject",
-                  "title": "Expense claim",
-                  "assignedTo": "@triggerOutputs()?['body/_ownerid_value']",
-                  "details": "@triggerOutputs()?['body/cr_description']"
-                }
-              },
-              "runAfter": {}
-            }
-          }
-        }
-      },
-      "Escalation_scope": {
-        "type": "Scope",
-        "actions": {
-          "Delay_48h": {
-            "type": "Wait",
-            "inputs": { "interval": { "count": 48, "unit": "Hour" } }
-          },
-          "Check_still_pending": {
-            "type": "If",
-            "expression": {
-              "equals": ["@variables('ApprovalStatus')", "Pending"]
-            },
-            "actions": {
-              "Send_reminder": {
-                "type": "OpenApiConnection",
-                "inputs": {
-                  "host": { "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365" },
-                  "parameters": {
-                    "operationId": "SendEmailV2",
-                    "subject": "Reminder: expense claim awaiting your approval"
-                  }
-                },
-                "runAfter": { "Delay_48h": ["Succeeded"] }
-              }
-            },
-            "runAfter": { "Delay_48h": ["Succeeded"] }
-          }
-        },
-        "runAfter": { "Over_threshold": ["Succeeded"] }
-      },
-      "Update_record_and_notify": {
-        "type": "If",
-        "expression": {
-          "equals": ["@variables('ApprovalOutcome')", "Approve"]
-        },
-        "actions": {
-          "Set_status_Approved": {
-            "type": "OpenApiConnection",
-            "inputs": {
-              "host": { "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps" },
-              "parameters": { "operationId": "UpdateRecord", "cr_status": "Approved" }
-            }
-          }
-        },
-        "else": {
-          "actions": {
-            "Set_status_Rejected": {
-              "type": "OpenApiConnection",
-              "inputs": {
-                "host": { "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps" },
-                "parameters": { "operationId": "UpdateRecord", "cr_status": "Rejected" }
-              }
-            }
-          }
-        },
-        "runAfter": { "Escalation_scope": ["Succeeded"] }
-      }
-    },
-    "outputs": {}
-  }
-}</pre>
-      <button type="button" class="copy-btn" onclick="copyBlock('json-source','json-status')">Copy flow definition JSON</button>
-      <span id="json-status" class="sr-only" aria-live="polite"></span>
-    </details>
-  </div>
 
   <h2>If you inherited this flow</h2>
   <p>Five things worth checking in the first sitting, before you change anything: who's hardcoded as an approver and whether they still hold that role, whether the threshold value lives in the flow or somewhere it can be changed without editing logic, what happens after the second and third reminder (not just the first), whether rejection actually captures a reason, and whether the record's status can drift from the approval history. Every one of those is a five-minute check that saves someone a bad afternoon later.</p>
