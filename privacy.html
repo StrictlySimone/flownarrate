@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+  (function(){
+    try {
+      var saved = localStorage.getItem('flownarrate-theme');
+      if (saved === 'dark' || saved === 'light') {
+        document.documentElement.setAttribute('data-theme', saved);
+      }
+    } catch(e) { /* localStorage unavailable, fall back to OS preference via CSS */ }
+  })();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 fill=%27%23311847%27/%3E%3Ctext x=%2716%27 y=%2723%27 font-family=%27monospace%27 font-size=%2718%27 font-weight=%27700%27 fill=%27%23EC4067%27 text-anchor=%27middle%27%3Efn%3C/text%3E%3C/svg%3E">
+<title>Privacy: FlowNarrate</title>
+<meta name="description" content="FlowNarrate does not collect personal data. Here is exactly what the site does and does not do.">
+<meta name="robots" content="index, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #FBF3F0;
+    --panel: #FFFBF9;
+    --ink: #311847;
+    --ink-soft: #6B5877;
+    --rule: #E3D3DC;
+    --succeeded: #A01A7D;
+  }
+  [data-theme="dark"]{
+    --paper: #1C1024;
+    --panel: #241531;
+    --ink: #F3E9EF;
+    --ink-soft: #C9AFC0;
+    --rule: #4A2F5E;
+    --succeeded: #F1728C;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper: #1C1024;
+      --panel: #241531;
+      --ink: #F3E9EF;
+      --ink-soft: #C9AFC0;
+      --rule: #4A2F5E;
+      --succeeded: #F1728C;
+    }
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Source Serif 4', serif;
+    font-size:18px;
+    line-height:1.7;
+    overflow-x:hidden;
+    width:100%;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:var(--succeeded);}
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--succeeded);
+    outline-offset:2px;
+  }
+  .skip-link{
+    position:absolute;left:-9999px;top:0;
+    background:var(--ink);color:var(--paper);
+    padding:12px 20px;z-index:100;
+    font-family:'JetBrains Mono',monospace;font-size:0.85rem;
+    text-decoration:none;
+  }
+  .skip-link:focus{left:12px;top:12px;}
+
+  nav{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:26px 56px;
+    border-bottom:1px solid var(--rule);
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  .brand{
+    font-family:'JetBrains Mono',monospace;
+    font-size:1rem;font-weight:600;
+    letter-spacing:0.02em;
+    white-space:nowrap;
+    text-decoration:none;
+    color:var(--ink);
+  }
+  .brand .dot{color:var(--succeeded);}
+  nav ul{display:flex;gap:34px;list-style:none;}
+  nav ul li a{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.8rem;text-decoration:none;color:var(--ink-soft);
+    text-transform:uppercase;letter-spacing:0.06em;
+  }
+  nav ul li a:hover{color:var(--ink);}
+  .nav-toggle{
+    display:none;
+    flex-direction:column;
+    justify-content:center;
+    gap:5px;
+    background:none;
+    border:none;
+    cursor:pointer;
+    padding:8px;
+  }
+  .nav-toggle span{
+    display:block;
+    width:22px;
+    height:2px;
+    background:var(--ink);
+  }
+  @media(max-width:680px){
+    .nav-toggle{display:flex;}
+    nav{flex-wrap:nowrap;}
+    #nav-links{
+      display:none;
+      flex-direction:column;
+      align-items:flex-start;
+      gap:16px;
+      width:100%;
+      position:absolute;
+      top:100%;
+      left:0;
+      background:var(--paper);
+      border-bottom:1px solid var(--rule);
+      padding:20px 22px;
+      z-index:50;
+    }
+    #nav-links.open{display:flex;}
+    nav{position:relative;}
+  }
+  .theme-toggle{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.8rem;
+    color:var(--ink-soft);
+    background:none;
+    border:1px solid var(--rule);
+    padding:6px 12px;
+    cursor:pointer;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+  }
+  .theme-toggle:hover{color:var(--ink);border-color:var(--ink-soft);}
+  body{transition:background-color .15s ease, color .15s ease;}
+  @media (prefers-reduced-motion: reduce){ body{transition:none;} }
+
+  article{
+    max-width:680px;
+    margin:0 auto;
+    padding:64px 24px 100px;
+  }
+  .meta{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    margin-bottom:18px;
+  }
+  h1{
+    font-weight:500;
+    font-size:clamp(1.9rem, 4vw, 2.6rem);
+    line-height:1.2;
+    letter-spacing:-0.01em;
+    margin-bottom:36px;
+  }
+  h2{
+    font-weight:500;
+    font-size:1.4rem;
+    margin:44px 0 16px;
+  }
+  p{margin-bottom:20px;color:var(--ink);}
+  p:first-of-type::first-letter{
+    font-size:2.6rem;
+    font-weight:600;
+    float:left;
+    line-height:0.8;
+    padding-right:8px;
+    padding-top:6px;
+    color:var(--succeeded);
+  }
+
+  .back{
+    display:inline-block;
+    margin-top:48px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.85rem;
+    text-decoration:none;
+    color:var(--ink-soft);
+    border-top:1px solid var(--rule);
+    padding-top:20px;
+  }
+  .back:hover{color:var(--ink);}
+
+  footer{
+    padding:34px 56px;
+    border-top:1px solid var(--rule);
+    display:flex;justify-content:space-between;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.75rem;color:var(--ink-soft);
+    flex-wrap:wrap;gap:10px;
+  }
+
+  @media(max-width:768px){
+    article{padding:52px 22px 80px;}
+    body{font-size:17px;}
+  }
+  @media(max-width:640px){
+    nav, footer{padding-left:22px;padding-right:22px;}
+    article{padding-top:40px;padding-left:20px;padding-right:20px;}
+    nav ul{gap:18px;}
+    h1{font-size:1.7rem;}
+  }
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav>
+  <a href="index.html" class="brand">flow<span class="dot">&middot;</span>narrate</a>
+  <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menu" onclick="toggleNav()">
+    <span></span><span></span><span></span>
+  </button>
+  <ul id="nav-links">
+    <li><a href="index.html#pillars">Read</a></li>
+    <li><a href="tools.html">Tools</a></li>
+    <li><a href="index.html#about">About</a></li>
+    <li><button type="button" id="theme-toggle" class="theme-toggle" aria-pressed="false" onclick="toggleTheme()">Dark</button></li>
+  </ul>
+</nav>
+
+<main id="main">
+<article>
+  <div class="meta">Legal</div>
+  <h1>Privacy</h1>
+
+  <p>FlowNarrate does not run a backend, does not use a database, and does not have a sign-up or login of any kind. Here is exactly what that means in practice.</p>
+
+  <h2>The tools</h2>
+  <p>Every tool on the <a href="tools.html">tools page</a> runs entirely in your browser using JavaScript. Whatever you type into an expression builder, a JSON schema box, or any other tool stays on your device. Nothing is sent to a server, because there is no server to send it to.</p>
+
+  <h2>Theme preference</h2>
+  <p>If you switch between light and dark mode, that choice is saved using your browser's local storage so it's remembered next time you visit. This stays on your device and is never transmitted anywhere.</p>
+
+  <h2>Analytics and cookies</h2>
+  <p>This site does not currently run analytics and does not set tracking cookies. If that changes in future, this page will be updated to say so plainly.</p>
+
+  <h2>Hosting</h2>
+  <p>The site is hosted on Netlify, which may log standard technical information (like IP addresses) as part of normal web hosting, the same as any website. FlowNarrate itself does not access or use this data.</p>
+
+  <h2>Contact</h2>
+  <p>Questions about this page can be sent via <a href="https://linkedin.com/in/sptgb" target="_blank" rel="noopener">LinkedIn</a>.</p>
+
+  <a href="index.html" class="back">&larr; Back to FlowNarrate</a>
+</article>
+</main>
+
+<footer>
+  <div><a href="index.html" style="color:inherit;">flownarrate.com</a> &middot; &copy; <span id="copyright-year"></span></div>
+  <div><a href="https://linkedin.com/in/sptgb" target="_blank" rel="noopener" style="color:inherit;">LinkedIn</a> &middot; AB-100 Certified &middot; Microsoft Certified Trainer</div>
+</footer>
+
+<script>
+  function currentTheme(){
+    var attr = document.documentElement.getAttribute("data-theme");
+    if (attr) return attr;
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+  function syncThemeButton(){
+    var btn = document.getElementById("theme-toggle");
+    if (!btn) return;
+    var theme = currentTheme();
+    btn.textContent = theme === "dark" ? "Light" : "Dark";
+    btn.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+  }
+  function toggleTheme(){
+    var next = currentTheme() === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    try { localStorage.setItem("flownarrate-theme", next); } catch(e) {}
+    syncThemeButton();
+  }
+  function toggleNav(){
+    var links = document.getElementById('nav-links');
+    var btn = document.getElementById('nav-toggle');
+    var isOpen = links.classList.toggle('open');
+    btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  }
+  document.querySelectorAll('#nav-links a').forEach(function(link){
+    link.addEventListener('click', function(){
+      document.getElementById('nav-links').classList.remove('open');
+      document.getElementById('nav-toggle').setAttribute('aria-expanded', 'false');
+    });
+  });
+  var yearEl = document.getElementById('copyright-year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+  syncThemeButton();
+</script>
+</body>
+</html>
