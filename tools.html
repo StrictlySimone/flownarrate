@@ -259,15 +259,12 @@
     .toc{
       position:static;
       width:100%;
-      max-height:none;
+      max-height:200px;
+      overflow-y:auto;
       margin-bottom:32px;
-      padding-bottom:20px;
+      padding-bottom:12px;
       border-bottom:1px solid var(--rule);
     }
-    .toc ul{display:flex;flex-wrap:wrap;gap:4px 16px;}
-    .toc li{margin-bottom:0;}
-    .toc a{border-left:none;padding:4px 0;}
-    .toc a[aria-current="true"]{border-left:none;text-decoration:underline;}
   }
   @media(max-width:640px){
     .tools-layout{padding:0 22px;}
