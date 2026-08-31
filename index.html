@@ -433,12 +433,16 @@
   .linkedin-link:hover{text-decoration:underline;}
   .badges{display:flex;gap:14px;flex-wrap:wrap;}
   .badge{
+    display:block;
     border:1px solid var(--ink);
     padding:14px 18px;
     font-family:'JetBrains Mono',monospace;
     font-size:0.78rem;
     min-width:140px;
+    text-decoration:none;
+    color:inherit;
   }
+  .badge:hover{border-color:var(--succeeded);}
   .badge .num{font-size:1.2rem;font-weight:600;display:block;margin-bottom:4px;color:var(--succeeded);}
 
   .posts{
@@ -630,9 +634,9 @@
       <a href="https://linkedin.com/in/sptgb" target="_blank" rel="noopener" class="linkedin-link">Connect on LinkedIn →</a>
     </div>
     <div class="badges">
-      <div class="badge"><span class="num">AB-100</span>Agentic AI Architect</div>
-      <div class="badge"><span class="num">MCT</span>Microsoft Certified Trainer</div>
-      <div class="badge"><span class="num">PL-200</span>Functional Consultant</div>
+      <a href="https://learn.microsoft.com/en-us/users/simone-9570/credentials/8634052aba38a50b" target="_blank" rel="noopener" class="badge"><span class="num">AB-100</span>Agentic AI Architect</a>
+      <a href="https://www.credly.com/badges/e900c514-fc7d-4693-a6ac-f1e89821d690/linked_in?t=tfuewo" target="_blank" rel="noopener" class="badge"><span class="num">MCT</span>Microsoft Certified Trainer</a>
+      <a href="https://learn.microsoft.com/en-us/users/simone-9570/credentials/cf951fd73e10f53" target="_blank" rel="noopener" class="badge"><span class="num">PL-200</span>Functional Consultant</a>
     </div>
   </div>
 </section>
