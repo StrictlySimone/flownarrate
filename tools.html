@@ -1084,6 +1084,17 @@
 
   renderExprInputs();
 
+  // Rows below are built with innerHTML + template literals; field/value
+  // always land in an HTML attribute, so they're escaped before insertion.
+  // Not exploitable today (every call site passes hardcoded example
+  // strings or nothing at all) but cheap to close off now rather than
+  // wait for a "load from URL" feature to make it a real DOM-XSS bug.
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, function (ch) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch];
+    });
+  }
+
   // --- Filter / condition builder ---
   let filterRowId = 0;
   const operators = ['equals','not equals','greater than','less than','contains'];
@@ -1095,11 +1106,11 @@
     row.className = 'filter-row';
     row.id = 'filter-row-' + id;
     row.innerHTML = `
-      <input type="text" placeholder="Field name" value="${field || ''}" aria-label="Field name" oninput="updateFilterOutput()">
+      <input type="text" placeholder="Field name" value="${escapeHtml(field || '')}" aria-label="Field name" oninput="updateFilterOutput()">
       <select aria-label="Operator" onchange="updateFilterOutput()">
         ${operators.map(o => `<option value="${o}" ${o === op ? 'selected' : ''}>${o}</option>`).join('')}
       </select>
-      <input type="text" placeholder="Value" value="${value || ''}" aria-label="Value" oninput="updateFilterOutput()">
+      <input type="text" placeholder="Value" value="${escapeHtml(value || '')}" aria-label="Value" oninput="updateFilterOutput()">
       <button type="button" class="remove-row" onclick="removeFilterRow(${id})" aria-label="Remove this condition">Remove</button>
     `;
     document.getElementById('filter-rows').appendChild(row);
@@ -1457,11 +1468,11 @@
     row.className = 'filter-row';
     row.id = 'odata-row-' + id;
     row.innerHTML = `
-      <input type="text" placeholder="Field name" value="${field || ''}" aria-label="Field name" oninput="updateOdataQuery()">
+      <input type="text" placeholder="Field name" value="${escapeHtml(field || '')}" aria-label="Field name" oninput="updateOdataQuery()">
       <select aria-label="Operator" onchange="updateOdataQuery()">
         ${Object.keys(odataOperators).map(o => `<option value="${o}" ${o === op ? 'selected' : ''}>${o}</option>`).join('')}
       </select>
-      <input type="text" placeholder="Value" value="${value || ''}" aria-label="Value" oninput="updateOdataQuery()">
+      <input type="text" placeholder="Value" value="${escapeHtml(value || '')}" aria-label="Value" oninput="updateOdataQuery()">
       <button type="button" class="remove-row" onclick="removeOdataRow(${id})" aria-label="Remove this condition">Remove</button>
     `;
     document.getElementById('odata-rows').appendChild(row);
@@ -1533,11 +1544,11 @@
     row.className = 'filter-row';
     row.id = 'fx-row-' + id;
     row.innerHTML = `
-      <input type="text" placeholder="Attribute name" value="${field || ''}" aria-label="Attribute name" oninput="updateFetchXml()">
+      <input type="text" placeholder="Attribute name" value="${escapeHtml(field || '')}" aria-label="Attribute name" oninput="updateFetchXml()">
       <select aria-label="Operator" onchange="updateFetchXml()">
         ${Object.keys(fxOperators).map(o => `<option value="${o}" ${o === op ? 'selected' : ''}>${o}</option>`).join('')}
       </select>
-      <input type="text" placeholder="Value" value="${value || ''}" aria-label="Value" oninput="updateFetchXml()">
+      <input type="text" placeholder="Value" value="${escapeHtml(value || '')}" aria-label="Value" oninput="updateFetchXml()">
       <button type="button" class="remove-row" onclick="removeFetchXmlRow(${id})" aria-label="Remove this condition">Remove</button>
     `;
     document.getElementById('fx-rows').appendChild(row);
