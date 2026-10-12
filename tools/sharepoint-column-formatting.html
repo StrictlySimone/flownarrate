@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+  (function(){
+    try {
+      var saved = localStorage.getItem('flownarrate-theme');
+      if (saved === 'dark' || saved === 'light') {
+        document.documentElement.setAttribute('data-theme', saved);
+      }
+    } catch(e) { /* localStorage unavailable, fall back to OS preference via CSS */ }
+  })();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 fill=%27%23311847%27/%3E%3Ctext x=%2716%27 y=%2723%27 font-family=%27monospace%27 font-size=%2718%27 font-weight=%27700%27 fill=%27%23EC4067%27 text-anchor=%27middle%27%3Efn%3C/text%3E%3C/svg%3E">
+<title>SharePoint column formatting generator: FlowNarrate</title>
+<meta name="description" content="Generate SharePoint column formatting JSON that colours a cell's background when its value matches a condition. Free, and it runs entirely in your browser.">
+<link rel="canonical" href="https://www.flownarrate.com/tools/sharepoint-column-formatting.html">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="FlowNarrate">
+<meta property="og:title" content="SharePoint column formatting generator">
+<meta property="og:description" content="Generate SharePoint column formatting JSON that colours a cell's background when its value matches a condition. Free, and it runs entirely in your browser.">
+<meta property="og:url" content="https://www.flownarrate.com/tools/sharepoint-column-formatting.html">
+<meta property="og:image" content="https://www.flownarrate.com/images/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SharePoint column formatting generator">
+<meta name="twitter:description" content="Generate SharePoint column formatting JSON that colours a cell's background when its value matches a condition. Free, and it runs entirely in your browser.">
+<meta name="twitter:image" content="https://www.flownarrate.com/images/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "SharePoint column formatting generator",
+      "url": "https://www.flownarrate.com/tools/sharepoint-column-formatting.html",
+      "description": "Generate SharePoint column formatting JSON that colours a cell's background when its value matches a condition. Free, and it runs entirely in your browser.",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any (runs in the browser)",
+      "isAccessibleForFree": true,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "GBP"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Simone Palmer-Thompson",
+        "url": "https://www.flownarrate.com/#about",
+        "sameAs": [
+          "https://linkedin.com/in/sptgb",
+          "https://learn.microsoft.com/en-us/users/simone-9570/credentials/8634052aba38a50b",
+          "https://www.credly.com/badges/e900c514-fc7d-4693-a6ac-f1e89821d690",
+          "https://learn.microsoft.com/en-us/users/simone-9570/credentials/cf951fd73e10f53"
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.flownarrate.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Tools",
+          "item": "https://www.flownarrate.com/tools.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "SharePoint column formatting generator",
+          "item": "https://www.flownarrate.com/tools/sharepoint-column-formatting.html"
+        }
+      ]
+    }
+  ]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/tools.css">
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav>
+  <a href="../index.html" class="brand">flow<span class="dot">·</span>narrate</a>
+  <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menu" onclick="toggleNav()">
+    <span></span><span></span><span></span>
+  </button>
+  <ul id="nav-links">
+    <li><a href="../blog.html">Blog</a></li>
+    <li><a href="../tools.html">Tools</a></li>
+    <li><a href="../index.html#about">About</a></li>
+    <li><button type="button" id="theme-toggle" class="theme-toggle" aria-pressed="false" onclick="toggleTheme()">Dark</button></li>
+  </ul>
+</nav>
+
+<main id="main">
+
+<section class="hero" style="border-bottom:none;grid-template-columns:1fr;max-width:none;margin:0;padding-bottom:0;">
+  <div class="hero-text" style="max-width:720px;">
+    <div class="breadcrumb"><a href="../tools.html">Tools</a> / SharePoint column formatting generator</div>
+    <div class="status-line"><span class="status-dot"></span>FREE · RUNS ENTIRELY IN YOUR BROWSER</div>
+    <h1>SharePoint column <span class="accent">formatting</span> generator</h1>
+    <p class="sub" style="max-width:600px;margin-bottom:14px;">Column formatting lets a SharePoint list highlight the items that matter, like an Urgent priority in red, without changing any data. The JSON is fiddly to write from scratch. Set the column, the condition and the colour, and copy JSON you can paste straight into the column's formatting panel.</p>
+  </div>
+</section>
+
+<section id="column-formatting">
+  <div class="section-head">
+    <div>
+      <h2>SharePoint column formatting</h2>
+    </div>
+    <p>CONDITIONAL BACKGROUND Colour<br>PASTE STRAIGHT INTO COLUMN FORMATTING</p>
+  </div>
+
+  <div class="expr-tool">
+    <div class="expr-field">
+      <label for="cf-field">Column internal name</label>
+      <input type="text" id="cf-field" value="Priority" oninput="updateColumnFormat()">
+    </div>
+    <div class="filter-row" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:16px;">
+      <select id="cf-operator" aria-label="Operator" onchange="updateColumnFormat()">
+        <option value="==">equals</option>
+        <option value="!=">not equals</option>
+        <option value=">">greater than</option>
+        <option value="<">less than</option>
+      </select>
+      <input type="text" id="cf-value" placeholder="Value to match" value="Urgent" oninput="updateColumnFormat()" aria-label="Value to match">
+      <input type="color" id="cf-color" value="#f8d7da" onchange="updateColumnFormat()" aria-label="Background colour" style="height:38px;">
+    </div>
+
+    <div class="expr-output">
+      <label for="cf-result">Column formatting JSON</label>
+      <pre id="cf-result" class="mermaid-code" tabindex="0"></pre>
+      <button type="button" class="copy-btn" onclick="copyColumnFormat()">Copy JSON</button>
+      <span id="cf-copy-status" class="sr-only" aria-live="polite"></span>
+    </div>
+
+    <p class="expr-note">Paste this into a SharePoint list column's "Format this column" → Advanced mode.</p>
+  </div>
+</section>
+
+<section>
+  <div class="tool-guide">
+    <h2>How to use it</h2>
+    <ol>
+      <li>Enter the column's internal name. It can differ from the display name; you'll find it at the end of the URL when you open the column's settings.</li>
+      <li>Choose the condition, the value to match and a background colour.</li>
+      <li>In the list, open the column's menu, choose Column settings, then Format this column, switch to Advanced mode and paste the JSON.</li>
+    </ol>
+    <p>Nothing you type here is sent anywhere. The tool runs entirely in your browser.</p>
+  </div>
+</section>
+
+<section style="border-bottom:none;">
+  <div class="section-head">
+    <div>
+      <h2>More free tools</h2>
+    </div>
+    <p>EVERY TOOL RUNS IN YOUR BROWSER<br>NO SIGN-IN, NOTHING STORED</p>
+  </div>
+  <div class="posts">
+    <a href="power-automate-expression-builder.html" class="post post-live">
+      <div class="meta">Power Automate</div>
+      <h3>Power Automate expression builder</h3>
+      <p>Pick a function, fill in the values, copy a working expression.</p>
+    </a>
+    <a href="trigger-condition-builder.html" class="post post-live">
+      <div class="meta">Power Automate · Power Apps</div>
+      <h3>Trigger condition and filter builder</h3>
+      <p>Conditions in, a trigger condition or Power Fx Filter formula out.</p>
+    </a>
+    <a href="formatdatetime-generator.html" class="post post-live">
+      <div class="meta">Power Automate</div>
+      <h3>formatDateTime generator</h3>
+      <p>Pick a date source and a format, get the formatDateTime expression.</p>
+    </a>
+    <a href="svg-to-power-apps-image.html" class="post post-live">
+      <div class="meta">Power Apps</div>
+      <h3>SVG to Power Apps image converter</h3>
+      <p>Paste SVG markup, get a data URI for the Image property.</p>
+    </a>
+    <a href="parse-json-schema-generator.html" class="post post-live">
+      <div class="meta">Power Automate</div>
+      <h3>Parse JSON schema generator</h3>
+      <p>Paste a sample payload, get the schema for a Parse JSON action.</p>
+    </a>
+    <a href="parse-json-schema-loosener.html" class="post post-live">
+      <div class="meta">Power Automate</div>
+      <h3>Parse JSON schema loosener</h3>
+      <p>Fix Parse JSON failing on null values or missing fields.</p>
+    </a>
+    <a href="adaptive-card-builder.html" class="post post-live">
+      <div class="meta">Teams · Power Automate</div>
+      <h3>Adaptive Card builder</h3>
+      <p>Title, body and Approve / Reject buttons, as card JSON for Teams.</p>
+    </a>
+    <a href="flow-error-handler.html" class="post post-live">
+      <div class="meta">Power Automate</div>
+      <h3>Flow error handler (Try / Catch)</h3>
+      <p>Run-after settings, error expression and alert body for a Try / Catch scope.</p>
+    </a>
+    <a href="html-email-table.html" class="post post-live">
+      <div class="meta">Power Automate · Email</div>
+      <h3>HTML email table styler</h3>
+      <p>Column headers and a colour, as an inline-styled email table.</p>
+    </a>
+    <a href="odata-filter-query-builder.html" class="post post-live">
+      <div class="meta">SharePoint · Dataverse</div>
+      <h3>OData filter query builder</h3>
+      <p>Conditions plus $select, $orderby and $top, as an OData query.</p>
+    </a>
+    <a href="fetchxml-builder.html" class="post post-live">
+      <div class="meta">Dataverse · Dynamics 365</div>
+      <h3>FetchXML builder</h3>
+      <p>Dataverse's own query language, for List rows or Advanced Find.</p>
+    </a>
+    <a href="../tools.html" class="post post-live">
+      <div class="meta">All tools</div>
+      <h3>Browse every tool →</h3>
+      <p>All twelve free Power Platform tools on one page.</p>
+    </a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div><a href="../index.html" style="color:inherit;">flownarrate.com</a> &middot; &copy; <span id="copyright-year"></span></div>
+  <div><a href="../privacy.html" style="color:inherit;">Privacy</a> · <a href="https://linkedin.com/in/sptgb" target="_blank" rel="noopener" style="color:inherit;">LinkedIn</a> · AB-100 Certified · Microsoft Certified Trainer</div>
+</footer>
+
+<script src="../assets/tools.js"></script>
+
+</body>
+</html>
