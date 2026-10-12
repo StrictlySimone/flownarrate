@@ -1,0 +1,18 @@
+# FlowNarrate
+
+> Real Power Automate flows, Dynamics 365 configurations and Power Platform patterns explained in plain English, by Simone, an AB-100 certified consultant and Microsoft Certified Trainer. FlowNarrate also offers free browser-based Power Platform tools; no sign-in, and nothing leaves the browser.
+
+## Posts
+
+- [Sending email from a mailbox nobody can sign in to](https://www.flownarrate.com/do-not-reply-mailbox-dataverse.html): Setting up a shared Dataverse mailbox (do-not-reply, notifications) to send email when no one signs into it, the two errors you'll hit, and why the second needs the Web API rather than the UI.
+- [An approval flow, narrated](https://www.flownarrate.com/narrating-an-approval-flow.html): A composite expense-claim approval flow walked step by step: what each action does, why the threshold and escalation exist, and where flows like this quietly break.
+- [What is FlowNarrate?](https://www.flownarrate.com/what-is-flownarrate.html): Why automation logic deserves to be explained as clearly as it was built.
+
+## Tools
+
+- [Power Platform tools](https://www.flownarrate.com/tools.html): Free in-browser tools: dynamic expressions, filter and trigger conditions, date formatter, SharePoint column formatting, SVG to Power Apps image, JSON schema converter, JSON schema loosener, Adaptive Card builder, flow error handler and HTML table styler.
+
+## Optional
+
+- [All posts](https://www.flownarrate.com/blog.html): Index of every FlowNarrate post.
+- [Privacy](https://www.flownarrate.com/privacy.html): FlowNarrate does not collect personal data.
