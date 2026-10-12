@@ -1,0 +1,31 @@
+# FlowNarrate
+
+> Real Power Automate flows, Dynamics 365 configurations and Power Platform patterns explained in plain English, by Simone, an AB-100 certified consultant and Microsoft Certified Trainer. FlowNarrate also offers free browser-based Power Platform tools; no sign-in, and nothing leaves the browser.
+
+## Posts
+
+- [Sending email from a mailbox nobody can sign in to](https://www.flownarrate.com/do-not-reply-mailbox-dataverse.html): Setting up a shared Dataverse mailbox (do-not-reply, notifications) to send email when no one signs into it, the two errors you'll hit, and why the second needs the Web API rather than the UI.
+- [An approval flow, narrated](https://www.flownarrate.com/narrating-an-approval-flow.html): A composite expense-claim approval flow walked step by step: what each action does, why the threshold and escalation exist, and where flows like this quietly break.
+- [What is FlowNarrate?](https://www.flownarrate.com/what-is-flownarrate.html): Why automation logic deserves to be explained as clearly as it was built.
+
+## Tools
+
+All twelve tools are free, need no sign-in and run entirely in the browser. [Tools index](https://www.flownarrate.com/tools.html)
+
+- [Adaptive Card builder](https://www.flownarrate.com/tools/adaptive-card-builder.html): Build Adaptive Card JSON with a title, body text and optional Approve and Reject buttons, for Microsoft Teams or Power Automate approvals.
+- [FetchXML builder](https://www.flownarrate.com/tools/fetchxml-builder.html): Build FetchXML queries for Dataverse and Dynamics 365: columns, filter conditions, sort order and row limit.
+- [Flow error handler (Try / Catch)](https://www.flownarrate.com/tools/flow-error-handler.html): Generate the run-after settings, error message expression and notification body for a Try and Catch scope pattern in Power Automate.
+- [formatDateTime generator](https://www.flownarrate.com/tools/formatdatetime-generator.html): Generate a Power Automate formatDateTime expression from a date source and a format, with optional time zone conversion.
+- [HTML email table styler](https://www.flownarrate.com/tools/html-email-table.html): Generate an inline-styled HTML table for Power Automate emails, with your own column headers and accent colour.
+- [OData filter query builder](https://www.flownarrate.com/tools/odata-filter-query-builder.html): Build OData $filter, $select, $orderby and $top query options from simple rows.
+- [Parse JSON schema generator](https://www.flownarrate.com/tools/parse-json-schema-generator.html): Paste a sample JSON payload and get the schema for a Power Automate Parse JSON action.
+- [Parse JSON schema loosener](https://www.flownarrate.com/tools/parse-json-schema-loosener.html): Stop Parse JSON failing with 'Invalid type. Expected String but got Null' or 'Required properties are missing from object'. Paste your schema and get one that allows nulls.
+- [Power Automate expression builder](https://www.flownarrate.com/tools/power-automate-expression-builder.html): Build Power Automate expressions like addDays, formatDateTime, concat, if, coalesce, triggerOutputs and variables without memorising the syntax.
+- [SharePoint column formatting generator](https://www.flownarrate.com/tools/sharepoint-column-formatting.html): Generate SharePoint column formatting JSON that colours a cell's background when its value matches a condition.
+- [SVG to Power Apps image converter](https://www.flownarrate.com/tools/svg-to-power-apps-image.html): Convert SVG markup into a data URI you can paste into a Power Apps Image control's Image property.
+- [Trigger condition and filter builder](https://www.flownarrate.com/tools/trigger-condition-builder.html): Build Power Automate trigger conditions or Power Fx Filter formulas from simple rows, combined with AND or OR.
+
+## Optional
+
+- [All posts](https://www.flownarrate.com/blog.html): Index of every FlowNarrate post.
+- [Privacy](https://www.flownarrate.com/privacy.html): FlowNarrate does not collect personal data.
