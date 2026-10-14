@@ -1,6 +1,6 @@
 # FlowNarrate
 
-> Real Power Automate flows, Dynamics 365 configurations and Power Platform patterns explained in plain English, by Simone, an AB-100 certified consultant and Microsoft Certified Trainer. FlowNarrate also offers free browser-based Power Platform tools; no sign-in, and nothing leaves the browser.
+> Automation, AI agents and business systems explained in plain English by Simone Palmer-Thompson, a solutions architect, AB-100 certified Agentic AI Architect and Microsoft Certified Trainer. Most posts currently cover Power Automate, Dynamics 365 and the Power Platform. FlowNarrate also offers twelve free browser-based Power Platform tools; no sign-in, and nothing leaves the browser.
 
 ## Posts
 

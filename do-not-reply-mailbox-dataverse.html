@@ -45,7 +45,7 @@
     "@id": "https://www.flownarrate.com/#simone",
     "name": "Simone Palmer-Thompson",
     "url": "https://www.flownarrate.com/#about",
-    "jobTitle": "Microsoft AI and Power Platform Solutions Architect",
+    "jobTitle": "Solutions Architect: automation, AI and business systems",
     "sameAs": [
       "https://linkedin.com/in/sptgb",
       "https://learn.microsoft.com/en-us/users/simone-9570/credentials/8634052aba38a50b",
@@ -67,34 +67,40 @@
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper: #FBF3F0;
-    --panel: #FFFBF9;
-    --ink: #311847;
-    --ink-soft: #6B5877;
-    --rule: #E3D3DC;
+    --paper: #F6F5F1;
+    --band: #EFEDE6;
+    --ok: #1F7A4D;
+    --panel: #FFFFFF;
+    --ink: #16161D;
+    --ink-soft: #4A4A55;
+    --rule: #D9D6CC;
     --succeeded: #A01A7D;
-    --warning: #A66A1E;
+    --warning: #B54708;
     --failed: #9E3B32;
   }
   [data-theme="dark"]{
-    --paper: #1C1024;
-    --panel: #241531;
-    --ink: #F3E9EF;
-    --ink-soft: #C9AFC0;
-    --rule: #4A2F5E;
-    --succeeded: #F1728C;
-    --warning: #E0A455;
+    --paper: #141418;
+    --band: #1B1B21;
+    --ok: #6CC495;
+    --panel: #1B1B21;
+    --ink: #EEEDE8;
+    --ink-soft: #B4B2BD;
+    --rule: #34343E;
+    --succeeded: #E58AC8;
+    --warning: #F0A35E;
     --failed: #E2564A;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --paper: #1C1024;
-      --panel: #241531;
-      --ink: #F3E9EF;
-      --ink-soft: #C9AFC0;
-      --rule: #4A2F5E;
-      --succeeded: #F1728C;
-      --warning: #E0A455;
+      --paper: #141418;
+    --band: #1B1B21;
+    --ok: #6CC495;
+      --panel: #1B1B21;
+      --ink: #EEEDE8;
+      --ink-soft: #B4B2BD;
+      --rule: #34343E;
+      --succeeded: #E58AC8;
+      --warning: #F0A35E;
       --failed: #E2564A;
     }
   }
@@ -344,7 +350,7 @@
 
 <main id="main">
 <article>
-  <div class="meta">D365 Explainer · <time datetime="2026-10-02">2 Oct 2026</time></div>
+  <div class="meta">System Explainer · <time datetime="2026-10-02">2 Oct 2026</time></div>
   <h1>Sending email from a mailbox nobody can sign in to</h1>
 
   <p>A common setup is a shared mailbox that a Power Automate flow uses as the sender: a do-not-reply address, or just as often a <span class="mono">notifications@</span> or <span class="mono">accounts@</span> that exists for sending, not receiving, and that nobody actually signs into. Do-not-reply is just the example here; the actual condition that matters is that there's no interactive login for the account. In Dataverse this looks simple, but you can hit two errors. The second one can't be fixed by an admin in the normal UI. Here's how I got it working without raising a ticket.</p>

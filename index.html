@@ -15,19 +15,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light dark">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 fill=%27%23311847%27/%3E%3Ctext x=%2716%27 y=%2723%27 font-family=%27monospace%27 font-size=%2718%27 font-weight=%27700%27 fill=%27%23EC4067%27 text-anchor=%27middle%27%3Efn%3C/text%3E%3C/svg%3E">
-<title>FlowNarrate: Power Platform, narrated clearly</title>
-<meta name="description" content="Real Power Automate flows, D365 configurations, and Power Platform patterns explained in plain English, by an AB-100 certified consultant and Microsoft Certified Trainer.">
+<title>FlowNarrate: automation and Power Platform, narrated clearly</title>
+<meta name="description" content="Automation, AI agents and business systems explained in plain English: real Power Automate flows, Dynamics 365 configurations and Power Platform patterns, by an AB-100 certified consultant and Microsoft Certified Trainer.">
 <link rel="canonical" href="https://www.flownarrate.com/">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="FlowNarrate">
-<meta property="og:title" content="FlowNarrate: Power Platform, narrated clearly">
-<meta property="og:description" content="Real Power Automate flows, D365 configurations, and Power Platform patterns explained in plain English, by an AB-100 certified consultant and Microsoft Certified Trainer.">
+<meta property="og:title" content="FlowNarrate: automation and Power Platform, narrated clearly">
+<meta property="og:description" content="Automation, AI agents and business systems explained in plain English: real Power Automate flows, Dynamics 365 configurations and Power Platform patterns, by an AB-100 certified consultant and Microsoft Certified Trainer.">
 <meta property="og:url" content="https://www.flownarrate.com/">
 <meta property="og:image" content="https://www.flownarrate.com/images/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="FlowNarrate: Power Platform, narrated clearly">
-<meta name="twitter:description" content="Real Power Automate flows, D365 configurations, and Power Platform patterns explained in plain English, by an AB-100 certified consultant and Microsoft Certified Trainer.">
+<meta name="twitter:title" content="FlowNarrate: automation and Power Platform, narrated clearly">
+<meta name="twitter:description" content="Automation, AI agents and business systems explained in plain English: real Power Automate flows, Dynamics 365 configurations and Power Platform patterns, by an AB-100 certified consultant and Microsoft Certified Trainer.">
 <meta name="twitter:image" content="https://www.flownarrate.com/images/og-image.png">
 <script type="application/ld+json">
 {
@@ -38,7 +38,7 @@
       "@id": "https://www.flownarrate.com/#website",
       "name": "FlowNarrate",
       "url": "https://www.flownarrate.com/",
-      "description": "Real Power Automate flows, D365 configurations, and Power Platform patterns explained in plain English, by an AB-100 certified consultant and Microsoft Certified Trainer.",
+      "description": "Automation, AI agents and business systems explained in plain English: real Power Automate flows, Dynamics 365 configurations and Power Platform patterns, by an AB-100 certified consultant and Microsoft Certified Trainer.",
       "inLanguage": "en-GB",
       "publisher": {
         "@id": "https://www.flownarrate.com/#simone"
@@ -49,7 +49,7 @@
       "@id": "https://www.flownarrate.com/#simone",
       "name": "Simone Palmer-Thompson",
       "url": "https://www.flownarrate.com/#about",
-      "jobTitle": "Microsoft AI and Power Platform Solutions Architect",
+      "jobTitle": "Solutions Architect: automation, AI and business systems",
       "sameAs": [
         "https://linkedin.com/in/sptgb",
         "https://learn.microsoft.com/en-us/users/simone-9570/credentials/8634052aba38a50b",
@@ -64,42 +64,48 @@
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper: #FBF3F0;
-    --panel: #FFFBF9;
-    --ink: #311847;
-    --ink-soft: #6B5877;
-    --rule: #E3D3DC;
+    --paper: #F6F5F1;
+    --band: #EFEDE6;
+    --ok: #1F7A4D;
+    --panel: #FFFFFF;
+    --ink: #16161D;
+    --ink-soft: #4A4A55;
+    --rule: #D9D6CC;
     --succeeded: #A01A7D;
     --accent-hover: #A01A7D;
     --bronze: #E09F7D;
-    --pink: #EF5D60;
-    --magenta: #EC4067;
+    --pink: #E58AC8;
+    --magenta: #A01A7D;
     --plum: #A01A7D;
-    --amethyst: #311847;
-    --warning: #A66A1E;
+    --amethyst: #16161D;
+    --warning: #B54708;
     --failed: #9E3B32;
   }
   [data-theme="dark"]{
-    --paper: #1C1024;
-    --panel: #241531;
-    --ink: #F3E9EF;
-    --ink-soft: #C9AFC0;
-    --rule: #4A2F5E;
-    --succeeded: #F1728C;
-    --accent-hover: #EF5D60;
-    --warning: #E0A455;
+    --paper: #141418;
+    --band: #1B1B21;
+    --ok: #6CC495;
+    --panel: #1B1B21;
+    --ink: #EEEDE8;
+    --ink-soft: #B4B2BD;
+    --rule: #34343E;
+    --succeeded: #E58AC8;
+    --accent-hover: #E58AC8;
+    --warning: #F0A35E;
     --failed: #E2564A;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --paper: #1C1024;
-      --panel: #241531;
-      --ink: #F3E9EF;
-      --ink-soft: #C9AFC0;
-      --rule: #4A2F5E;
-      --succeeded: #F1728C;
-      --accent-hover: #EF5D60;
-      --warning: #E0A455;
+      --paper: #141418;
+    --band: #1B1B21;
+    --ok: #6CC495;
+      --panel: #1B1B21;
+      --ink: #EEEDE8;
+      --ink-soft: #B4B2BD;
+      --rule: #34343E;
+      --succeeded: #E58AC8;
+      --accent-hover: #E58AC8;
+      --warning: #F0A35E;
       --failed: #E2564A;
     }
   }
@@ -358,7 +364,7 @@
     max-width:760px;
     letter-spacing:-0.01em;
   }
-  h1 .accent{color:var(--magenta, #EC4067);font-style:italic;}
+  h1 .accent{color:var(--succeeded);font-style:italic;}
   .hero p.sub{
     margin-top:24px;
     max-width:440px;
@@ -479,6 +485,7 @@
   .badge:hover{border-color:var(--succeeded);}
   .badge .num{font-size:1.2rem;font-weight:600;display:block;margin-bottom:4px;color:var(--succeeded);}
 
+  .card-icon{display:block;width:28px;height:28px;color:var(--succeeded);margin-bottom:14px;}
   .posts{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
@@ -516,6 +523,77 @@
     .flowchart{padding:28px 18px;}
   }
 
+  /* Direction D: homepage layout */
+  .inner{max-width:1180px;margin:0 auto;}
+  .hero{max-width:1292px;border-bottom:none;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:56px;padding:72px 56px 64px;align-items:start;}
+  .hero-text{padding-top:0;}
+  .hero p.sub{max-width:560px;}
+  .run-summary{border-top:1px solid var(--ink);margin-top:8px;}
+  .rs-head{
+    font-family:'JetBrains Mono',monospace;font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;
+    color:var(--ink-soft);padding:12px 0;border-bottom:1px solid var(--rule);
+  }
+  .rs-row{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:16px 0;border-bottom:1px solid var(--rule);font-size:1.02rem;}
+  .rs-status{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap;}
+  .rs-dot{width:7px;height:7px;border-radius:50%;background:currentColor;display:inline-block;}
+  .rs-ok{color:var(--ok);}
+  .rs-wait{color:var(--warning);}
+  .btn{border-radius:4px;display:inline-flex;align-items:center;min-height:48px;}
+  .btn-secondary:hover{border-color:var(--succeeded);color:var(--succeeded);}
+  .btn-icon{gap:10px;margin-top:8px;}
+  .band{background:var(--band);border-top:1px solid var(--rule);}
+  .section-head{align-items:baseline;margin-bottom:20px;}
+  .section-head h2{margin-top:0;}
+  .section-sub{color:var(--ink-soft);margin:-8px 0 22px;}
+  .text-link{font-family:'JetBrains Mono',monospace;font-size:0.8rem;min-height:44px;display:inline-flex;align-items:center;}
+  .topic-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;}
+  .topic-filters[hidden]{display:none;}
+  .topic-filters button{
+    min-height:44px;padding:0 14px;border-radius:4px;cursor:pointer;
+    font-family:'JetBrains Mono',monospace;font-size:0.78rem;
+    background:transparent;color:var(--ink);border:1px solid var(--ink-soft);
+  }
+  .topic-filters button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+  .post-list{list-style:none;}
+  .post-list a{
+    display:grid;grid-template-columns:24px 190px minmax(0,1fr) auto;gap:6px 22px;align-items:baseline;
+    padding:22px 0;border-bottom:1px solid var(--rule);text-decoration:none;color:inherit;
+  }
+  .post-list a:hover .post-title{color:var(--succeeded);}
+  .post-row-icon{width:24px;height:24px;color:var(--succeeded);align-self:center;}
+  .post-format{font-family:'JetBrains Mono',monospace;font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--succeeded);}
+  .post-title{font-size:1.22rem;line-height:1.35;}
+  .post-list time{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--ink-soft);white-space:nowrap;}
+  .post-empty{padding:22px 0;border-bottom:1px solid var(--rule);font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:var(--ink-soft);}
+  .formats{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:0 40px;border-top:1px solid var(--ink);}
+  .formats div{padding:20px 0;border-bottom:1px solid var(--rule);}
+  .formats h3{font-weight:500;font-size:1.12rem;margin-bottom:6px;}
+  .formats p{color:var(--ink-soft);font-size:0.95rem;}
+  .tool-list{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:0 40px;border-top:1px solid var(--ink);}
+  .tool-list a{display:flex;align-items:center;gap:14px;min-height:56px;padding:12px 0;border-bottom:1px solid var(--rule);text-decoration:none;color:inherit;}
+  .tool-list a:hover span{color:var(--succeeded);}
+  .tool-row-icon{width:22px;height:22px;flex-shrink:0;color:var(--succeeded);}
+  .about{display:flex;flex-wrap:wrap;gap:48px;}
+  .about-text{flex:1 1 520px;min-width:0;}
+  .about-text h2{font-weight:500;font-size:1.7rem;margin-bottom:18px;}
+  .about-text p{margin-bottom:14px;max-width:640px;}
+  .about-text p a{color:var(--succeeded);}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--succeeded);margin-bottom:10px !important;}
+  .cred-list{flex:1 1 320px;min-width:0;border-top:1px solid var(--ink);align-self:flex-start;}
+  .cred-list a{display:flex;align-items:baseline;gap:18px;min-height:52px;padding:14px 0;border-bottom:1px solid var(--rule);text-decoration:none;color:inherit;}
+  .cred-list a:hover{color:var(--succeeded);}
+  .cred-code{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--succeeded);min-width:76px;}
+  @media(max-width:900px){
+    .hero{grid-template-columns:1fr;gap:36px;}
+  }
+  @media(max-width:640px){
+    .hero{padding:44px 22px 48px;}
+    .post-list a{grid-template-columns:24px minmax(0,1fr);}
+    .post-list .post-format{grid-column:2;}
+    .post-list .post-title{grid-column:2;}
+    .post-list time{grid-column:2;}
+  }
+
   @media (prefers-reduced-motion: reduce){
     *{transition:none !important;}
   }
@@ -541,167 +619,114 @@
 
 <main id="main">
 
-<section class="hero" style="border-bottom:none;">
+<section class="hero">
   <div class="hero-text">
-    <div class="status-line"><span class="status-dot"></span>SUCCEEDED · this flow ran without errors</div>
-    <h1>You can build a flow.<br>Can you <span class="accent">explain</span> it six months later?</h1>
-    <p class="sub">FlowNarrate takes real Power Automate flows and D365 configurations and writes down what most builders skip: the reasoning behind each step. Written by an AB-100 certified consultant and Microsoft Certified Trainer.</p>
+    <h1>Most flows get built. Fewer get <span class="accent">explained</span>.</h1>
+    <p class="sub">FlowNarrate takes real automations, AI agents and business systems and writes down what most builders skip: the reasoning behind each step. Right now that's mostly Power Platform and Dynamics 365. The habit works on anything.</p>
     <div class="hero-ctas">
-      <a href="what-is-flownarrate.html" class="btn btn-primary">Read the first narration →</a>
-      <a href="#about" class="btn btn-secondary">Why this exists</a>
+      <a href="narrating-an-approval-flow.html" class="btn btn-primary">Read a narration →</a>
+      <a href="what-is-flownarrate.html" class="btn btn-secondary">Why this exists</a>
     </div>
   </div>
+  <div class="run-summary" role="group" aria-label="Run summary of a typical flow">
+    <p class="rs-head">Run summary · your last flow</p>
+    <div class="rs-row"><span>Built the flow</span><span class="rs-status rs-ok"><span class="rs-dot" aria-hidden="true"></span>Succeeded</span></div>
+    <div class="rs-row"><span>Runs without errors</span><span class="rs-status rs-ok"><span class="rs-dot" aria-hidden="true"></span>Succeeded</span></div>
+    <div class="rs-row"><span>Anyone knows why it works</span><span class="rs-status rs-wait"><span class="rs-dot" aria-hidden="true"></span>Waiting on you</span></div>
+  </div>
+</section>
 
-  <div class="flowchart">
-    <div class="fc-label">Example, narrated below</div>
-    <svg width="100%" height="140" viewBox="0 0 460 140" preserveAspectRatio="xMinYMin meet" role="img" aria-labelledby="fc-title fc-desc" style="max-width:420px;margin:0 auto;">
-      <title id="fc-title">Flowchart: case routing by priority</title>
-      <desc id="fc-desc">A new case comes in. If it's marked urgent, it goes straight to whoever's on call. Otherwise it joins the normal queue.</desc>
-      <!-- trigger -->
-      <rect x="0" y="50" width="110" height="40" fill="none" stroke="#1A1A17" stroke-width="1.3"/>
-      <text x="55" y="74" text-anchor="middle" class="fc-node-text" font-size="11">New case</text>
-      <!-- connector -->
-      <path d="M110,70 L150,70" class="fc-connector"/>
-      <polygon points="150,70 143,66 143,74" fill="#4B4B44"/>
-      <!-- decision diamond -->
-      <polygon points="215,40 280,70 215,100 150,70" fill="none" stroke="#1A1A17" stroke-width="1.3"/>
-      <text x="215" y="74" text-anchor="middle" class="fc-node-text" font-size="10">Is it urgent?</text>
-      <!-- connector to yes -->
-      <path d="M280,70 L320,70" class="fc-connector"/>
-      <polygon points="320,70 313,66 313,74" fill="#4B4B44"/>
-      <text x="292" y="58" class="fc-node-text" font-size="9" fill="#2F6B3F">yes</text>
-      <!-- action yes -->
-      <rect x="320" y="50" width="125" height="40" fill="none" stroke="#2F6B3F" stroke-width="1.3"/>
-      <text x="382" y="74" text-anchor="middle" class="fc-node-text" font-size="11" fill="#2F6B3F">Goes to on-call</text>
-      <!-- connector to no (down) -->
-      <path d="M215,100 L215,120 L320,120" class="fc-connector"/>
-      <polygon points="320,120 313,116 313,124" fill="#4B4B44"/>
-      <text x="235" y="115" class="fc-node-text" font-size="9" fill="#A66A1E">no</text>
-      <!-- action no -->
-      <rect x="320" y="102" width="125" height="36" fill="none" stroke="#A66A1E" stroke-width="1.3"/>
-      <text x="382" y="124" text-anchor="middle" class="fc-node-text" font-size="10" fill="#A66A1E">Joins the queue</text>
-    </svg>
-
-    <div class="narration">
-      <span class="mark">→ narrated</span>
-      "A new case comes in. If it's marked urgent, it goes straight to whoever's on call. Everything else joins the normal queue."
+<section class="band" id="latest">
+  <div class="inner">
+    <div class="section-head">
+      <h2>Latest narrations</h2>
+      <a href="blog.html" class="text-link">All posts →</a>
     </div>
-
-    <details class="mermaid-toggle">
-      <summary>View as Mermaid (copyable)</summary>
-      <pre class="mermaid-code" id="mermaid-source" tabindex="0">flowchart LR
-    A[New case] --> B{Is it urgent?}
-    B -->|yes| C[Goes to on-call]
-    B -->|no| D[Joins the queue]</pre>
-      <button type="button" class="copy-btn" onclick="copyMermaid()">Copy Mermaid code</button>
-      <span id="copy-status" class="sr-only" aria-live="polite"></span>
-    </details>
+    <div class="topic-filters" role="group" aria-label="Filter by topic" hidden>
+      <button type="button" data-topic="all" aria-pressed="true">All</button>
+      <button type="button" data-topic="automation" aria-pressed="false">Automation</button>
+      <button type="button" data-topic="ai-agents" aria-pressed="false">AI agents</button>
+      <button type="button" data-topic="business-systems" aria-pressed="false">Business systems</button>
+      <button type="button" data-topic="certification" aria-pressed="false">Certification</button>
+    </div>
+    <ul class="post-list" id="post-list">
+      <li data-topics="business-systems"><a href="do-not-reply-mailbox-dataverse.html">
+        <svg class="post-row-icon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 7l8.5 6 8.5-6"/><path d="M4 20L20 4"/></svg>
+        <span class="post-format">System Explainer</span>
+        <span class="post-title">Sending email from a mailbox nobody can sign in to</span>
+        <time datetime="2026-10-02">2 Oct 2026</time>
+      </a></li>
+      <li data-topics="automation"><a href="narrating-an-approval-flow.html">
+        <svg class="post-row-icon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="2.2"/><path d="M7.2 12H11l4-5.5h4.5M11 12l4 5.5h4.5"/><circle cx="20" cy="6.5" r="0.4" fill="currentColor"/><circle cx="20" cy="17.5" r="0.4" fill="currentColor"/></svg>
+        <span class="post-format">Flow Narration</span>
+        <span class="post-title">An approval flow, narrated: why each step exists, and where it breaks</span>
+        <time datetime="2026-08-30">30 Aug 2026</time>
+      </a></li>
+      <li data-topics=""><a href="what-is-flownarrate.html">
+        <svg class="post-row-icon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v10H10l-4 4v-4H4z"/><path d="M8 9h8M8 12h5"/></svg>
+        <span class="post-format">Origin</span>
+        <span class="post-title">What is FlowNarrate?</span>
+        <time datetime="2026-08-15">15 Aug 2026</time>
+      </a></li>
+    </ul>
+    <p class="post-empty" id="post-empty" hidden>Nothing on this topic yet. It's on the list.</p>
+    <p class="sr-only" id="filter-status" aria-live="polite"></p>
   </div>
 </section>
 
 <section id="pillars">
-  <div class="section-head">
-    <div>
-      <h2>What gets narrated here</h2>
-    </div>
-    <p>SIX RECURRING FORMATS<br>EACH SOLVING A DIFFERENT DOCUMENTATION GAP</p>
-  </div>
-  <div class="manifest">
-    <div class="mrow">
-      <div class="mbody">
-        <h3>Flow Narrations <span class="mtag">signature format</span></h3>
-        <p>Real flows, walked step by step. What each action does and why it's there, using actual, anonymized flows.</p>
-      </div>
-    </div>
-    <div class="mrow">
-      <div class="mbody">
-        <h3>D365 Explainers</h3>
-        <p>Features explained for the people who use these systems daily, not the people who built them.</p>
-      </div>
-    </div>
-    <div class="mrow">
-      <div class="mbody">
-        <h3>Certification Corner</h3>
-        <p>AB-100 study notes and exam guidance from someone who actively teaches this material as an MCT.</p>
-      </div>
-    </div>
-    <div class="mrow">
-      <div class="mbody">
-        <h3>Case Studies</h3>
-        <p>Real business problems, the flow or D365 fix, and what changed afterward.</p>
-      </div>
-    </div>
-    <div class="mrow">
-      <div class="mbody">
-        <h3>Quick Tips</h3>
-        <p>One trick or setting, explained without the padding.</p>
-      </div>
-    </div>
-    <div class="mrow">
-      <div class="mbody">
-        <h3>Agentic AI</h3>
-        <p>Copilot Studio multi-agent design and orchestration, explained the same way as any other flow: what each agent does and why it's handing off.</p>
-      </div>
+  <div class="inner">
+    <div class="section-head"><h2>What gets narrated here</h2></div>
+    <div class="formats">
+      <div><h3>Flow Narrations</h3><p>Real automations, walked step by step: what each action does and why it's there.</p></div>
+      <div><h3>System Explainers</h3><p>Platforms explained for the people who use them daily, not the people who built them.</p></div>
+      <div><h3>Case Studies</h3><p>Real business problems, anonymised: the options, the decision, and what changed afterwards.</p></div>
+      <div><h3>Agentic AI</h3><p>Multi-agent design and orchestration, explained like any other flow: what each agent does and why it hands off.</p></div>
+      <div><h3>Certification Corner</h3><p>Study notes and exam guidance from someone who teaches the material.</p></div>
+      <div><h3>Quick Tips</h3><p>One trick or setting, explained without the padding.</p></div>
     </div>
   </div>
 </section>
 
 <section id="tools-teaser">
-  <div class="tools-card">
-    <div>
-      <div class="section-head" style="border-bottom:none;margin-bottom:14px;padding-bottom:0;">
-        <div>
-          <h2>Free Power Platform tools</h2>
-        </div>
-      </div>
-      <p>Dynamic expressions, trigger and filter conditions, date formatting, JSON schemas, an Adaptive Card builder, a flow error handler, and more, all running in your browser. Pick your inputs, copy the result into your flow.</p>
+  <div class="inner">
+    <div class="section-head">
+      <h2>Free tools</h2>
+      <a href="tools.html" class="text-link">All tools →</a>
     </div>
-    <a href="tools.html" class="btn btn-primary">Open the tools →</a>
+    <p class="section-sub">Twelve so far, for Power Automate, Dataverse and SharePoint. All of them run in your browser.</p>
+    <ul class="tool-list">
+      <li><a href="tools/power-automate-expression-builder.html"><svg class="tool-row-icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4c-2 0-2 2-2 4s-1 4-2 4c1 0 2 2 2 4s0 4 2 4"/><path d="M16 4c2 0 2 2 2 4s1 4 2 4c-1 0-2 2-2 4s0 4-2 4"/><path d="M10 12h4"/></svg><span>Expression builder</span></a></li>
+      <li><a href="tools/trigger-condition-builder.html"><svg class="tool-row-icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16l-6 7.5V18l-4 2v-7.5z"/></svg><span>Trigger conditions</span></a></li>
+      <li><a href="tools/formatdatetime-generator.html"><svg class="tool-row-icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M8.5 3v4M15.5 3v4"/><path d="M8 14h2M12 14h2M8 17h2"/></svg><span>formatDateTime</span></a></li>
+      <li><a href="tools/sharepoint-column-formatting.html"><svg class="tool-row-icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M9 5v14M15 5v14"/><rect x="9.8" y="10.8" width="4.4" height="7.4" fill="currentColor" stroke="none" opacity="0.3"/></svg><span>Column formatting</span></a></li>
+      <li><a href="tools/svg-to-power-apps-image.html"><svg class="tool-row-icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5-10 8"/></svg><span>SVG to Power Apps</span></a></li>
+      <li><a href="tools/parse-json-schema-generator.html"><svg class="tool-row-icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="6" height="5" rx="1"/><rect x="15" y="9.5" width="6" height="5" rx="1"/><rect x="15" y="16" width="6" height="5" rx="1"/><path d="M6 8v10.5h9M6 12h9"/></svg><span>Parse JSON schema</span></a></li>
+      <li><a href="tools/parse-json-schema-loosener.html"><svg class="tool-row-icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.6-1.8"/><path d="M12 15v2"/></svg><span>Schema loosener</span></a></li>
+      <li><a href="tools/adaptive-card-builder.html"><svg class="tool-row-icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M6.5 8.5h11M6.5 11.5h7"/><rect x="6.5" y="14.5" width="4.5" height="2.5" rx="0.6"/><rect x="13" y="14.5" width="4.5" height="2.5" rx="0.6"/></svg><span>Adaptive Cards</span></a></li>
+      <li><a href="tools/flow-error-handler.html"><svg class="tool-row-icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l9 16H3z"/><path d="M12 10v4"/><circle cx="12" cy="16.8" r="0.4" fill="currentColor"/></svg><span>Error handler</span></a></li>
+      <li><a href="tools/html-email-table.html"><svg class="tool-row-icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 7l8.5 6 8.5-6"/></svg><span>HTML email table</span></a></li>
+      <li><a href="tools/odata-filter-query-builder.html"><svg class="tool-row-icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/><path d="M8 10.5h5"/></svg><span>OData query</span></a></li>
+      <li><a href="tools/fetchxml-builder.html"><svg class="tool-row-icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="7" ry="2.8"/><path d="M5 6v12c0 1.6 3.1 2.8 7 2.8s7-1.2 7-2.8V6"/><path d="M5 12c0 1.6 3.1 2.8 7 2.8s7-1.2 7-2.8"/></svg><span>FetchXML</span></a></li>
+    </ul>
   </div>
 </section>
 
-<section id="about">
-  <div class="credentials">
-    <div class="credtext">
+<section id="about" style="border-bottom:none;">
+  <div class="inner about">
+    <div class="about-text">
+      <p class="kicker">About</p>
       <h2>Written by someone who has to explain this for a living</h2>
-      <p>Simone Palmer-Thompson is a Microsoft AI and Power Platform Solutions Architect: Agentic AI Architect (AB-100), Microsoft Certified Trainer, and Power Platform Functional Consultant (PL-200). Current work spans Dynamics 365 and Dataverse architecture, Copilot Studio multi-agent design, and building Power Platform governance frameworks for large public-sector environments.</p>
-      <p style="margin-top:12px;">Outside Power Platform work: a recent side project rebuilt <a href="https://navigatingseasons.co.uk" target="_blank" rel="noopener" style="color:var(--succeeded);text-decoration:underline;">navigatingseasons.co.uk</a>, a BACP-accredited counselling practice's site, off a page-builder onto hand-built, accessibility-first HTML.</p>
-      <a href="https://linkedin.com/in/sptgb" target="_blank" rel="noopener" class="linkedin-link"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M6.94 5a2 2 0 1 1-4-.002 2 2 0 0 1 4 .002ZM7 8.48H3V21h4V8.48Zm6.32 0H9.34V21h3.94v-6.57c0-3.66 4.77-4 4.77 0V21H22v-7.93c0-6.17-7.06-5.94-8.68-2.91V8.48Z"/></svg>Connect on LinkedIn<span class="sr-only"> (opens in a new tab)</span></a>
+      <p>Simone Palmer-Thompson is a solutions architect specialising in automation, AI and business systems. Current work is in the Microsoft ecosystem as an Agentic AI Architect (AB-100), Microsoft Certified Trainer, and Power Platform Functional Consultant (PL-200), spanning Dynamics 365 and Dataverse architecture, Copilot Studio multi-agent design, and building Power Platform governance frameworks for large public-sector environments.</p>
+      <p>Outside Power Platform work: a recent side project rebuilt <a href="https://navigatingseasons.co.uk" target="_blank" rel="noopener">navigatingseasons.co.uk<span class="sr-only"> (opens in a new tab)</span></a>, a BACP-accredited counselling practice's site, off a page-builder onto hand-built, accessibility-first HTML.</p>
+      <a href="https://linkedin.com/in/sptgb" target="_blank" rel="noopener" class="btn btn-secondary btn-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M6.94 5a2 2 0 1 1-4-.002 2 2 0 0 1 4 .002ZM7 8.48H3V21h4V8.48Zm6.32 0H9.34V21h3.94v-6.57c0-3.66 4.77-4 4.77 0V21H22v-7.93c0-6.17-7.06-5.94-8.68-2.91V8.48Z"/></svg>Connect on LinkedIn<span class="sr-only"> (opens in a new tab)</span></a>
     </div>
-    <div class="badges">
-      <a href="https://learn.microsoft.com/en-us/users/simone-9570/credentials/8634052aba38a50b" target="_blank" rel="noopener" class="badge"><span class="num">AB-100</span>Agentic AI Architect</a>
-      <a href="https://www.credly.com/badges/e900c514-fc7d-4693-a6ac-f1e89821d690/linked_in?t=tfuewo" target="_blank" rel="noopener" class="badge"><span class="num">MCT</span>Microsoft Certified Trainer</a>
-      <a href="https://learn.microsoft.com/en-us/users/simone-9570/credentials/cf951fd73e10f53" target="_blank" rel="noopener" class="badge"><span class="num">PL-200</span>Functional Consultant</a>
+    <div class="cred-list">
+      <p class="rs-head">Credentials · verified by Microsoft</p>
+      <a href="https://learn.microsoft.com/en-us/users/simone-9570/credentials/8634052aba38a50b" target="_blank" rel="noopener"><span class="cred-code">AB-100</span><span>Agentic AI Architect</span><span class="sr-only"> (opens in a new tab)</span></a>
+      <a href="https://www.credly.com/badges/e900c514-fc7d-4693-a6ac-f1e89821d690/linked_in?t=tfuewo" target="_blank" rel="noopener"><span class="cred-code">MCT</span><span>Microsoft Certified Trainer</span><span class="sr-only"> (opens in a new tab)</span></a>
+      <a href="https://learn.microsoft.com/en-us/users/simone-9570/credentials/cf951fd73e10f53" target="_blank" rel="noopener"><span class="cred-code">PL-200</span><span>Functional Consultant</span><span class="sr-only"> (opens in a new tab)</span></a>
     </div>
-  </div>
-</section>
-
-<section style="border-bottom:none;">
-  <div class="section-head">
-    <div>
-      <h2>Start here</h2>
-    </div>
-    <p>THE THREE LATEST POSTS</p>
-  </div>
-  <div class="posts">
-    <a href="do-not-reply-mailbox-dataverse.html" class="post post-live">
-      <div class="meta">D365 Explainer · <time datetime="2026-10-02">2 Oct 2026</time></div>
-      <h3>Sending email from a mailbox nobody can sign in to</h3>
-      <p>A shared Dataverse mailbox needs to send email, but no one signs into it. Two errors you'll hit, and the second needs the Web API, not the UI.</p>
-    </a>
-    <a href="narrating-an-approval-flow.html" class="post post-live">
-      <div class="meta">Flow Narration · <time datetime="2026-08-30">30 Aug 2026</time></div>
-      <h3>An approval flow, narrated: why each step exists, and where it breaks</h3>
-      <p>A composite expense-claim flow, documented the way it should have been from day one.</p>
-    </a>
-    <a href="what-is-flownarrate.html" class="post post-live">
-      <div class="meta">Origin · <time datetime="2026-08-15">15 Aug 2026</time></div>
-      <h3>What is FlowNarrate?</h3>
-      <p>Why automation logic deserves to be told as clearly as it was built.</p>
-    </a>
-  </div>
-  <div style="margin-top:28px;">
-    <a href="blog.html" class="btn btn-secondary">View all posts →</a>
   </div>
 </section>
 
@@ -713,14 +738,31 @@
 </footer>
 
 <script>
-  function copyMermaid(){
-    const text = document.getElementById('mermaid-source').textContent;
-    navigator.clipboard.writeText(text).then(() => {
-      document.getElementById('copy-status').textContent = 'Mermaid code copied to clipboard';
-    }).catch(() => {
-      document.getElementById('copy-status').textContent = 'Copy failed, select the text manually';
+  (function(){
+    var group = document.querySelector('.topic-filters');
+    if (!group) return;
+    var items = Array.prototype.slice.call(document.querySelectorAll('#post-list li'));
+    var empty = document.getElementById('post-empty');
+    var status = document.getElementById('filter-status');
+    var buttons = Array.prototype.slice.call(group.querySelectorAll('button'));
+    buttons.forEach(function(btn){
+      var topic = btn.getAttribute('data-topic');
+      var count = topic === 'all' ? items.length : items.filter(function(li){ return (' ' + li.getAttribute('data-topics') + ' ').indexOf(' ' + topic + ' ') !== -1; }).length;
+      btn.textContent = btn.textContent + ' (' + count + ')';
+      btn.addEventListener('click', function(){
+        var shown = 0;
+        items.forEach(function(li){
+          var match = topic === 'all' || (' ' + li.getAttribute('data-topics') + ' ').indexOf(' ' + topic + ' ') !== -1;
+          li.hidden = !match;
+          if (match) shown++;
+        });
+        buttons.forEach(function(b){ b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
+        empty.hidden = shown !== 0;
+        status.textContent = shown + (shown === 1 ? ' post' : ' posts') + ' shown';
+      });
     });
-  }
+    group.hidden = false;
+  })();
 
   function currentTheme(){
     var attr = document.documentElement.getAttribute("data-theme");
