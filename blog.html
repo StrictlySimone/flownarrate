@@ -249,6 +249,7 @@
 
   section{padding:40px 56px 72px;max-width:1240px;margin:0 auto;}
 
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
   .posts{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
@@ -320,6 +321,7 @@
 </div>
 
 <section>
+  <h2 class="sr-only">All posts</h2>
   <div class="posts" id="posts-grid">
     <a href="do-not-reply-mailbox-dataverse.html" class="post post-live" data-format="D365 Explainer">
       <div class="meta">D365 Explainer · <time datetime="2026-10-02">2 Oct 2026</time></div>
