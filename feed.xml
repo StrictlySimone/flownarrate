@@ -4,7 +4,7 @@
     <title>FlowNarrate</title>
     <link>https://www.flownarrate.com/</link>
     <atom:link href="https://www.flownarrate.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <description>Automation and business systems explained in plain English: the reasoning behind each step, not just the steps.</description>
+    <description>Automation, AI agents and business systems explained in plain English: the reasoning behind each step, not just the steps.</description>
     <language>en-gb</language>
     <lastBuildDate>Fri, 02 Oct 2026 09:00:00 +0000</lastBuildDate>
     <item>
@@ -12,7 +12,7 @@
       <link>https://www.flownarrate.com/do-not-reply-mailbox-dataverse.html</link>
       <guid isPermaLink="true">https://www.flownarrate.com/do-not-reply-mailbox-dataverse.html</guid>
       <pubDate>Fri, 02 Oct 2026 09:00:00 +0000</pubDate>
-      <category>D365 Explainer</category>
+      <category>System Explainer</category>
       <description>A shared Dataverse mailbox (do-not-reply, notifications, accounts) needs to send email, but no one signs into it. Two errors you'll hit setting this up, and the second one needs the Web API, not the UI.</description>
     </item>
     <item>

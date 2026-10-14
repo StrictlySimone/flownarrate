@@ -42,7 +42,7 @@
     "@id": "https://www.flownarrate.com/#simone",
     "name": "Simone Palmer-Thompson",
     "url": "https://www.flownarrate.com/#about",
-    "jobTitle": "Microsoft AI and Power Platform Solutions Architect",
+    "jobTitle": "Solutions Architect: automation, AI and business systems",
     "sameAs": [
       "https://linkedin.com/in/sptgb",
       "https://learn.microsoft.com/en-us/users/simone-9570/credentials/8634052aba38a50b",
@@ -76,34 +76,40 @@
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper: #FBF3F0;
-    --panel: #FFFBF9;
-    --ink: #311847;
-    --ink-soft: #6B5877;
-    --rule: #E3D3DC;
+    --paper: #F6F5F1;
+    --band: #EFEDE6;
+    --ok: #1F7A4D;
+    --panel: #FFFFFF;
+    --ink: #16161D;
+    --ink-soft: #4A4A55;
+    --rule: #D9D6CC;
     --succeeded: #A01A7D;
-    --warning: #A66A1E;
+    --warning: #B54708;
     --failed: #9E3B32;
   }
   [data-theme="dark"]{
-    --paper: #1C1024;
-    --panel: #241531;
-    --ink: #F3E9EF;
-    --ink-soft: #C9AFC0;
-    --rule: #4A2F5E;
-    --succeeded: #F1728C;
-    --warning: #E0A455;
+    --paper: #141418;
+    --band: #1B1B21;
+    --ok: #6CC495;
+    --panel: #1B1B21;
+    --ink: #EEEDE8;
+    --ink-soft: #B4B2BD;
+    --rule: #34343E;
+    --succeeded: #E58AC8;
+    --warning: #F0A35E;
     --failed: #E2564A;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --paper: #1C1024;
-      --panel: #241531;
-      --ink: #F3E9EF;
-      --ink-soft: #C9AFC0;
-      --rule: #4A2F5E;
-      --succeeded: #F1728C;
-      --warning: #E0A455;
+      --paper: #141418;
+    --band: #1B1B21;
+    --ok: #6CC495;
+      --panel: #1B1B21;
+      --ink: #EEEDE8;
+      --ink-soft: #B4B2BD;
+      --rule: #34343E;
+      --succeeded: #E58AC8;
+      --warning: #F0A35E;
       --failed: #E2564A;
     }
   }
@@ -309,13 +315,13 @@
 <div class="page-head">
   <div class="eyebrow">All posts</div>
   <h1>Every narration, in one place</h1>
-  <p class="sub">Flow narrations, D365 explainers, certification notes, and quick tips, in the order they were written. Filter by format if you're after one kind of thing.</p>
+  <p class="sub">Flow narrations, system explainers, certification notes, and quick tips, in the order they were written. Filter by format if you're after one kind of thing.</p>
   <div class="filters" role="group" aria-label="Filter posts by format">
     <button type="button" class="filter-pill active" data-filter="all" onclick="filterPosts('all', this)">All</button>
     <button type="button" class="filter-pill" data-filter="Origin" onclick="filterPosts('Origin', this)">Origin</button>
     <button type="button" class="filter-pill" data-filter="Flow Narration" onclick="filterPosts('Flow Narration', this)">Flow Narration</button>
     <button type="button" class="filter-pill" data-filter="Quick Tip" onclick="filterPosts('Quick Tip', this)">Quick Tip</button>
-    <button type="button" class="filter-pill" data-filter="D365 Explainer" onclick="filterPosts('D365 Explainer', this)">D365 Explainer</button>
+    <button type="button" class="filter-pill" data-filter="System Explainer" onclick="filterPosts('System Explainer', this)">System Explainer</button>
     <button type="button" class="filter-pill" data-filter="Certification Corner" onclick="filterPosts('Certification Corner', this)">Certification Corner</button>
     <button type="button" class="filter-pill" data-filter="Opinion" onclick="filterPosts('Opinion', this)">Opinion</button>
   </div>
@@ -324,9 +330,9 @@
 <section>
   <h2 class="sr-only">All posts</h2>
   <div class="posts" id="posts-grid">
-    <a href="do-not-reply-mailbox-dataverse.html" class="post post-live" data-format="D365 Explainer">
+    <a href="do-not-reply-mailbox-dataverse.html" class="post post-live" data-format="System Explainer">
       <svg class="card-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 7l8.5 6 8.5-6"/><path d="M4 20L20 4"/></svg>
-      <div class="meta">D365 Explainer · <time datetime="2026-10-02">2 Oct 2026</time></div>
+      <div class="meta">System Explainer · <time datetime="2026-10-02">2 Oct 2026</time></div>
       <h3>Sending email from a mailbox nobody can sign in to</h3>
       <p>A shared Dataverse mailbox needs to send email, but no one signs into it. Two errors you'll hit, and the second needs the Web API, not the UI.</p>
     </a>
