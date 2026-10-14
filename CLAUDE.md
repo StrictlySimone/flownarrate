@@ -7,6 +7,7 @@ Static site served by GitHub Pages at **https://www.flownarrate.com** (see `CNAM
 - Every absolute URL (canonical, `og:url`, `og:image`, JSON-LD, sitemap, `llms.txt`) uses `https://www.flownarrate.com`, never the bare domain.
 - British spelling ("colour").
 - Every page's `<head>` links the RSS feed (`feed.xml`) and every footer has an RSS link; keep both on new pages.
+- Icons: every post and tool has a line icon, kept as a file in `assets/icons/<slug>.svg` (24×24, stroke `currentColor`, width 1.6, round caps, no fill). Pages inline the SVG with `aria-hidden="true" focusable="false"` and class `card-icon` (cards) or `tool-hero-icon` (tool page heading). A new post or tool gets a new icon in the same style, added to its cards everywhere they appear.
 - Tool pages live in `tools/` and share `assets/tools.css` and `assets/tools.js`. The JS only initialises tools present on the page, through `onPage(id, init)` at the end of each tool's block.
 
 ## Publishing a new post: checklist
@@ -14,7 +15,7 @@ Static site served by GitHub Pages at **https://www.flownarrate.com** (see `CNAM
 Do all of these in the same commit as the post itself.
 
 1. **The post page** (`<slug>.html` at the root): copy the `<head>` of an existing post and update `<title>`, description, canonical, `og:*` and `twitter:*` tags, the `<time datetime>` and the `BlogPosting` JSON-LD (`headline`, `description`, `url`, `mainEntityOfPage`, `datePublished`).
-2. **`blog.html`**: add a card to the top of `#posts-grid` with the right `data-format`. Also add the post to the `blogPost` list in the JSON-LD.
+2. **`blog.html`**: add a card to the top of `#posts-grid` with the right `data-format` and the post's icon (see Site rules). Also add the post to the `blogPost` list in the JSON-LD.
 3. **`index.html`**: the homepage shows the three latest posts. Add the new one first and remove the oldest.
 4. **`sitemap.xml`**: add a `<url>` entry with `<lastmod>` set to the publish date. Update `<lastmod>` for `blog.html` and `/` (the homepage) too.
 5. **`llms.txt`**: add the post to the top of the `## Posts` list as `- [Title](https://www.flownarrate.com/<slug>.html): one-sentence summary`.

@@ -449,3 +449,7 @@ footer{
 .tool-guide ol{padding-left:22px;margin-bottom:14px;}
 .tool-guide code{font-family:'JetBrains Mono',monospace;font-size:0.85em;color:var(--ink);}
 
+
+/* Line icons (source files in assets/icons/) */
+.card-icon{display:block;width:28px;height:28px;color:var(--succeeded);margin-bottom:14px;}
+.tool-hero-icon{display:block;width:44px;height:44px;color:var(--succeeded);margin-bottom:18px;}
