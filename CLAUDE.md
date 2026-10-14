@@ -28,4 +28,10 @@ Do all of these in the same commit as the post itself.
 4. **`sitemap.xml`**: add a `<url>` entry, and update `<lastmod>` for `tools.html`.
 5. **`llms.txt`**: add it to the `## Tools` list.
 
-When an existing page changes in a way readers would notice, update its `<lastmod>` in `sitemap.xml`.
+## Keeping the XML files current
+
+`sitemap.xml` and `feed.xml` (the RSS feed) must always match the site. Check both whenever you add, rename, edit or remove a page.
+
+- **Sitemap:** every public page has a `<url>` entry (not `404.html`). When an existing page changes in a way readers would notice, update its `<lastmod>`.
+- **RSS feed:** every post has an `<item>`, newest first. When a post's title or description changes, update its `<item>` to match. When a post is removed, remove its `<item>`. Keep the `guid` unchanged for an existing post, or feed readers will show it again as new.
+- Both files must stay valid XML. After editing, check them with `python3 -c "import xml.dom.minidom as m; m.parse('sitemap.xml'); m.parse('feed.xml')"`.
