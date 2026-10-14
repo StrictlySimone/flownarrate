@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>FlowNarrate</title>
+    <link>https://www.flownarrate.com/</link>
+    <atom:link href="https://www.flownarrate.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <description>Automation and business systems explained in plain English: the reasoning behind each step, not just the steps.</description>
+    <language>en-gb</language>
+    <lastBuildDate>Fri, 02 Oct 2026 09:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Sending email from a mailbox nobody can sign in to</title>
+      <link>https://www.flownarrate.com/do-not-reply-mailbox-dataverse.html</link>
+      <guid isPermaLink="true">https://www.flownarrate.com/do-not-reply-mailbox-dataverse.html</guid>
+      <pubDate>Fri, 02 Oct 2026 09:00:00 +0000</pubDate>
+      <category>D365 Explainer</category>
+      <description>A shared Dataverse mailbox (do-not-reply, notifications, accounts) needs to send email, but no one signs into it. Two errors you'll hit setting this up, and the second one needs the Web API, not the UI.</description>
+    </item>
+    <item>
+      <title>An approval flow, narrated: why each step exists, and where it breaks</title>
+      <link>https://www.flownarrate.com/narrating-an-approval-flow.html</link>
+      <guid isPermaLink="true">https://www.flownarrate.com/narrating-an-approval-flow.html</guid>
+      <pubDate>Sun, 30 Aug 2026 09:00:00 +0000</pubDate>
+      <category>Flow Narration</category>
+      <description>A composite expense-claim approval flow, walked step by step: what each action does, why the threshold and escalation exist, and where flows like this quietly break.</description>
+    </item>
+    <item>
+      <title>What is FlowNarrate?</title>
+      <link>https://www.flownarrate.com/what-is-flownarrate.html</link>
+      <guid isPermaLink="true">https://www.flownarrate.com/what-is-flownarrate.html</guid>
+      <pubDate>Sat, 15 Aug 2026 09:00:00 +0000</pubDate>
+      <category>Origin</category>
+      <description>Why automation logic deserves to be told as clearly as it was built.</description>
+    </item>
+  </channel>
+</rss>

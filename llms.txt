@@ -28,4 +28,5 @@ All twelve tools are free, need no sign-in and run entirely in the browser. [Too
 ## Optional
 
 - [All posts](https://www.flownarrate.com/blog.html): Index of every FlowNarrate post.
+- [RSS feed](https://www.flownarrate.com/feed.xml): New posts, as RSS.
 - [Privacy](https://www.flownarrate.com/privacy.html): FlowNarrate does not collect personal data.
