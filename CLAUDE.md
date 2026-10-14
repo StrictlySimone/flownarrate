@@ -6,6 +6,7 @@ Static site served by GitHub Pages at **https://www.flownarrate.com** (see `CNAM
 
 - Every absolute URL (canonical, `og:url`, `og:image`, JSON-LD, sitemap, `llms.txt`) uses `https://www.flownarrate.com`, never the bare domain.
 - British spelling ("colour").
+- Every page's `<head>` links the RSS feed (`feed.xml`) and every footer has an RSS link; keep both on new pages.
 - Tool pages live in `tools/` and share `assets/tools.css` and `assets/tools.js`. The JS only initialises tools present on the page, through `onPage(id, init)` at the end of each tool's block.
 
 ## Publishing a new post: checklist
@@ -17,6 +18,7 @@ Do all of these in the same commit as the post itself.
 3. **`index.html`**: the homepage shows the three latest posts. Add the new one first and remove the oldest.
 4. **`sitemap.xml`**: add a `<url>` entry with `<lastmod>` set to the publish date. Update `<lastmod>` for `blog.html` and `/` (the homepage) too.
 5. **`llms.txt`**: add the post to the top of the `## Posts` list as `- [Title](https://www.flownarrate.com/<slug>.html): one-sentence summary`.
+6. **`feed.xml`**: add an `<item>` at the top (title, link, `guid`, `pubDate` in RFC 822 format such as `Fri, 02 Oct 2026 09:00:00 +0000`, category, description) and set `<lastBuildDate>` to the same date. Copy the `<link rel="alternate" type="application/rss+xml" …>` line into the new page's `<head>`.
 
 ## Adding or changing a tool: checklist
 
@@ -26,4 +28,10 @@ Do all of these in the same commit as the post itself.
 4. **`sitemap.xml`**: add a `<url>` entry, and update `<lastmod>` for `tools.html`.
 5. **`llms.txt`**: add it to the `## Tools` list.
 
-When an existing page changes in a way readers would notice, update its `<lastmod>` in `sitemap.xml`.
+## Keeping the XML files current
+
+`sitemap.xml` and `feed.xml` (the RSS feed) must always match the site. Check both whenever you add, rename, edit or remove a page.
+
+- **Sitemap:** every public page has a `<url>` entry (not `404.html`). When an existing page changes in a way readers would notice, update its `<lastmod>`.
+- **RSS feed:** every post has an `<item>`, newest first. When a post's title or description changes, update its `<item>` to match. When a post is removed, remove its `<item>`. Keep the `guid` unchanged for an existing post, or feed readers will show it again as new.
+- Both files must stay valid XML. After editing, check them with `python3 -c "import xml.dom.minidom as m; m.parse('sitemap.xml'); m.parse('feed.xml')"`.
