@@ -563,7 +563,28 @@ function copyOdataQuery(){
   });
 }
 
+// Example dates follow the visitor's clock (in UTC, as Power Automate does),
+// so the samples always show today rather than a fixed date.
+function showDateExamples(){
+  const now = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  const y = now.getUTCFullYear(), mo = pad(now.getUTCMonth() + 1), d = pad(now.getUTCDate());
+  const h = now.getUTCHours(), mi = pad(now.getUTCMinutes());
+  const samples = {
+    'yyyy-MM-dd': y + '-' + mo + '-' + d,
+    'dd/MM/yyyy': d + '/' + mo + '/' + y,
+    'dddd, MMMM d': now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' }),
+    'HH:mm': pad(h) + ':' + mi,
+    'hh:mm tt': pad(h % 12 || 12) + ':' + mi + ' ' + (h < 12 ? 'AM' : 'PM')
+  };
+  document.querySelectorAll('#df-format option[data-example]').forEach(opt => {
+    opt.textContent = samples[opt.value] + ' (' + opt.dataset.example + ')';
+  });
+  document.getElementById('df-example-utc').textContent = y + '-' + mo + '-' + d + 'T' + pad(h) + ':' + mi + ':00Z';
+}
+
 onPage('df-result', updateDateFormatter);
+onPage('df-example-utc', showDateExamples);
 onPage('loosen-result', updateLoosenedSchema);
 onPage('ac-result', updateAdaptiveCard);
 onPage('eh-runafter', updateErrorHandler);
@@ -655,6 +676,1086 @@ function copyFetchXml(){
 }
 
 onPage('fx-rows', function(){ addFetchXmlRow('prioritycode', 'equals', '1'); });
+
+// --- Microsoft Forms pre-filled link builder ---
+// Everything is learned from one sample pre-filled link. Forms encodes each
+// question type differently, so the sample's values tell us the type:
+//   text:   Dfffff                                  (raw)
+//   choice: "Yes"                                   (JSON string)
+//   multi:  "[\"Radio\",\"Flyer\"]"                 (JSON array, stringified twice)
+//   grid:   {"r<row>":{"id":1,"key":"<guid>"},...}  (Likert rows -> column)
+//   date:   "2026-10-17"                            (JSON string, ISO date)
+//   number: 4                                       (raw; rating, NPS, number-only text)
+// A stray space in a choice option is stored as a non-breaking space, and a
+// pre-filled answer must match it exactly, so options seen in the sample are
+// kept and reused character for character.
+// The DOM is built with createElement/textContent throughout, because the
+// sample link and the answers are user input.
+let pfBase = '';
+let pfFixedParams = [];
+let pfQuestions = [];
+const pfTypeNames = {
+  text: 'text answer',
+  choice: 'choice, pick one',
+  multi: 'choice, pick one or more',
+  grid: 'grid (Likert)',
+  date: 'date',
+  number: 'number (rating, score or number question)'
+};
+
+function pfStatus(id, message){
+  const el = document.getElementById(id);
+  // Clear first so a screen reader announces the same message twice in a row.
+  el.textContent = '';
+  setTimeout(() => { el.textContent = message; }, 50);
+}
+
+function pfEl(tag, props, children){
+  const el = document.createElement(tag);
+  Object.assign(el, props || {});
+  (children || []).forEach(c => el.append(c));
+  return el;
+}
+
+function pfDetectType(raw){
+  const v = raw.trim();
+  if (v.startsWith('{')){
+    try {
+      const obj = JSON.parse(v);
+      const rows = Object.keys(obj).filter(k => obj[k] && obj[k].key);
+      if (rows.length) return { type: 'grid', grid: obj };
+    } catch(e) { /* not JSON, fall through to text */ }
+  }
+  if (v.startsWith('"')){
+    try {
+      const s = JSON.parse(v);
+      if (typeof s === 'string'){
+        if (s.startsWith('[')){
+          try {
+            const arr = JSON.parse(s);
+            if (Array.isArray(arr)) return { type: 'multi', sample: arr.join(', '), options: arr };
+          } catch(e) { /* a choice that happens to start with [ */ }
+        }
+        if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return { type: 'date', sample: s };
+        return { type: 'choice', sample: s, options: [s] };
+      }
+    } catch(e) { /* fall through */ }
+  }
+  if (/^\d+$/.test(v)) return { type: 'number', sample: v };
+  return { type: 'text', sample: raw };
+}
+
+function pfReadSample(moveFocus){
+  pfSetExample(null);
+  ['pf-ai-done', 'pf-reply-done'].forEach(id => { document.getElementById(id).hidden = true; });
+  document.getElementById('pf-reply-before').hidden = false;
+  const input = document.getElementById('pf-sample').value.trim();
+  let url;
+  try {
+    url = new URL(input);
+  } catch(e) {
+    pfStatus('pf-read-status', 'That does not look like a link. Paste the whole pre-filled link, starting with https.');
+    return;
+  }
+  const params = Array.from(url.searchParams.entries());
+  const isQuestion = name => /^r[0-9a-f]{32}$/i.test(name);
+  if (!url.searchParams.get('id') || !params.some(([name]) => isQuestion(name))){
+    pfStatus('pf-read-status', 'No questions found in that link. Check it is a pre-filled link from Get Pre-filled URL, with at least one answer filled in.');
+    return;
+  }
+
+  const titles = pfTitles();
+  pfBase = url.origin + url.pathname;
+  pfFixedParams = params.filter(([name]) => !isQuestion(name));
+  pfQuestions = params.filter(([name]) => isQuestion(name)).map(([name, value], i) => {
+    const found = pfDetectType(value);
+    const q = {
+      param: name,
+      number: i + 1,
+      title: titles[i] || '',
+      type: found.type,
+      sample: found.sample || '',
+      options: found.options || [],
+      formOptions: [],
+      answer: '',
+      leaveOut: false
+    };
+    if (found.type === 'grid'){
+      q.rows = Object.keys(found.grid).map((rowParam, r) => ({ param: rowParam, name: 'Row ' + (r + 1), answer: '' }));
+      const cols = {};
+      Object.values(found.grid).forEach(c => { cols[c.key] = c.id; });
+      q.cols = Object.keys(cols).map(key => ({ key: key, id: cols[key], name: '' })).sort((a, b) => a.id - b.id);
+    }
+    return q;
+  });
+
+  pfRenderQuestions();
+  pfRenderTestOptions();
+  pfGridNamesFromFormText();
+  pfOptionsFromFormText();
+  pfReady = true;
+  pfShowMode();
+  pfShowAiPrompt();
+  pfUpdateLink();
+
+  const counts = {};
+  pfQuestions.forEach(q => { counts[q.type] = (counts[q.type] || 0) + 1; });
+  const summary = Object.keys(counts).map(t => counts[t] + ' ' + pfTypeNames[t]).join(', ');
+  if (moveFocus) document.getElementById(pfMode() === 'basic' ? 'pf-ai-heading' : 'pf-step2-heading').focus();
+  pfStatus('pf-read-status', 'Found ' + pfQuestions.length + ' questions: ' + summary + '. Step 2 is next.');
+}
+
+function pfQuestionLabel(q){
+  return 'Question ' + q.number + (q.title ? ': ' + q.title : '');
+}
+
+function pfRenderQuestions(){
+  const box = document.getElementById('pf-questions');
+  box.textContent = '';
+  pfQuestions.forEach(q => box.append(pfRenderQuestion(q)));
+}
+
+function pfRenderQuestion(q, inline){
+  const id = 'pf-q' + q.number;
+  const wrap = pfEl('div', { className: 'pf-question', id: id + '-block' });
+  const hint = pfEl('p', { className: 'pf-hint', id: id + '-hint' });
+
+  if (q.type === 'grid'){
+    const fieldset = pfEl('fieldset', {}, [pfEl('legend', { className: 'pf-label', textContent: pfQuestionLabel(q) + ' (grid)' })]);
+    hint.textContent = 'Choose a column for each row. Sample link used columns with id ' + q.cols.map(c => c.id).join(', ') + '. A column the sample did not use cannot be chosen.';
+    fieldset.append(hint);
+
+    const colNames = pfEl('div', { className: 'pf-sub' }, [
+      pfEl('label', { htmlFor: id + '-cols', textContent: 'Names for the columns with id ' + q.cols.map(c => c.id).join(', ') + ', in that order, separated by commas (optional)' }),
+      pfEl('input', { type: 'text', id: id + '-cols', value: q.cols.map(c => c.name).filter(Boolean).join(', '),
+        oninput: e => {
+          const names = e.target.value.split(',').map(s => s.trim());
+          q.cols.forEach((c, i) => { c.name = names[i] || ''; });
+          pfRefreshGridSelects(q);
+        } })
+    ]);
+    const rowNames = pfEl('div', { className: 'pf-sub' }, [
+      pfEl('label', { htmlFor: id + '-rows', textContent: 'Row names, one per line (optional)' }),
+      pfEl('textarea', { id: id + '-rows', rows: 3, value: q.rows.map(r => r.name).join('\n'),
+        onchange: e => {
+          const names = e.target.value.split('\n').map(s => s.trim());
+          q.rows.forEach((r, i) => { r.name = names[i] || ('Row ' + (i + 1)); });
+          pfRefreshGridSelects(q);
+        } })
+    ]);
+    fieldset.append(colNames, rowNames);
+
+    q.rows.forEach((row, r) => {
+      const select = pfEl('select', { id: id + '-r' + r, onchange: e => { row.answer = e.target.value; pfUpdateLink(); } });
+      const label = pfEl('label', { htmlFor: select.id, textContent: row.name });
+      fieldset.append(pfEl('div', { className: 'pf-grid-row' }, [label, select]));
+    });
+    wrap.append(fieldset);
+    pfRefreshGridSelects(q);
+  } else if (q.type === 'choice' && q.formOptions.length){
+    const select = pfEl('select', { id: id, onchange: e => { q.answer = e.target.value; pfUpdateLink(); } });
+    select.append(pfEl('option', { value: '', textContent: 'No answer' }));
+    q.formOptions.forEach(o => select.append(pfEl('option', { value: o, textContent: o.trim() })));
+    select.value = q.formOptions.includes(pfExactOption(q, q.answer)) ? pfExactOption(q, q.answer) : '';
+    select.setAttribute('aria-describedby', hint.id);
+    wrap.append(pfEl('label', { htmlFor: id, className: 'pf-label', textContent: pfQuestionLabel(q) }), select, hint);
+  } else if (q.type === 'multi' && q.formOptions.length){
+    const fieldset = pfEl('fieldset', {}, [pfEl('legend', { className: 'pf-label', textContent: pfQuestionLabel(q) })]);
+    const picked = q.answer.split('\n').filter(Boolean);
+    const isOption = v => q.formOptions.some(o => pfExactOption({ options: [o] }, v) === o);
+    const other = pfEl('input', { type: 'text', id: id + '-other', value: picked.filter(v => !isOption(v)).join(', ') });
+    const sync = () => {
+      const ticked = Array.from(fieldset.querySelectorAll('input[type="checkbox"]:checked')).map(c => c.value);
+      const typed = other.value.split(',').map(v => v.trim()).filter(Boolean);
+      q.answer = ticked.concat(typed).join('\n');
+      pfUpdateLink();
+    };
+    q.formOptions.forEach((o, i) => {
+      const box = pfEl('input', { type: 'checkbox', id: id + '-o' + i, value: o, checked: picked.some(v => pfExactOption({ options: [o] }, v) === o), onchange: sync });
+      fieldset.append(pfEl('label', { className: 'check-label', htmlFor: box.id }, [box, o.trim()]));
+    });
+    other.oninput = sync;
+    fieldset.append(pfEl('div', { className: 'pf-sub' }, [pfEl('label', { htmlFor: other.id, textContent: 'Other (typed answer)' }), other]), hint);
+    wrap.append(fieldset);
+  } else {
+    const multiline = q.type === 'text' || q.type === 'multi';
+    const field = pfEl(multiline ? 'textarea' : 'input', { id: id,
+      oninput: e => { q.answer = e.target.value; pfUpdateHint(q); pfUpdateLink(); } });
+    if (multiline) field.rows = q.type === 'text' ? 5 : 3;
+    else field.type = q.type === 'date' ? 'date' : 'text';
+    if (q.type === 'number') field.inputMode = 'numeric';
+    field.value = q.answer;
+    field.setAttribute('aria-describedby', hint.id);
+    wrap.append(pfEl('label', { htmlFor: id, className: 'pf-label', textContent: pfQuestionLabel(q) }), field, hint);
+  }
+
+  if (!inline){
+    const leaveOut = pfEl('input', { type: 'checkbox', id: id + '-out', checked: q.leaveOut,
+      onchange: e => { q.leaveOut = e.target.checked; pfUpdateLink(); } });
+    wrap.append(pfEl('label', { className: 'check-label', htmlFor: leaveOut.id }, [leaveOut, 'Leave question ' + q.number + ' out of the link (paste it by hand instead)']));
+  }
+  pfUpdateHint(q, hint);
+  return wrap;
+}
+
+function pfRefreshGridSelects(q){
+  q.rows.forEach((row, r) => {
+    const select = document.getElementById('pf-q' + q.number + '-r' + r);
+    if (!select) return;
+    select.previousElementSibling.textContent = row.name;
+    select.textContent = '';
+    select.append(pfEl('option', { value: '', textContent: 'No answer' }));
+    q.cols.forEach(c => select.append(pfEl('option', { value: c.key, textContent: c.name || ('Column with id ' + c.id) })));
+    select.value = row.answer;
+  });
+}
+
+function pfUpdateHint(q, el){
+  const hint = el || document.getElementById('pf-q' + q.number + '-hint');
+  if (!hint || q.type === 'grid') return;
+  const len = q.answer.length;
+  if (q.type === 'text'){
+    hint.textContent = 'Text answer. ' + len.toLocaleString('en-GB') + ' characters.' +
+      (len > 4000 ? ' Over 4,000 characters, which is more than a long answer box takes.' : '');
+  } else if (q.type === 'choice' && q.formOptions.length){
+    hint.textContent = 'Choice, pick one.';
+  } else if (q.type === 'multi' && q.formOptions.length){
+    hint.textContent = 'Choice, pick one or more. Tick each that applies.';
+  } else if (q.type === 'choice'){
+    hint.textContent = 'Choice, pick one. Type the option exactly as the form shows it. Sample answer: ' + pfShowOption(q.sample);
+  } else if (q.type === 'multi'){
+    hint.textContent = 'Choice, pick one or more. One option per line, exactly as the form shows it. Sample answer: ' + q.options.map(pfShowOption).join(', ');
+  } else if (q.type === 'date'){
+    hint.textContent = 'Date. Sample answer: ' + q.sample.split('-').reverse().join('/');
+  } else {
+    hint.textContent = 'Number only. For a star rating, the number of stars; for a 0 to 10 score, the score. Sample answer: ' + q.sample;
+  }
+}
+
+function pfShowOption(option){
+  return /^\u00a0|\u00a0$/.test(option) ? option.trim() + ' (has a hidden space, kept automatically)' : option;
+}
+
+// Use the sample's exact spelling of an option when the answer matches it
+// apart from spaces and capitals.
+function pfExactOption(q, value){
+  const norm = v => v.replace(/\u00a0/g, ' ').trim().toLowerCase();
+  return q.options.find(o => norm(o) === norm(value)) || value;
+}
+
+function pfEncodeValue(q){
+  if (q.type === 'text') return q.answer.trim() ? q.answer : null;
+  if (q.type === 'choice') return q.answer.trim() ? JSON.stringify(pfExactOption(q, q.answer)) : null;
+  if (q.type === 'date') return q.answer ? JSON.stringify(q.answer) : null;
+  if (q.type === 'number') return q.answer.trim() ? q.answer.trim() : null;
+  if (q.type === 'multi'){
+    const picks = q.answer.split('\n').filter(s => s.trim()).map(s => pfExactOption(q, s));
+    return picks.length ? JSON.stringify(JSON.stringify(picks)) : null;
+  }
+  const grid = {};
+  q.rows.forEach(row => {
+    const col = q.cols.find(c => c.key === row.answer);
+    if (col) grid[row.param] = { id: col.id, key: col.key };
+  });
+  return Object.keys(grid).length ? JSON.stringify(grid) : null;
+}
+
+function pfBuildUrl(extra){
+  const parts = pfFixedParams.map(([name, value]) => name + '=' + encodeURIComponent(value));
+  pfQuestions.forEach(q => {
+    if (q.leaveOut) return;
+    const value = pfEncodeValue(q);
+    if (value !== null) parts.push(q.param + '=' + encodeURIComponent(value));
+  });
+  (extra || []).forEach(p => parts.push(p));
+  return pfBase + '?' + parts.join('&');
+}
+
+function pfUpdateLink(){
+  const link = pfBuildUrl();
+  const len = link.length;
+  document.getElementById('pf-open').href = link;
+  document.getElementById('pf-link').textContent = link;
+  let advice;
+  // 5,739 characters is the longest link tested on a real form so far.
+  if (len <= 5739) advice = 'Within the length tested on Microsoft Forms, so it should load.';
+  else if (len <= 8000) advice = 'Longer than tested. It may work: check the last answers arrived in full, or use the length test in step 4.';
+  else advice = 'Probably too long. Tick "Leave out of the link" for the longest answers and paste those by hand.';
+  document.getElementById('pf-length').textContent = 'The link is ' + len.toLocaleString('en-GB') + ' characters long. ' + advice;
+}
+
+// Copy with the Clipboard API, falling back to a selected textarea for the
+// browsers and app viewers that block it. Resolves to true or false.
+function pfCopyText(text){
+  const fallback = () => {
+    const area = pfEl('textarea', { value: text, readOnly: true });
+    area.style.position = 'fixed';
+    area.style.opacity = '0';
+    document.body.append(area);
+    area.select();
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch(e) { ok = false; }
+    area.remove();
+    return ok;
+  };
+  if (!navigator.clipboard) return Promise.resolve(fallback());
+  return navigator.clipboard.writeText(text).then(() => true, () => fallback());
+}
+
+// Long boxes show their first few lines until expanded.
+function pfToggleBox(button){
+  const box = document.getElementById(button.getAttribute('aria-controls'));
+  const open = button.getAttribute('aria-expanded') !== 'true';
+  box.classList.toggle('pf-collapsed', !open);
+  button.setAttribute('aria-expanded', open ? 'true' : 'false');
+  button.textContent = open ? button.dataset.less : button.dataset.more;
+}
+
+function pfCopyLink(){
+  pfCopyText(pfBuildUrl()).then(ok => {
+    pfStatus('pf-link-status', ok ? 'Link copied.' : 'Copying was blocked. Expand the link below, select it and copy it yourself.');
+  });
+}
+
+// "Question 3: answer" blocks from Copilot. Markdown bold around the
+// heading is common, so it is stripped.
+function pfFillFromPaste(){
+  const result = pfApplyAnswers(document.getElementById('pf-paste').value);
+  pfRenderQuestions();
+  pfUpdateLink();
+  let msg = 'Filled ' + result.filled.length + ' of ' + pfQuestions.length + ' questions.';
+  if (result.missing.length) msg += ' No answer found for question ' + result.missing.join(', ') + '.';
+  if (result.problems.length) msg += ' Could not use: ' + result.problems.join('; ') + '.';
+  msg += ' Check the answers in the boxes below.';
+  pfStatus('pf-paste-status', msg);
+  return msg;
+}
+
+// Several picks may come one per line, or on one line with commas. When the
+// form's options are known, they are found by name, so an option that itself
+// contains a comma stays whole; whatever is left over is a typed "Other".
+function pfSplitMulti(q, answer){
+  const clean = v => v.replace(/^\s*[-*•]\s*/, '').trim();
+  const norm = v => v.replace(/\u00a0/g, ' ').trim().toLowerCase();
+  if (q.formOptions.length){
+    let rest = ' ' + answer.replace(/\u00a0/g, ' ') + ' ';
+    const picks = [];
+    q.formOptions.slice().sort((x, y) => y.length - x.length).forEach(o => {
+      const at = rest.toLowerCase().indexOf(norm(o));
+      if (at >= 0){ picks.push(o); rest = rest.slice(0, at) + '\n' + rest.slice(at + norm(o).length); }
+    });
+    const ordered = q.formOptions.filter(o => picks.includes(o));
+    const other = rest.split(/[\n,;]/).map(clean).filter(v => v && !/^(and|other:?)$/i.test(v));
+    return ordered.concat(other);
+  }
+  const parts = /[\n;]/.test(answer) ? answer.split(/[\n;]/) : answer.split(',');
+  return parts.map(clean).filter(Boolean);
+}
+
+function pfApplyAnswers(text){
+  const blocks = {};
+  let current = null;
+  text.split(/\r?\n/).forEach(line => {
+    const m = line.replace(/\*\*/g, '').match(/^\s*#*\s*(?:question|q)\s*(\d+)\s*[:.)\-–—]\s?(.*)$/i);
+    if (m){
+      current = Number(m[1]);
+      blocks[current] = [m[2]];
+    } else if (/:\/\/\S*\?id=/.test(line)){
+      current = null;
+    } else if (current !== null){
+      blocks[current].push(line);
+    }
+  });
+
+  const filled = [], missing = [], problems = [];
+  pfQuestions.forEach(q => {
+    const lines = blocks[q.number];
+    // An answer ends at a blank line, so a closing question or remark from
+    // the AI isn't taken as part of it. One-line types take one line.
+    let kept = [];
+    if (lines){
+      const firstText = lines.findIndex(l => l.trim());
+      for (let i = Math.max(firstText, 0); i < lines.length && (i === firstText || lines[i].trim()); i++) kept.push(lines[i]);
+      if (['choice', 'date', 'number'].includes(q.type)) kept = kept.slice(0, 1);
+    }
+    let answer = kept.join('\n').trim();
+    if (/^(not answered|unanswered|no answer|n\/a|none|-)\.?$/i.test(answer)) answer = '';
+    if (!answer){ missing.push(q.number); return; }
+    filled.push(q.number);
+    if (q.type === 'multi'){
+      q.answer = pfSplitMulti(q, answer).join('\n');
+    } else if (q.type === 'grid'){
+      // One row per line, or several on a line split by ; or by a comma
+      // that starts the next "row: column" pair.
+      answer.split(/\n|;|,(?=[^,:]+:)/).forEach(line => {
+        const m = line.replace(/^\s*[-*•]\s*/, '').match(/^(.+?)\s*[:=]\s*(.+)$/);
+        if (!m) return;
+        const rowText = m[1].trim().toLowerCase(), colText = m[2].trim().toLowerCase();
+        const row = q.rows.find((r, i) => r.name.toLowerCase() === rowText || String(i + 1) === rowText.replace(/^row\s*/, ''));
+        const col = q.cols.find(c => (c.name && c.name.toLowerCase() === colText) || String(c.id) === colText);
+        if (row && col) row.answer = col.key;
+        else problems.push('question ' + q.number + ', "' + line.trim() + '"');
+      });
+    } else if (q.type === 'date'){
+      const m = answer.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+      q.answer = m ? m[3] + '-' + m[2].padStart(2, '0') + '-' + m[1].padStart(2, '0') : answer;
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(q.answer)){ q.answer = ''; problems.push('question ' + q.number + ', "' + answer + '" is not a date'); }
+    } else {
+      q.answer = answer;
+    }
+  });
+  return { filled: filled, missing: missing, problems: problems };
+}
+
+function pfCopilotPrompt(){
+  const lines = pfQuestions.map(q => {
+    let how = pfTypeNames[q.type];
+    if (q.type === 'grid'){
+      how += ', one line per row as "row name: column name"';
+      if (q.cols.some(c => c.name)) how += '. Rows: ' + q.rows.map(r => r.name).join(', ') + '. Columns: ' + q.cols.map(c => c.name || ('id ' + c.id)).join(', ');
+    }
+    if (q.type === 'multi') how += ', one option per line';
+    if (q.type === 'date') how += ', written as dd/mm/yyyy';
+    if (q.type === 'number') how += ', the number only';
+    return 'Question ' + q.number + (q.title ? ' (' + q.title + ')' : '') + ': ' + how;
+  });
+  return 'Write my answers out again in exactly this format, with nothing before or after. ' +
+    'Start each answer on a new line with "Question", its number and a colon, then the answer. ' +
+    'Do not repeat the question. For choice questions use the option wording exactly as the form shows it.\n\n' +
+    lines.join('\n');
+}
+
+function pfCopyPrompt(){
+  pfCopyText(pfCopilotPrompt()).then(ok => {
+    pfStatus('pf-paste-status', ok ? 'AI prompt copied.' : 'Copying was blocked.');
+  });
+}
+
+function pfRenderCopyBlocks(){
+  const box = document.getElementById('pf-copy-blocks');
+  box.textContent = '';
+  const list = pfQuestions.filter(q => q.type !== 'grid' && q.answer.trim() && (q.leaveOut || !document.getElementById('pf-copy-only-left').checked));
+  if (!list.length){
+    box.append(pfEl('p', { className: 'pf-hint', textContent: 'No answers to copy yet.' }));
+    pfStatus('pf-copy-status', 'No answers to copy yet.');
+    return;
+  }
+  list.forEach(q => {
+    const btn = pfEl('button', { type: 'button', className: 'copy-btn',
+      textContent: 'Question ' + q.number + ': copy answer',
+      className: 'copy-btn pf-copy',
+      onclick: () => pfCopyText(q.answer).then(ok => pfStatus('pf-copy-status', ok
+        ? 'Question ' + q.number + ' answer copied. ' + q.answer.length + ' characters.'
+        : 'Copying was blocked.')) });
+    box.append(pfEl('div', { className: 'pf-copy-block' }, [
+      pfEl('h3', { textContent: pfQuestionLabel(q) }),
+      pfEl('p', { className: 'pf-hint', textContent: q.answer.length.toLocaleString('en-GB') + ' characters' }),
+      btn
+    ]));
+  });
+  pfStatus('pf-copy-status', list.length + (list.length === 1 ? ' copy button' : ' copy buttons') + ' ready below.');
+}
+
+// --- Length test ---
+function pfRenderTestOptions(){
+  const select = document.getElementById('pf-test-question');
+  select.textContent = '';
+  pfQuestions.filter(q => q.type === 'text').forEach(q => {
+    select.append(pfEl('option', { value: q.number, textContent: pfQuestionLabel(q) }));
+  });
+  select.append(pfEl('option', { value: 'pad', textContent: 'No question: pad the link with an extra unused parameter' }));
+}
+
+function pfTestAnswer(base, target, label){
+  // Spaces and full stops make the answer encode like real writing.
+  const start = 'Start of test ' + label + '. ';
+  const end = ' End of test ' + label + '.';
+  const filler = 'Test words, and more. ';
+  let body = '';
+  while (base.length + encodeURIComponent(start + body + filler + end).length <= target && (start + body + end).length < 4000){
+    body += filler;
+  }
+  return start + body + end;
+}
+
+function pfMakeTests(){
+  const choice = document.getElementById('pf-test-question').value;
+  const box = document.getElementById('pf-test-links');
+  box.textContent = '';
+  const targets = [2000, 4000, 6000, 8000, 12000, 16000, 24000, 32000];
+  const list = pfEl('ul', { className: 'pf-test-list' });
+  let capped = false;
+  targets.forEach(target => {
+    if (capped) return;
+    const label = target.toLocaleString('en-GB');
+    let link;
+    if (choice === 'pad'){
+      const base = pfBuildUrl() + '&pad=';
+      link = base + 'x'.repeat(Math.max(0, target - base.length));
+    } else {
+      const q = pfQuestions.find(x => x.number === Number(choice));
+      const saved = { answer: q.answer, leaveOut: q.leaveOut };
+      q.answer = ''; q.leaveOut = true;
+      const base = pfBuildUrl() + '&' + q.param + '=';
+      q.answer = saved.answer; q.leaveOut = saved.leaveOut;
+      const answer = pfTestAnswer(base, target, label);
+      link = base + encodeURIComponent(answer);
+      // A text box takes about 4,000 characters, so past that the answer
+      // stops growing; stop rather than repeat the same link.
+      if (answer.length >= 4000) capped = true;
+    }
+    list.append(pfEl('li', {}, [
+      pfEl('a', { href: link, target: '_blank', rel: 'noopener noreferrer',
+        textContent: 'Test link, ' + link.length.toLocaleString('en-GB') + ' characters (opens in a new tab)' })
+    ]));
+  });
+  box.append(list);
+  let msg = list.children.length + ' test links ready below, shortest first.';
+  if (capped) msg += ' The answer reached 4,000 characters, so longer links need the padding option.';
+  pfStatus('pf-test-status', msg);
+}
+
+// --- Basic and advanced modes ---
+// Basic: the AI writes the answers and the link, and the tool checks the
+// link. Advanced: answers typed into boxes or loaded from a file.
+let pfReady = false;
+
+function pfMode(){
+  return document.getElementById('pf-mode-advanced').checked ? 'advanced' : 'basic';
+}
+
+function pfShowMode(){
+  const mode = pfMode();
+  document.querySelectorAll('[data-pf-mode]').forEach(el => {
+    el.hidden = el.dataset.pfMode !== mode || (el.dataset.pfAfterRead === 'true' && !pfReady);
+  });
+  document.querySelectorAll('[data-pf-after-read]:not([data-pf-mode])').forEach(el => { el.hidden = !pfReady; });
+  // Close any answer being changed in place, so each field exists once.
+  if (pfReady && document.querySelector('.pf-inline-edit')){
+    pfRenderAnswerList();
+    pfRenderQuestions();
+  }
+}
+
+// Question titles: the titles box, or else lines like "3. How did you hear
+// about this event?" in the copied form text.
+function pfTitles(){
+  const typed = document.getElementById('pf-titles').value.split('\n').map(t => t.trim()).filter(Boolean);
+  if (typed.length) return typed;
+  const titles = [];
+  document.getElementById('pf-form-text').value.split(/\r?\n/).forEach(line => {
+    const m = line.match(/^\s*(\d+)\.\s+(.+?)\s*$/);
+    if (m) titles[Number(m[1]) - 1] = m[2];
+  });
+  return titles;
+}
+
+// Grid row and column names from the copied form text: the lines under the
+// grid question are the column headings (tab-separated, or one per line)
+// followed by one line per row.
+// Choice options from the copied form text, so answers can be picked from
+// a list. An option the sample link used keeps the sample's exact spelling.
+const pfNotOptions = /^(enter your answer|select your answer|please input date.*|the value must be a number|not at all likely|extremely likely|required|other|\*)$/i;
+
+function pfOptionsFromFormText(){
+  const lines = document.getElementById('pf-form-text').value.split(/\r?\n/);
+  pfQuestions.forEach(q => {
+    q.formOptions = [];
+    if (q.type !== 'choice' && q.type !== 'multi') return;
+    const startAt = lines.findIndex(l => new RegExp('^\\s*' + q.number + '\\.\\s').test(l));
+    if (startAt < 0) return;
+    for (let i = startAt + 1; i < lines.length && !/^\s*\d+\.\s/.test(lines[i]); i++){
+      const text = lines[i].trim();
+      if (text && !pfNotOptions.test(text)) q.formOptions.push(pfExactOption(q, text));
+    }
+  });
+}
+
+function pfGridNamesFromFormText(){
+  const lines = document.getElementById('pf-form-text').value.split(/\r?\n/);
+  pfQuestions.filter(q => q.type === 'grid').forEach(q => {
+    const startAt = lines.findIndex(l => new RegExp('^\\s*' + q.number + '\\.\\s').test(l));
+    if (startAt < 0) return;
+    const block = [];
+    for (let i = startAt + 1; i < lines.length && !/^\s*\d+\.\s/.test(lines[i]); i++){
+      if (lines[i].trim()) block.push(lines[i]);
+    }
+    let cols, rows;
+    if (block.length && block[0].includes('\t')){
+      cols = block[0].split('\t').map(c => c.trim()).filter(Boolean);
+      rows = block.slice(1).map(r => r.split('\t')[0].trim());
+    } else {
+      const k = block.length - q.rows.length;
+      if (k < 1) return;
+      cols = block.slice(0, k).map(c => c.trim());
+      rows = block.slice(k).map(r => r.trim());
+    }
+    if (rows.length !== q.rows.length || cols.length < Math.max(...q.cols.map(c => c.id))) return;
+    q.rows.forEach((r, i) => { r.name = rows[i]; });
+    q.cols.forEach(c => { c.name = cols[c.id - 1]; });
+  });
+}
+
+// The prompt carries everything the AI needs to write the link: the IDs, the
+// exact options seen in the sample, and how each question type is encoded.
+function pfAiPrompt(){
+  const notes = document.getElementById('pf-notes').value.trim();
+  const formText = document.getElementById('pf-form-text').value.trim();
+  const enc = v => encodeURIComponent(v);
+  const lines = pfQuestions.map(q => {
+    let line = 'Question ' + q.number + (q.title ? ' (' + q.title + ')' : '') + ': ID ' + q.param + ', ' + pfTypeNames[q.type] + '.';
+    if (q.options.length) line += ' Option(s) seen in the sample, encoded exactly: ' + q.options.map(o => enc(o)).join(', ') + '.';
+    if (q.type === 'grid'){
+      line += ' Rows in order: ' + q.rows.map((r, i) => (r.name || 'Row ' + (i + 1)) + ' = ' + r.param).join(', ') + '.';
+      line += ' Columns: ' + q.cols.map(c => 'id ' + c.id + (c.name ? ' (' + c.name + ')' : '') + ' key ' + c.key).join(', ') + '. Column id 1 is the first column on the form.';
+    }
+    return line;
+  });
+  const start = pfBase + '?' + pfFixedParams.map(([name, value]) => name + '=' + enc(value)).join('&');
+  return [
+    'I need to fill in a Microsoft Form. Using my notes at the end, answer every question you can. Do not write a review or a summary. Reply with only these things:',
+    '1. The line "Here are your answers:", then list the answers, one line per question, as "Question 1: answer", in plain words as the form shows them (not encoded), so I can check them. For a grid question, put each row on its own line as "row name: column name".',
+    '2. Give me a pre-filled link for the form on its own line, with nothing around it.',
+    '',
+    'How to build the link:',
+    '- Start with exactly: ' + start,
+    '- For each answered question add &<question ID>=<value>. Leave out questions you cannot answer.',
+    '- URL-encode every value: space %20, " %22, & %26, comma %2C, colon %3A, / %2F, [ %5B, ] %5D, \\ %5C, { %7B, } %7D.',
+    '- Text and number questions: the text or number itself. A star rating is the number of stars.',
+    '- Choice, pick one: the option in double quotes. "Option A" becomes %22Option%20A%22.',
+    '- Choice, pick one or more: a list inside double quotes, with inner quotes escaped. "[\\"Option A\\",\\"Option B\\"]" becomes %22%5B%5C%22Option%20A%5C%22%2C%5C%22Option%20B%5C%22%5D%22. Put a typed "Other" answer in the list as its own item.',
+    '- Date: "yyyy-mm-dd" in double quotes. "' + pfToday() + '" becomes %22' + pfToday() + '%22.',
+    '- Grid: {"<row ID>":{"id":<column id>,"key":"<column key>"},...} with one entry per answered row, then URL-encoded.',
+    '- If my notes don\'t cover a question, don\'t guess: write "Question N: not answered", leave it out of the link, and after the link ask me about it in one short sentence.',
+    '- Use each option\'s wording exactly as the form shows it. If an option is listed below with %C2%A0 in it, keep the %C2%A0: it is a hidden space the form needs.',
+    '',
+    'Questions:',
+    lines.join('\n'),
+    formText ? '\nThe form as it appears on screen (for question wording and options):\n' + formText : '',
+    '\nMy notes:',
+    notes || '(none, ask me if you need more information)',
+    '',
+    'Remember: reply with only "Here are your answers:" and the "Question 1: answer" lines, then the pre-filled link, then a short question about anything my notes did not cover.'
+  ].join('\n');
+}
+
+// The prompt is always shown as well, because some browsers and app viewers
+// block copying without saying so.
+function pfShowAiPrompt(){
+  if (pfReady) document.getElementById('pf-ai-prompt').textContent = pfAiPrompt();
+}
+
+function pfCopyAiPrompt(){
+  pfShowAiPrompt();
+  pfCopyText(pfAiPrompt()).then(ok => {
+    if (ok) pfMarkDone('pf-ai-done');
+    pfStatus('pf-ai-status', ok
+      ? 'AI prompt copied. It starts "I need to fill in a Microsoft Form". Paste it into a new chat in Copilot or another AI, then paste the whole reply in step 3.'
+      : 'Copying was blocked. Expand the prompt below, select it all and copy it yourself.');
+  });
+}
+
+// The checked answers, each with a button to change it in place. Editing
+// borrows the advanced-mode field for that question, so the ids stay unique.
+function pfRenderAnswerList(){
+  const list = document.getElementById('pf-answers');
+  list.textContent = '';
+  let answered = 0;
+  pfQuestions.forEach(q => {
+    const text = pfDescribe(q);
+    if (text) answered++;
+    const change = pfEl('button', { type: 'button', className: 'copy-btn pf-change', id: 'pf-change-' + q.number,
+      textContent: text ? 'Change answer' : 'Add answer', onclick: () => pfEditAnswer(q) });
+    change.setAttribute('aria-label', (text ? 'Change answer to question ' : 'Add answer to question ') + q.number);
+    list.append(pfEl('li', { id: 'pf-answer-' + q.number }, [
+      pfEl('span', { className: 'pf-answers-q', textContent: pfQuestionLabel(q) }),
+      pfEl('span', { className: text ? 'pf-answers-a' : 'pf-answers-a pf-answers-none', textContent: text || 'No answer' }),
+      change
+    ]));
+  });
+  return answered;
+}
+
+function pfEditAnswer(q){
+  const item = document.getElementById('pf-answer-' + q.number);
+  const old = document.getElementById('pf-q' + q.number + '-block');
+  if (old) old.remove();
+  const editor = pfRenderQuestion(q, true);
+  const done = pfEl('button', { type: 'button', className: 'copy-btn pf-primary', textContent: 'Done',
+    onclick: () => {
+      pfRenderAnswerList();
+      pfRenderQuestions();
+      pfUpdateLink();
+      document.getElementById('pf-change-' + q.number).focus();
+      pfStatus('pf-reply-status', 'Question ' + q.number + ' ' + (pfDescribe(q) ? 'updated: ' + pfDescribe(q) : 'has no answer') + '. The link uses it.');
+    } });
+  done.setAttribute('aria-label', 'Done with question ' + q.number);
+  item.querySelector('.pf-change').replaceWith(pfEl('div', { className: 'pf-inline-edit' }, [editor, done]));
+  const field = editor.querySelector('input, select, textarea');
+  if (field) field.focus();
+}
+
+function pfCopyAnswers(){
+  const text = pfQuestions.map(q => pfQuestionLabel(q) + '\n' + (pfDescribe(q) || 'No answer')).join('\n\n');
+  pfCopyText(text).then(ok => pfStatus('pf-reply-status', ok ? 'Answers copied.' : 'Copying was blocked.'));
+}
+
+// Read the answers back out of a link, so the AI's link can be checked and
+// rebuilt with the tool's exact encoding.
+function pfDecodeInto(q, raw, problems){
+  const fail = () => problems.push('question ' + q.number + ' could not be read');
+  try {
+    if (q.type === 'text' || q.type === 'number'){ q.answer = raw; return; }
+    if (q.type === 'choice' || q.type === 'date'){ q.answer = JSON.parse(raw); return; }
+    if (q.type === 'multi'){ q.answer = JSON.parse(JSON.parse(raw)).join('\n'); return; }
+    const grid = JSON.parse(raw);
+    q.rows.forEach(row => {
+      const cell = grid[row.param];
+      const col = cell && q.cols.find(c => c.key === cell.key || c.id === cell.id);
+      row.answer = col ? col.key : '';
+      if (cell && !col) problems.push('question ' + q.number + ', ' + row.name + ' uses a column the sample link never used');
+    });
+  } catch(e) { fail(); }
+}
+
+function pfDescribe(q){
+  if (q.type === 'grid'){
+    const done = q.rows.filter(r => r.answer).map(r => r.name + ': ' + (q.cols.find(c => c.key === r.answer).name || 'column ' + q.cols.find(c => c.key === r.answer).id));
+    return done.length ? done.join('; ') : '';
+  }
+  if (q.type === 'date' && q.answer) return q.answer.split('-').reverse().join('/');
+  return q.answer.replace(/\n/g, ', ');
+}
+
+function pfMarkDone(id){
+  const el = document.getElementById(id);
+  if (el) el.hidden = false;
+  const before = document.getElementById('pf-reply-before');
+  if (before && id === 'pf-ai-done') before.hidden = true;
+}
+
+function pfCheckReply(){
+  const reply = document.getElementById('pf-reply').value;
+  if (!reply.trim()){
+    pfStatus('pf-reply-status', 'Paste the AI\'s reply first. Copy the AI prompt in step 2, paste it into a new AI chat, then paste the whole reply here.');
+    return;
+  }
+  const problems = [];
+  pfQuestions.forEach(q => { q.answer = ''; q.leaveOut = false; if (q.rows) q.rows.forEach(r => { r.answer = ''; }); });
+
+  const found = reply.match(/(?:https?|file):\/\/[^\s<>()\[\]`]+\?id=[^\s<>()\[\]`]+/i);
+  let source;
+  if (found){
+    source = 'link';
+    let url;
+    try { url = new URL(found[0]); } catch(e) { url = null; }
+    if (!url){
+      problems.push('the link in the reply is broken');
+    } else {
+      if (url.searchParams.get('id') !== new URLSearchParams(pfFixedParams).get('id')) problems.push('the link is for a different form');
+      url.searchParams.forEach((value, name) => {
+        const q = pfQuestions.find(x => x.param === name);
+        if (q) pfDecodeInto(q, value, problems);
+        else if (/^r[0-9a-f]{32}$/i.test(name)) problems.push('the link has a question ID the form does not have');
+      });
+      // Choice answers that only matched after fixing spaces or capitals.
+      pfQuestions.forEach(q => {
+        if (q.type === 'choice' && q.answer && pfExactOption(q, q.answer) !== q.answer) problems.push('question ' + q.number + ' needed its hidden space fixing');
+      });
+    }
+  } else {
+    source = 'answers';
+    const result = pfApplyAnswers(reply);
+    result.problems.forEach(p => problems.push(p));
+  }
+
+  pfRenderQuestions();
+  pfUpdateLink();
+  const answered = pfRenderAnswerList();
+  document.getElementById('pf-answers-block').hidden = false;
+
+  if (answered > 0) pfMarkDone('pf-reply-done');
+  if (answered === 0){
+    pfStatus('pf-reply-status', 'No answers found in that reply: it has no form link and no lines starting "Question 1:". The AI probably did not get the whole prompt. Check that what you pasted into the AI starts "I need to fill in a Microsoft Form", then try again in a new chat.');
+    return;
+  }
+  let msg = source === 'link'
+    ? 'Read the link from the reply: ' + answered + ' of ' + pfQuestions.length + ' questions answered.'
+    : 'No link in the reply, so the tool built one from the answers: ' + answered + ' of ' + pfQuestions.length + ' questions answered.';
+  const blank = pfQuestions.filter(q => !pfDescribe(q)).map(q => q.number);
+  if (blank.length) msg += ' Not answered: question ' + blank.join(', ') + '. Use Add answer in the list below, or fill ' + (blank.length === 1 ? 'it' : 'them') + ' in on the form.';
+  if (problems.length) msg += ' Fixed or flagged: ' + problems.join('; ') + '.';
+  msg += ' The answers are listed below. The Open the pre-filled form link uses them.';
+  pfStatus('pf-reply-status', msg);
+}
+
+// Advanced: a .txt or .md file with a "Sample link:" line and
+// "Question 1: answer" lines.
+function pfLoadFile(input){
+  const file = input.files && input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    const text = String(reader.result);
+    const link = text.match(/https:\/\/\S*ResponsePage\.aspx\?\S+/i);
+    if (!link){
+      pfStatus('pf-read-status', 'No form link found in ' + file.name + '. Add a line starting "Sample link:" with the pre-filled link.');
+      return;
+    }
+    document.getElementById('pf-sample').value = link[0];
+    pfReadSample(false);
+    document.getElementById('pf-paste').value = text;
+    pfStatus('pf-read-status', 'Loaded ' + file.name + '. ' + pfFillFromPaste());
+  };
+  reader.readAsText(file);
+}
+
+// --- Examples ---
+// Made-up forms for trying the tool. Their links open example-form.html, a
+// stand-in that shows the answers filled in, so nothing reaches a real form.
+// Dates are the visitor's today. Shared by the tool and the stand-in page.
+const pfExamples = [
+  { slug: 'away-day', title: 'Team away day feedback',
+    notes: 'I went to the away day today. I went to the workshops and the team lunch. The venue was excellent, the food and activities were good, but the timing was only fair. Four stars out of five. There were six of us. Next time I\'d like a longer lunch break and the quiz earlier in the day.',
+    questions: [
+      { type: 'choice', title: 'Did you attend the away day?', options: ['Yes', 'No'], answer: 'Yes' },
+      { type: 'multi', title: 'Which sessions did you go to?', options: ['Planning', 'Workshops', 'Team lunch', 'Quiz'], answer: ['Workshops', 'Team lunch'] },
+      { type: 'grid', title: 'Please rate the following', rows: ['Venue', 'Food', 'Activities', 'Timing'], cols: ['Poor', 'Fair', 'Good', 'Excellent'], answer: ['Excellent', 'Good', 'Good', 'Fair'] },
+      { type: 'date', title: 'When did you attend?', answer: 'today' },
+      { type: 'rating', title: 'Rate the day out of 5', max: 5, answer: '4' },
+      { type: 'number', title: 'How many people were in your team?', answer: '6' },
+      { type: 'text', title: 'What would you change next time?', answer: 'A longer lunch break, and the quiz earlier in the day.' }
+    ] },
+  { slug: 'customer', title: 'Customer feedback: your recent order',
+    notes: 'I ordered on the app today. Delivery was quick and the packaging was good, but customer service took a while to reply. Four stars. I\'d probably recommend you, maybe 7 out of 10. It would help to have live chat.',
+    questions: [
+      { type: 'choice', title: 'How did you place your order?', options: ['Website', 'App', 'Phone'], answer: 'App', dropdown: true },
+      { type: 'date', title: 'When did you order?', answer: 'today' },
+      { type: 'multi', title: 'What went well?', options: ['Delivery speed', 'Packaging', 'Customer service', 'Price'], answer: ['Delivery speed', 'Packaging'] },
+      { type: 'rating', title: 'Rate your experience out of 5', max: 5, answer: '4' },
+      { type: 'nps', title: 'How likely are you to recommend us to a friend?', answer: '7' },
+      { type: 'text', title: 'Anything we could do better?', answer: 'Live chat, so questions get answered faster.' }
+    ] },
+  { slug: 'course', title: 'Course evaluation',
+    notes: 'I did the Power Automate intro course today. I agree the content was useful and the trainer was clear. The pace was a bit fast, so neutral on that. Materials were good, I agree. I\'d recommend it. I\'ll use it to automate our weekly report emails. Five stars.',
+    questions: [
+      { type: 'choice', title: 'Which course did you attend?', options: ['Excel basics', 'Power Automate intro', 'Copilot for beginners'], answer: 'Power Automate intro' },
+      { type: 'grid', title: 'How far do you agree?', rows: ['The content was useful', 'The trainer was clear', 'The pace was right', 'The materials helped', 'I could ask questions'], cols: ['Strongly disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly agree'], answer: ['Agree', 'Agree', 'Neutral', 'Agree', ''] },
+      { type: 'choice', title: 'Would you recommend this course?', options: ['Yes', 'No', 'Not sure'], answer: 'Yes' },
+      { type: 'text', title: 'How will you use what you learned?', answer: 'To automate our weekly report emails.' },
+      { type: 'rating', title: 'Rate the course out of 5', max: 5, answer: '5' }
+    ] },
+  { slug: 'booking', title: 'Event booking',
+    notes: 'Book me in for today. My name is Sam Taylor, two tickets please. One of us is vegetarian and one has a nut allergy. We\'d like front and centre seats. Step-free access would be great.',
+    questions: [
+      { type: 'text', title: 'Your full name', answer: 'Sam Taylor' },
+      { type: 'date', title: 'Which date are you booking?', answer: 'today' },
+      { type: 'number', title: 'How many tickets?', answer: '2' },
+      { type: 'multi', title: 'Any dietary needs?', options: ['Vegetarian', 'Vegan', 'Gluten free', 'Nut allergy', 'None'], answer: ['Vegetarian', 'Nut allergy'] },
+      { type: 'choice', title: 'Where would you like to sit?', options: ['Front & centre', 'Upper level / balcony', 'I\'d rather not say'], answer: 'Front & centre' },
+      { type: 'text', title: 'Anything else we should know?', answer: 'Step-free access, please.' }
+    ] }
+];
+
+// Question and grid ids are made up but shaped like real ones.
+function pfExampleIds(ex){
+  const n = pfExamples.indexOf(ex) + 1;
+  return {
+    form: 'EXAMPLE-' + ex.slug.toUpperCase(),
+    question: i => 'r' + n + String(i + 1).padStart(31, '0'),
+    row: (i, r) => 'r' + n + String(i + 1).padStart(3, '0') + String(r + 1).padStart(28, '0'),
+    key: c => '00000000-0000-4000-8000-' + String(c + 1).padStart(12, '0')
+  };
+}
+
+function pfExampleAnswer(q){
+  return q.answer === 'today' ? pfToday() : q.answer;
+}
+
+// The value a link carries for one example question, encoded as Forms does.
+function pfExampleValue(ex, q, i, answer){
+  const ids = pfExampleIds(ex);
+  if (q.type === 'choice' || q.type === 'date') return JSON.stringify(answer);
+  if (q.type === 'multi') return JSON.stringify(JSON.stringify(answer));
+  if (q.type === 'grid'){
+    const grid = {};
+    answer.forEach((col, r) => {
+      const c = q.cols.indexOf(col);
+      if (c >= 0) grid[ids.row(i, r)] = { id: c + 1, key: ids.key(c) };
+    });
+    return JSON.stringify(grid);
+  }
+  return String(answer);
+}
+
+function pfExampleBase(){
+  return new URL('example-form.html', location.href).href.split('?')[0];
+}
+
+// The sample link uses each grid column once, as a real sample should.
+function pfExampleSample(ex){
+  const ids = pfExampleIds(ex);
+  return pfExampleBase() + '?id=' + ids.form + ex.questions.map((q, i) => {
+    let sample;
+    if (q.type === 'choice') sample = q.options[0];
+    else if (q.type === 'multi') sample = [q.options[0]];
+    else if (q.type === 'grid') sample = q.rows.map((r, n) => q.cols[n % q.cols.length]);
+    else if (q.type === 'date') sample = pfToday();
+    else if (q.type === 'text') sample = 'test';
+    else sample = '1';
+    return '&' + ids.question(i) + '=' + encodeURIComponent(pfExampleValue(ex, q, i, sample));
+  }).join('');
+}
+
+function pfExampleFormText(ex){
+  const lines = [ex.title];
+  ex.questions.forEach((q, i) => {
+    lines.push((i + 1) + '. ' + q.title);
+    if (q.options) q.options.forEach(o => lines.push(o));
+    if (q.type === 'grid'){ lines.push(q.cols.join('\t')); q.rows.forEach(r => lines.push(r)); }
+  });
+  return lines.join('\n');
+}
+
+function pfExampleReply(ex){
+  const lines = ['Here are your answers:'];
+  ex.questions.forEach((q, i) => {
+    const a = pfExampleAnswer(q);
+    if (q.type === 'multi') lines.push('Question ' + (i + 1) + ':', ...a);
+    else if (q.type === 'grid'){
+      lines.push('Question ' + (i + 1) + ':');
+      q.rows.forEach((r, n) => { if (a[n]) lines.push(r + ': ' + a[n]); });
+    }
+    else if (q.type === 'date') lines.push('Question ' + (i + 1) + ': ' + a.split('-').reverse().join('/'));
+    else lines.push('Question ' + (i + 1) + ': ' + a);
+  });
+  return lines.join('\n');
+}
+
+let pfExample = null;
+
+function pfToday(){
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+function pfSetExample(ex){
+  pfExample = ex;
+  const note = document.getElementById('pf-example-note');
+  note.hidden = !ex;
+  if (ex) note.textContent = 'You\'re looking at example ' + (pfExamples.indexOf(ex) + 1) + ': ' + ex.title +
+    '. It\'s a made-up form, and its link opens a stand-in form, not a real one. Choose another example, or start with your own form.';
+  document.getElementById('pf-open-text').textContent = ex ? 'Open the example form' : 'Open the pre-filled form';
+  document.querySelectorAll('.pf-example-btn').forEach(b => b.setAttribute('aria-pressed', b.dataset.example === (ex && ex.slug) ? 'true' : 'false'));
+}
+
+function pfLoadExample(slug){
+  const ex = pfExamples.find(e => e.slug === slug) || pfExamples[Math.floor(Math.random() * pfExamples.length)];
+  document.getElementById('pf-mode-basic').checked = true;
+  document.getElementById('pf-sample').value = pfExampleSample(ex);
+  document.getElementById('pf-form-text').value = pfExampleFormText(ex);
+  document.getElementById('pf-titles').value = '';
+  pfReadSample(false);
+  document.getElementById('pf-notes').value = ex.notes.replace('today', 'today, ' + pfToday().split('-').reverse().join('/'));
+  pfShowAiPrompt();
+  const answers = pfExampleReply(ex);
+  pfApplyAnswers(answers);
+  document.getElementById('pf-reply').value = answers + '\n\nYour pre-filled link:\n' + pfBuildUrl();
+  pfCheckReply();
+  pfMarkDone('pf-ai-done');
+  pfSetExample(ex);
+}
+
+// Clear everything, ready for the visitor's own form.
+function pfStartOwn(){
+  ['pf-sample', 'pf-form-text', 'pf-titles', 'pf-notes', 'pf-reply', 'pf-paste'].forEach(id => { document.getElementById(id).value = ''; });
+  pfQuestions = [];
+  pfReady = false;
+  pfSetExample(null);
+  ['pf-ai-done', 'pf-reply-done'].forEach(id => { document.getElementById(id).hidden = true; });
+  document.getElementById('pf-reply-before').hidden = false;
+  document.getElementById('pf-answers-block').hidden = true;
+  ['pf-questions', 'pf-answers', 'pf-ai-prompt'].forEach(id => { document.getElementById(id).textContent = ''; });
+  ['pf-read-status', 'pf-reply-status', 'pf-ai-status', 'pf-link-status'].forEach(id => { document.getElementById(id).textContent = ''; });
+  pfShowMode();
+  document.getElementById('pf-sample').focus();
+}
+
+// Browsers can restore the sample link after Back; read it straight away.
+// Otherwise open on a random example, so the first view shows the tool working.
+onPage('pf-sample', function(){
+  pfShowMode();
+  if (document.getElementById('pf-sample').value.trim()) pfReadSample();
+  else pfLoadExample();
+});
+
+// --- Example form stand-in ---
+// Shows an example form with the link's answers filled in, the way Microsoft
+// Forms would: an answer that doesn't match an option is left blank.
+function exRenderForm(){
+  const params = new URLSearchParams(location.search);
+  const ex = pfExamples.find(e => pfExampleIds(e).form === params.get('id'));
+  const box = document.getElementById('ex-questions');
+  if (!ex){
+    box.append(pfEl('p', { textContent: 'This example link doesn\'t match any of the examples. Go back to the link builder and choose an example.' }));
+    return;
+  }
+  const ids = pfExampleIds(ex);
+  document.getElementById('ex-title').textContent = ex.title;
+  const read = (i, parse) => { const v = params.get(ids.question(i)); if (v === null) return null; try { return parse ? JSON.parse(v) : v; } catch(e) { return null; } };
+  ex.questions.forEach((q, i) => {
+    const id = 'ex-q' + (i + 1);
+    const label = (i + 1) + '. ' + q.title;
+    const wrap = pfEl('div', { className: 'pf-question' });
+    if (q.type === 'choice' || q.type === 'multi'){
+      let picked = q.type === 'choice' ? [read(i, true)] : (() => { try { return JSON.parse(read(i, true)); } catch(e) { return []; } })();
+      picked = (picked || []).filter(v => typeof v === 'string');
+      if (q.dropdown){
+        const select = pfEl('select', { id: id }, [pfEl('option', { value: '', textContent: 'Select your answer' })].concat(q.options.map(o => pfEl('option', { value: o, textContent: o }))));
+        select.value = q.options.includes(picked[0]) ? picked[0] : '';
+        wrap.append(pfEl('label', { htmlFor: id, className: 'pf-label', textContent: label }), select);
+      } else {
+        const fieldset = pfEl('fieldset', {}, [pfEl('legend', { className: 'pf-label', textContent: label })]);
+        q.options.forEach((o, n) => {
+          const input = pfEl('input', { type: q.type === 'choice' ? 'radio' : 'checkbox', name: id, id: id + '-' + n, value: o, checked: picked.includes(o) });
+          fieldset.append(pfEl('label', { className: 'check-label', htmlFor: input.id }, [input, o]));
+        });
+        if (q.type === 'multi'){
+          const other = picked.filter(v => !q.options.includes(v)).join(', ');
+          const input = pfEl('input', { type: 'text', id: id + '-other', value: other });
+          fieldset.append(pfEl('div', { className: 'pf-sub' }, [pfEl('label', { htmlFor: input.id, textContent: 'Other' }), input]));
+        }
+        wrap.append(fieldset);
+      }
+    } else if (q.type === 'grid'){
+      const grid = read(i, true) || {};
+      const fieldset = pfEl('fieldset', {}, [pfEl('legend', { className: 'pf-label', textContent: label })]);
+      q.rows.forEach((r, n) => {
+        const cell = grid[ids.row(i, n)];
+        const select = pfEl('select', { id: id + '-r' + n }, [pfEl('option', { value: '', textContent: 'No answer' })].concat(q.cols.map(c => pfEl('option', { value: c, textContent: c }))));
+        const c = cell ? q.cols.findIndex((col, k) => ids.key(k) === cell.key) : -1;
+        select.value = c >= 0 ? q.cols[c] : '';
+        fieldset.append(pfEl('div', { className: 'pf-grid-row' }, [pfEl('label', { htmlFor: select.id, textContent: r }), select]));
+      });
+      wrap.append(fieldset);
+    } else {
+      const value = q.type === 'date' ? read(i, true) : read(i);
+      const field = pfEl(q.type === 'text' ? 'textarea' : 'input', { id: id, value: value || '' });
+      if (q.type === 'text') field.rows = 3;
+      else field.type = q.type === 'date' ? 'date' : 'text';
+      const hint = { rating: 'Stars, 1 to ' + q.max + '.', nps: '0 = not at all likely, 10 = extremely likely.' }[q.type];
+      wrap.append(pfEl('label', { htmlFor: id, className: 'pf-label', textContent: label }), field);
+      if (hint) wrap.append(pfEl('p', { className: 'pf-hint', textContent: hint }));
+    }
+    box.append(wrap);
+  });
+}
+
+function exSubmit(){
+  pfStatus('ex-status', 'This is an example, so nothing was sent. On a real form, you would press Submit only after checking every answer.');
+}
+
+onPage('ex-form', exRenderForm);
 
 function currentTheme(){
   var attr = document.documentElement.getAttribute("data-theme");

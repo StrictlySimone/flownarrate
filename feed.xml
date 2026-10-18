@@ -6,7 +6,15 @@
     <atom:link href="https://www.flownarrate.com/feed.xml" rel="self" type="application/rss+xml"/>
     <description>Automation, AI agents and business systems explained in plain English: the reasoning behind each step, not just the steps.</description>
     <language>en-gb</language>
-    <lastBuildDate>Fri, 02 Oct 2026 09:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 18 Oct 2026 09:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Filling in a whole Microsoft Form at once, with a pre-filled link</title>
+      <link>https://www.flownarrate.com/microsoft-forms-pre-filled-links.html</link>
+      <guid isPermaLink="true">https://www.flownarrate.com/microsoft-forms-pre-filled-links.html</guid>
+      <pubDate>Sun, 18 Oct 2026 09:00:00 +0000</pubDate>
+      <category>System Explainer</category>
+      <description>Pasting answers into a Microsoft Form one box at a time is slow with a screen reader. Pre-filled links load every answer at once. How the link works for each question type, the hidden space that silently blanks an answer, and a tool that lets an AI write the link.</description>
+    </item>
     <item>
       <title>Sending email from a mailbox nobody can sign in to</title>
       <link>https://www.flownarrate.com/do-not-reply-mailbox-dataverse.html</link>
