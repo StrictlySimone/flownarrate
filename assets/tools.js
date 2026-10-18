@@ -1222,7 +1222,7 @@ function pfAiPrompt(){
   const start = pfBase + '?' + pfFixedParams.map(([name, value]) => name + '=' + enc(value)).join('&');
   return [
     'I need to fill in a Microsoft Form. Using my notes at the end, answer every question you can. Do not write a review or a summary. Reply with only these things:',
-    '1. List the answers, one line per question, as "Question 1: answer", in plain words as the form shows them (not encoded), so I can check them. For a grid question, put each row on its own line as "row name: column name".',
+    '1. The line "Here are your answers:", then list the answers, one line per question, as "Question 1: answer", in plain words as the form shows them (not encoded), so I can check them. For a grid question, put each row on its own line as "row name: column name".',
     '2. Give me a pre-filled link for the form on its own line, with nothing around it.',
     '',
     'How to build the link:',
@@ -1230,8 +1230,8 @@ function pfAiPrompt(){
     '- For each answered question add &<question ID>=<value>. Leave out questions you cannot answer.',
     '- URL-encode every value: space %20, " %22, & %26, comma %2C, colon %3A, / %2F, [ %5B, ] %5D, \\ %5C, { %7B, } %7D.',
     '- Text and number questions: the text or number itself. A star rating is the number of stars.',
-    '- Choice, pick one: the option in double quotes. "Yes" becomes %22Yes%22.',
-    '- Choice, pick one or more: a list inside double quotes, with inner quotes escaped. "[\\"Radio\\",\\"Flyer\\"]" becomes %22%5B%5C%22Radio%5C%22%2C%5C%22Flyer%5C%22%5D%22. Put a typed "Other" answer in the list as its own item.',
+    '- Choice, pick one: the option in double quotes. "Option A" becomes %22Option%20A%22.',
+    '- Choice, pick one or more: a list inside double quotes, with inner quotes escaped. "[\\"Option A\\",\\"Option B\\"]" becomes %22%5B%5C%22Option%20A%5C%22%2C%5C%22Option%20B%5C%22%5D%22. Put a typed "Other" answer in the list as its own item.',
     '- Date: "yyyy-mm-dd" in double quotes. "' + pfToday() + '" becomes %22' + pfToday() + '%22.',
     '- Grid: {"<row ID>":{"id":<column id>,"key":"<column key>"},...} with one entry per answered row, then URL-encoded.',
     '- If my notes don\'t cover a question, don\'t guess: write "Question N: not answered", leave it out of the link, and after the link ask me about it in one short sentence.',
@@ -1243,7 +1243,7 @@ function pfAiPrompt(){
     '\nMy notes:',
     notes || '(none, ask me if you need more information)',
     '',
-    'Remember: reply with only the "Question 1: answer" lines, then the pre-filled link, then a short question about anything my notes did not cover.'
+    'Remember: reply with only "Here are your answers:" and the "Question 1: answer" lines, then the pre-filled link, then a short question about anything my notes did not cover.'
   ].join('\n');
 }
 
