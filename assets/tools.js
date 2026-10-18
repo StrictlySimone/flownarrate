@@ -663,6 +663,11 @@ onPage('fx-rows', function(){ addFetchXmlRow('prioritycode', 'equals', '1'); });
 //   choice: "Yes"                                   (JSON string)
 //   multi:  "[\"Radio\",\"Flyer\"]"                 (JSON array, stringified twice)
 //   grid:   {"r<row>":{"id":1,"key":"<guid>"},...}  (Likert rows -> column)
+//   date:   "2026-10-17"                            (JSON string, ISO date)
+//   number: 4                                       (raw; rating, NPS, number-only text)
+// A stray space in a choice option is stored as a non-breaking space, and a
+// pre-filled answer must match it exactly, so options seen in the sample are
+// kept and reused character for character.
 // The DOM is built with createElement/textContent throughout, because the
 // sample link and the answers are user input.
 let pfBase = '';
@@ -672,7 +677,9 @@ const pfTypeNames = {
   text: 'text answer',
   choice: 'choice, pick one',
   multi: 'choice, pick one or more',
-  grid: 'grid (Likert)'
+  grid: 'grid (Likert)',
+  date: 'date',
+  number: 'number (rating, score or number question)'
 };
 
 function pfStatus(id, message){
@@ -705,13 +712,15 @@ function pfDetectType(raw){
         if (s.startsWith('[')){
           try {
             const arr = JSON.parse(s);
-            if (Array.isArray(arr)) return { type: 'multi', sample: arr.join(', ') };
+            if (Array.isArray(arr)) return { type: 'multi', sample: arr.join(', '), options: arr };
           } catch(e) { /* a choice that happens to start with [ */ }
         }
-        return { type: 'choice', sample: s };
+        if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return { type: 'date', sample: s };
+        return { type: 'choice', sample: s, options: [s] };
       }
     } catch(e) { /* fall through */ }
   }
+  if (/^\d+$/.test(v)) return { type: 'number', sample: v };
   return { type: 'text', sample: raw };
 }
 
@@ -742,6 +751,7 @@ function pfReadSample(moveFocus){
       title: titles[i] || '',
       type: found.type,
       sample: found.sample || '',
+      options: found.options || [],
       answer: '',
       leaveOut: false
     };
@@ -817,10 +827,12 @@ function pfRenderQuestion(q){
     pfRefreshGridSelects(q);
   } else {
     const multiline = q.type === 'text' || q.type === 'multi';
-    const field = pfEl(multiline ? 'textarea' : 'input', { id: id, value: q.answer,
+    const field = pfEl(multiline ? 'textarea' : 'input', { id: id,
       oninput: e => { q.answer = e.target.value; pfUpdateHint(q); pfUpdateLink(); } });
     if (multiline) field.rows = q.type === 'text' ? 5 : 3;
-    else field.type = 'text';
+    else field.type = q.type === 'date' ? 'date' : 'text';
+    if (q.type === 'number') field.inputMode = 'numeric';
+    field.value = q.answer;
     field.setAttribute('aria-describedby', hint.id);
     wrap.append(pfEl('label', { htmlFor: id, className: 'pf-label', textContent: pfQuestionLabel(q) }), field, hint);
   }
@@ -852,17 +864,34 @@ function pfUpdateHint(q, el){
     hint.textContent = 'Text answer. ' + len.toLocaleString('en-GB') + ' characters.' +
       (len > 4000 ? ' Over 4,000 characters, which is more than a long answer box takes.' : '');
   } else if (q.type === 'choice'){
-    hint.textContent = 'Choice, pick one. Type the option exactly as the form shows it. Sample answer: ' + q.sample;
+    hint.textContent = 'Choice, pick one. Type the option exactly as the form shows it. Sample answer: ' + pfShowOption(q.sample);
+  } else if (q.type === 'multi'){
+    hint.textContent = 'Choice, pick one or more. One option per line, exactly as the form shows it. Sample answer: ' + q.options.map(pfShowOption).join(', ');
+  } else if (q.type === 'date'){
+    hint.textContent = 'Date. Sample answer: ' + q.sample.split('-').reverse().join('/');
   } else {
-    hint.textContent = 'Choice, pick one or more. One option per line, exactly as the form shows it. Sample answer: ' + q.sample;
+    hint.textContent = 'Number only. For a star rating, the number of stars; for a 0 to 10 score, the score. Sample answer: ' + q.sample;
   }
+}
+
+function pfShowOption(option){
+  return /^\u00a0|\u00a0$/.test(option) ? option.trim() + ' (has a hidden space, kept automatically)' : option;
+}
+
+// Use the sample's exact spelling of an option when the answer matches it
+// apart from spaces and capitals.
+function pfExactOption(q, value){
+  const norm = v => v.replace(/\u00a0/g, ' ').trim().toLowerCase();
+  return q.options.find(o => norm(o) === norm(value)) || value;
 }
 
 function pfEncodeValue(q){
   if (q.type === 'text') return q.answer.trim() ? q.answer : null;
-  if (q.type === 'choice') return q.answer.trim() ? JSON.stringify(q.answer) : null;
+  if (q.type === 'choice') return q.answer.trim() ? JSON.stringify(pfExactOption(q, q.answer)) : null;
+  if (q.type === 'date') return q.answer ? JSON.stringify(q.answer) : null;
+  if (q.type === 'number') return q.answer.trim() ? q.answer.trim() : null;
   if (q.type === 'multi'){
-    const picks = q.answer.split('\n').filter(s => s.trim());
+    const picks = q.answer.split('\n').filter(s => s.trim()).map(s => pfExactOption(q, s));
     return picks.length ? JSON.stringify(JSON.stringify(picks)) : null;
   }
   const grid = {};
@@ -890,8 +919,9 @@ function pfUpdateLink(){
   document.getElementById('pf-open').href = link;
   document.getElementById('pf-link').textContent = link;
   let advice;
-  if (len <= 2000) advice = 'Short enough for any browser.';
-  else if (len <= 8000) advice = 'Long. It may work: check the last answers arrived in full, or use the length test in step 4.';
+  // 5,739 characters is the longest link tested on a real form so far.
+  if (len <= 5739) advice = 'Within the length tested on Microsoft Forms, so it should load.';
+  else if (len <= 8000) advice = 'Longer than tested. It may work: check the last answers arrived in full, or use the length test in step 4.';
   else advice = 'Probably too long. Tick "Leave out of the link" for the longest answers and paste those by hand.';
   document.getElementById('pf-length').textContent = 'The link is ' + len.toLocaleString('en-GB') + ' characters long. ' + advice;
 }
@@ -938,6 +968,10 @@ function pfFillFromPaste(){
         if (row && col) row.answer = col.key;
         else problems.push('question ' + q.number + ', "' + line.trim() + '"');
       });
+    } else if (q.type === 'date'){
+      const m = answer.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+      q.answer = m ? m[3] + '-' + m[2].padStart(2, '0') + '-' + m[1].padStart(2, '0') : answer;
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(q.answer)){ q.answer = ''; problems.push('question ' + q.number + ', "' + answer + '" is not a date'); }
     } else {
       q.answer = answer;
     }
@@ -947,7 +981,7 @@ function pfFillFromPaste(){
   pfUpdateLink();
   let msg = 'Filled ' + filled.length + ' of ' + pfQuestions.length + ' questions.';
   if (missing.length) msg += ' No answer found for question ' + missing.join(', ') + '.';
-  if (problems.length) msg += ' Could not match these grid lines: ' + problems.join('; ') + '.';
+  if (problems.length) msg += ' Could not use: ' + problems.join('; ') + '.';
   msg += ' Check the answers in the boxes below.';
   pfStatus('pf-paste-status', msg);
 }
@@ -960,6 +994,8 @@ function pfCopilotPrompt(){
       if (q.cols.some(c => c.name)) how += '. Rows: ' + q.rows.map(r => r.name).join(', ') + '. Columns: ' + q.cols.map(c => c.name || ('id ' + c.id)).join(', ');
     }
     if (q.type === 'multi') how += ', one option per line';
+    if (q.type === 'date') how += ', written as dd/mm/yyyy';
+    if (q.type === 'number') how += ', the number only';
     return 'Question ' + q.number + (q.title ? ' (' + q.title + ')' : '') + ': ' + how;
   });
   return 'Write my answers out again in exactly this format, with nothing before or after. ' +
