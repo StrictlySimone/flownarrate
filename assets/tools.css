@@ -548,3 +548,4 @@ textarea:focus-visible, summary:focus-visible, [tabindex="-1"]:focus-visible{
 .pf-answers-q{display:block;font-size:0.95rem;color:var(--ink-soft);}
 .pf-answers-a{display:block;color:var(--ink);font-weight:500;}
 .pf-answers-none{color:var(--failed);}
+#pf-ai-prompt{white-space:pre-wrap;word-break:break-word;max-height:24em;overflow-y:auto;}

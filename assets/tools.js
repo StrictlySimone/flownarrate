@@ -1196,7 +1196,7 @@ function pfAiPrompt(){
   });
   const start = pfBase + '?' + pfFixedParams.map(([name, value]) => name + '=' + enc(value)).join('&');
   return [
-    'I need to fill in a Microsoft Form. Using my notes, answer every question you can. Then:',
+    'I need to fill in a Microsoft Form. Using my notes at the end, answer every question you can. Do not write a review or a summary. Reply with only these two things:',
     '1. List the answers, one line per question, as "Question 1: answer", so I can check them.',
     '2. Give me a pre-filled link for the form on its own line, with nothing around it.',
     '',
@@ -1215,17 +1215,23 @@ function pfAiPrompt(){
     lines.join('\n'),
     formText ? '\nThe form as it appears on screen (for question wording and options):\n' + formText : '',
     '\nMy notes:',
-    notes || '(none, ask me if you need more information)'
+    notes || '(none, ask me if you need more information)',
+    '',
+    'Remember: reply with only the "Question 1: answer" lines and then the pre-filled link.'
   ].join('\n');
 }
 
+// The prompt is always shown as well as copied, because some browsers and
+// app viewers block the clipboard without saying so.
 function pfCopyAiPrompt(){
-  navigator.clipboard.writeText(pfAiPrompt()).then(() => {
-    pfStatus('pf-ai-status', 'AI prompt copied. Paste it into Copilot or another AI, then paste its reply in step 3.');
+  const prompt = pfAiPrompt();
+  const box = document.getElementById('pf-ai-prompt');
+  box.hidden = false;
+  box.textContent = prompt;
+  navigator.clipboard.writeText(prompt).then(() => {
+    pfStatus('pf-ai-status', 'AI prompt copied. It starts "I need to fill in a Microsoft Form". Paste it into a new chat in Copilot or another AI, then paste the whole reply in step 3. The prompt is also shown below.');
   }).catch(() => {
-    document.getElementById('pf-ai-prompt').hidden = false;
-    document.getElementById('pf-ai-prompt').textContent = pfAiPrompt();
-    pfStatus('pf-ai-status', 'Copy failed. The prompt is shown below; select it and copy it yourself.');
+    pfStatus('pf-ai-status', 'Copying was blocked, so the prompt is shown below. Select it all and copy it yourself.');
   });
 }
 
@@ -1302,6 +1308,10 @@ function pfCheckReply(){
   });
   document.getElementById('pf-answers-block').hidden = false;
 
+  if (answered === 0){
+    pfStatus('pf-reply-status', 'No answers found in that reply: it has no form link and no lines starting "Question 1:". The AI probably did not get the whole prompt. Check that what you pasted into the AI starts "I need to fill in a Microsoft Form", then try again in a new chat.');
+    return;
+  }
   let msg = source === 'link'
     ? 'Read the link from the reply: ' + answered + ' of ' + pfQuestions.length + ' questions answered.'
     : 'No link in the reply, so the tool built one from the answers: ' + answered + ' of ' + pfQuestions.length + ' questions answered.';
