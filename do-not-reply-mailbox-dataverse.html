@@ -332,6 +332,15 @@
   figure{margin:8px 0 32px;}
   figure img{display:block;max-width:100%;height:auto;border:1px solid var(--rule);}
   figcaption{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--ink-soft);margin-top:8px;}
+
+  .recreation{background:var(--panel);border:1px solid var(--rule);border-left:4px solid var(--failed);padding:14px 18px;}
+  .recreation.ok{border-left-color:var(--ok);}
+  .recreation .label{display:block;font-family:'JetBrains Mono',monospace;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--failed);margin-bottom:6px;}
+  .recreation.ok .label{color:var(--ok);}
+  .recreation .msg{overflow-wrap:anywhere;}
+  .recreation dl{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;margin:0;font-family:'JetBrains Mono',monospace;font-size:0.85rem;}
+  .recreation dt{color:var(--ink-soft);}
+  .recreation dd{margin:0;overflow-wrap:anywhere;}
 </style>
 <link rel="alternate" type="application/rss+xml" title="FlowNarrate" href="https://www.flownarrate.com/feed.xml">
 </head>
@@ -368,12 +377,34 @@
 
   <h2>Problem 1: the mailbox won't enable</h2>
   <p>The mailbox showed Pending Approval, and Test &amp; Enable then failed with a message about a missing <span class="mono">prvReadActivity</span> privilege.</p>
+
+  <figure>
+    <div class="recreation">
+      <span class="label">Before: mailbox won&rsquo;t enable</span>
+      <dl>
+        <dt>Approval</dt><dd>Pending Approval</dd>
+        <dt>Incoming</dt><dd>Server-Side Synchronization: failed, missing prvReadActivity privilege</dd>
+      </dl>
+    </div>
+    <figcaption>A text recreation of what the mailbox showed, not a screenshot. The exact alert wording can vary.</figcaption>
+  </figure>
   <p><strong>Fix:</strong></p>
   <ol>
     <li>An admin approves the mailbox. In the Power Platform admin centre this is under Settings &gt; Email &gt; Mailboxes &gt; Approve Email.</li>
     <li>Set Incoming = None and Outgoing = Server-Side Synchronization.</li>
     <li>Run Test &amp; Enable again. Outgoing should show Success. Incoming can stay "Not Run".</li>
   </ol>
+
+  <figure>
+    <div class="recreation ok">
+      <span class="label">After: send-only mailbox working</span>
+      <dl>
+        <dt>Incoming</dt><dd>None &middot; Not Run</dd>
+        <dt>Outgoing</dt><dd>Server-Side Synchronization &middot; Success</dd>
+      </dl>
+    </div>
+    <figcaption>A text recreation of the mailbox once it worked, not a screenshot.</figcaption>
+  </figure>
   <p>The privilege error appeared because incoming mail was set to server-side sync, which needs read rights for the owning user. A send-only mailbox doesn't need incoming mail, so no security role change was needed.</p>
 
   <figure>
@@ -382,6 +413,13 @@
   </figure>
 
   <h2>Problem 2: "The user selected in the From field does not have the option enabled to allow other users to send the email on their behalf"</h2>
+  <figure>
+    <div class="recreation">
+      <span class="label">Error</span>
+      <div class="msg">The user selected in the From field does not have the option enabled to allow other users to send the email on their behalf.</div>
+    </div>
+    <figcaption>A text recreation of the error, not a screenshot.</figcaption>
+  </figure>
   <p>This is the harder one.</p>
   <ul>
     <li>Sending as another user needs two things: the sender has a role with Send Email as Another User (<span class="mono">prvSendAsUser</span>) &mdash; for a flow, that's the flow owner or connection account &mdash; and the From user has switched on the "allow other users to send email on my behalf" option.</li>
