@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.flownarrate.com/</loc>
-    <lastmod>2026-10-14</lastmod>
+    <lastmod>2026-10-18</lastmod>
   </url>
   <url>
     <loc>https://www.flownarrate.com/blog.html</loc>
@@ -22,7 +22,7 @@
   </url>
   <url>
     <loc>https://www.flownarrate.com/tools.html</loc>
-    <lastmod>2026-10-14</lastmod>
+    <lastmod>2026-10-18</lastmod>
   </url>
   <url>
     <loc>https://www.flownarrate.com/privacy.html</loc>
@@ -47,6 +47,10 @@
   <url>
     <loc>https://www.flownarrate.com/tools/html-email-table.html</loc>
     <lastmod>2026-10-14</lastmod>
+  </url>
+  <url>
+    <loc>https://www.flownarrate.com/tools/microsoft-forms-prefill-link-builder.html</loc>
+    <lastmod>2026-10-18</lastmod>
   </url>
   <url>
     <loc>https://www.flownarrate.com/tools/odata-filter-query-builder.html</loc>

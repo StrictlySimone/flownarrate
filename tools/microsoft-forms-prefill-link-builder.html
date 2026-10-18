@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+  (function(){
+    try {
+      var saved = localStorage.getItem('flownarrate-theme');
+      if (saved === 'dark' || saved === 'light') {
+        document.documentElement.setAttribute('data-theme', saved);
+      }
+    } catch(e) { /* localStorage unavailable, fall back to OS preference via CSS */ }
+  })();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 fill=%27%23311847%27/%3E%3Ctext x=%2716%27 y=%2723%27 font-family=%27monospace%27 font-size=%2718%27 font-weight=%27700%27 fill=%27%23EC4067%27 text-anchor=%27middle%27%3Efn%3C/text%3E%3C/svg%3E">
+<title>Microsoft Forms pre-filled link builder: FlowNarrate</title>
+<meta name="description" content="Fill in a whole Microsoft Form at once from a pre-filled link. Paste one sample link, type or paste every answer, then open the form to check and submit. Screen reader friendly, and it runs entirely in your browser.">
+<link rel="canonical" href="https://www.flownarrate.com/tools/microsoft-forms-prefill-link-builder.html">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="FlowNarrate">
+<meta property="og:title" content="Microsoft Forms pre-filled link builder">
+<meta property="og:description" content="Fill in a whole Microsoft Form at once from a pre-filled link. Paste one sample link, type or paste every answer, then open the form to check and submit. Screen reader friendly, and it runs entirely in your browser.">
+<meta property="og:url" content="https://www.flownarrate.com/tools/microsoft-forms-prefill-link-builder.html">
+<meta property="og:image" content="https://www.flownarrate.com/images/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Microsoft Forms pre-filled link builder">
+<meta name="twitter:description" content="Fill in a whole Microsoft Form at once from a pre-filled link. Paste one sample link, type or paste every answer, then open the form to check and submit. Screen reader friendly, and it runs entirely in your browser.">
+<meta name="twitter:image" content="https://www.flownarrate.com/images/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Microsoft Forms pre-filled link builder",
+      "url": "https://www.flownarrate.com/tools/microsoft-forms-prefill-link-builder.html",
+      "description": "Fill in a whole Microsoft Form at once from a pre-filled link. Paste one sample link, type or paste every answer, then open the form to check and submit. Screen reader friendly, and it runs entirely in your browser.",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Any (runs in the browser)",
+      "isAccessibleForFree": true,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "GBP"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Simone Palmer-Thompson",
+        "url": "https://www.flownarrate.com/#about",
+        "sameAs": [
+          "https://linkedin.com/in/sptgb",
+          "https://learn.microsoft.com/en-us/users/simone-9570/credentials/8634052aba38a50b",
+          "https://www.credly.com/badges/e900c514-fc7d-4693-a6ac-f1e89821d690",
+          "https://learn.microsoft.com/en-us/users/simone-9570/credentials/cf951fd73e10f53"
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.flownarrate.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Tools",
+          "item": "https://www.flownarrate.com/tools.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Microsoft Forms pre-filled link builder",
+          "item": "https://www.flownarrate.com/tools/microsoft-forms-prefill-link-builder.html"
+        }
+      ]
+    }
+  ]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/tools.css">
+<link rel="alternate" type="application/rss+xml" title="FlowNarrate" href="https://www.flownarrate.com/feed.xml">
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav>
+  <a href="../index.html" class="brand">flow<span class="dot">·</span>narrate</a>
+  <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menu" onclick="toggleNav()">
+    <span></span><span></span><span></span>
+  </button>
+  <ul id="nav-links">
+    <li><a href="../blog.html">Blog</a></li>
+    <li><a href="../tools.html">Tools</a></li>
+    <li><a href="../index.html#about">About</a></li>
+    <li><button type="button" id="theme-toggle" class="theme-toggle" aria-pressed="false" onclick="toggleTheme()">Dark</button></li>
+  </ul>
+</nav>
+
+<main id="main">
+
+<section class="hero" style="border-bottom:none;grid-template-columns:1fr;max-width:none;margin:0;padding-bottom:0;">
+  <div class="hero-text" style="max-width:720px;">
+    <div class="breadcrumb"><a href="../tools.html">Tools</a> / Microsoft Forms pre-filled link builder</div>
+    <svg class="tool-hero-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8"/><path d="M8.5 16.5l1.5 1.5 3-3"/></svg>
+    <div class="status-line"><span class="status-dot"></span>FREE · RUNS ENTIRELY IN YOUR BROWSER</div>
+    <h1>Microsoft Forms <span class="accent">pre-filled</span> link builder</h1>
+    <p class="sub" style="max-width:600px;margin-bottom:14px;">Filling in a long form one box at a time is slow, and slower still with a screen reader. Microsoft Forms can open with answers already filled in from a pre-filled link. Paste one sample pre-filled link from the form, put in all your answers here, then open the form, check every answer and press Submit yourself. Nothing is ever submitted for you.</p>
+  </div>
+</section>
+
+<section id="prefill-builder">
+  <div class="expr-tool">
+    <h2 class="pf-step-heading">Step 1: Read the questions from a sample link</h2>
+    <div class="expr-field">
+      <label for="pf-sample">Sample pre-filled link</label>
+      <textarea id="pf-sample" rows="4" aria-describedby="pf-sample-hint"></textarea>
+      <p class="pf-hint" id="pf-sample-hint">The form's owner makes this in Microsoft Forms: the "..." menu, Get Pre-filled URL, switch on Enable pre-filled answers, answer every question with anything, then Get Prefilled Link. A question left blank in the sample is missing from the link.</p>
+    </div>
+    <div class="expr-field">
+      <label for="pf-titles">Question titles, one per line, in form order (optional)</label>
+      <textarea id="pf-titles" rows="4" aria-describedby="pf-titles-hint"></textarea>
+      <p class="pf-hint" id="pf-titles-hint">Used as labels below, so you hear "Question 2: Did you attend alone?" rather than just "Question 2".</p>
+    </div>
+    <button type="button" class="copy-btn" onclick="pfReadSample(true)">Read questions</button>
+    <p id="pf-read-status" class="pf-hint" role="status"></p>
+
+    <div id="pf-step2" hidden>
+      <h2 class="pf-step-heading" id="pf-step2-heading" tabindex="-1">Step 2: Answers</h2>
+      <div class="expr-field">
+        <label for="pf-paste">Paste all answers at once (optional)</label>
+        <textarea id="pf-paste" rows="6" aria-describedby="pf-paste-hint"></textarea>
+        <p class="pf-hint" id="pf-paste-hint">Each answer starts on a new line with "Question", its number and a colon, for example "Question 3: Radio". Copy the Copilot prompt to get answers in this format.</p>
+      </div>
+      <button type="button" class="copy-btn" onclick="pfFillFromPaste()">Fill the answer boxes</button>
+      <button type="button" class="copy-btn" onclick="pfCopyPrompt()">Copy a prompt for Copilot</button>
+      <p id="pf-paste-status" class="pf-hint" role="status"></p>
+      <div id="pf-questions"></div>
+    </div>
+
+    <div id="pf-step3" hidden>
+      <h2 class="pf-step-heading">Step 3: Open the form</h2>
+      <p id="pf-length" class="pf-hint"></p>
+      <a id="pf-open" class="pf-open" href="#" target="_blank" rel="noopener noreferrer">Open the pre-filled form<span class="sr-only"> (opens in a new tab)</span></a>
+      <button type="button" class="copy-btn" onclick="pfCopyLink()">Copy link</button>
+      <p id="pf-link-status" class="pf-hint" role="status"></p>
+      <details class="mermaid-toggle">
+        <summary>Show the link</summary>
+        <pre id="pf-link" class="mermaid-code" tabindex="0"></pre>
+      </details>
+
+      <h3 class="pf-step-heading">Answers to paste by hand</h3>
+      <p class="pf-hint">For answers too long for the link. Each button copies one answer, so you can paste it into the matching box in the form.</p>
+      <label class="check-label" for="pf-copy-only-left"><input type="checkbox" id="pf-copy-only-left" checked>Only answers left out of the link</label>
+      <button type="button" class="copy-btn" onclick="pfRenderCopyBlocks()">Make copy buttons</button>
+      <p id="pf-copy-status" class="pf-hint" role="status"></p>
+      <div id="pf-copy-blocks"></div>
+    </div>
+
+    <div id="pf-step4" hidden>
+      <h2 class="pf-step-heading">Step 4 (optional): Length test</h2>
+      <p class="pf-hint">Makes test links from about 2,000 to 32,000 characters. Open them shortest first. The longest one where the form opens and the answer ends with "End of test" is your limit. Test links never submit anything; close the tab without submitting.</p>
+      <div class="expr-field" style="margin-top:14px;">
+        <label for="pf-test-question">Make the link longer using</label>
+        <select id="pf-test-question"></select>
+      </div>
+      <button type="button" class="copy-btn" onclick="pfMakeTests()">Make test links</button>
+      <p id="pf-test-status" class="pf-hint" role="status"></p>
+      <div id="pf-test-links"></div>
+    </div>
+
+    <p class="expr-note">Your answers end up in the link, so they are saved in your browser history. A private window avoids that, and also stops the form showing answers from an earlier visit.</p>
+  </div>
+</section>
+
+<section>
+  <div class="tool-guide">
+    <h2>How to use it</h2>
+    <ol>
+      <li>Ask the form's owner for one pre-filled link with every question answered. Dummy answers such as "test" are fine. The link reveals each question's ID, and tells this tool whether a question takes text, one choice, several choices or a grid of choices.</li>
+      <li>Paste the link into step 1 and choose Read questions. If you have the question titles, paste them one per line first so each answer box is labelled with its question.</li>
+      <li>Type each answer into its box, or paste answers from Copilot all at once. Choice answers must match the option wording in the form exactly, including capital letters.</li>
+      <li>Choose Open the pre-filled form. The form opens in a new tab with your answers in place. Check each one, change anything that is wrong, then submit it yourself.</li>
+      <li>If the form does not open, or a long answer is cut short, the link is too long. Tick Leave out of the link for the longest answers, open the form again, and paste those answers using the copy buttons.</li>
+    </ol>
+    <p>Grid (Likert) questions can only use the columns that appear somewhere in the sample link, so when making the sample, use every column at least once. File upload questions cannot be pre-filled.</p>
+    <p>Pre-filled links are a standard Microsoft Forms feature. The form owner has to switch them on, and the form always waits for you to submit. Nothing you type here is sent anywhere. The tool runs entirely in your browser.</p>
+  </div>
+</section>
+
+<section style="border-bottom:none;">
+  <div class="section-head">
+    <div>
+      <h2>More free tools</h2>
+    </div>
+    <p>EVERY TOOL RUNS IN YOUR BROWSER<br>NO SIGN-IN, NOTHING STORED</p>
+  </div>
+  <div class="posts">
+    <a href="power-automate-expression-builder.html" class="post post-live">
+      <svg class="card-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4c-2 0-2 2-2 4s-1 4-2 4c1 0 2 2 2 4s0 4 2 4"/><path d="M16 4c2 0 2 2 2 4s1 4 2 4c-1 0-2 2-2 4s0 4-2 4"/><path d="M10 12h4"/></svg>
+      <div class="meta">Power Automate</div>
+      <h3>Power Automate expression builder</h3>
+      <p>Pick a function, fill in the values, copy a working expression.</p>
+    </a>
+    <a href="trigger-condition-builder.html" class="post post-live">
+      <svg class="card-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16l-6 7.5V18l-4 2v-7.5z"/></svg>
+      <div class="meta">Power Automate · Power Apps</div>
+      <h3>Trigger condition and filter builder</h3>
+      <p>Conditions in, a trigger condition or Power Fx Filter formula out.</p>
+    </a>
+    <a href="formatdatetime-generator.html" class="post post-live">
+      <svg class="card-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M8.5 3v4M15.5 3v4"/><path d="M8 14h2M12 14h2M8 17h2"/></svg>
+      <div class="meta">Power Automate</div>
+      <h3>formatDateTime generator</h3>
+      <p>Pick a date source and a format, get the formatDateTime expression.</p>
+    </a>
+    <a href="sharepoint-column-formatting.html" class="post post-live">
+      <svg class="card-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M9 5v14M15 5v14"/><rect x="9.8" y="10.8" width="4.4" height="7.4" fill="currentColor" stroke="none" opacity="0.3"/></svg>
+      <div class="meta">SharePoint</div>
+      <h3>SharePoint column formatting generator</h3>
+      <p>Conditional background colour for a list column, as ready-to-paste JSON.</p>
+    </a>
+    <a href="svg-to-power-apps-image.html" class="post post-live">
+      <svg class="card-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5-10 8"/></svg>
+      <div class="meta">Power Apps</div>
+      <h3>SVG to Power Apps image converter</h3>
+      <p>Paste SVG markup, get a data URI for the Image property.</p>
+    </a>
+    <a href="parse-json-schema-generator.html" class="post post-live">
+      <svg class="card-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="6" height="5" rx="1"/><rect x="15" y="9.5" width="6" height="5" rx="1"/><rect x="15" y="16" width="6" height="5" rx="1"/><path d="M6 8v10.5h9M6 12h9"/></svg>
+      <div class="meta">Power Automate</div>
+      <h3>Parse JSON schema generator</h3>
+      <p>Paste a sample payload, get the schema for a Parse JSON action.</p>
+    </a>
+    <a href="parse-json-schema-loosener.html" class="post post-live">
+      <svg class="card-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.6-1.8"/><path d="M12 15v2"/></svg>
+      <div class="meta">Power Automate</div>
+      <h3>Parse JSON schema loosener</h3>
+      <p>Fix Parse JSON failing on null values or missing fields.</p>
+    </a>
+    <a href="adaptive-card-builder.html" class="post post-live">
+      <svg class="card-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M6.5 8.5h11M6.5 11.5h7"/><rect x="6.5" y="14.5" width="4.5" height="2.5" rx="0.6"/><rect x="13" y="14.5" width="4.5" height="2.5" rx="0.6"/></svg>
+      <div class="meta">Teams · Power Automate</div>
+      <h3>Adaptive Card builder</h3>
+      <p>Title, body and Approve / Reject buttons, as card JSON for Teams.</p>
+    </a>
+    <a href="flow-error-handler.html" class="post post-live">
+      <svg class="card-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l9 16H3z"/><path d="M12 10v4"/><circle cx="12" cy="16.8" r="0.4" fill="currentColor"/></svg>
+      <div class="meta">Power Automate</div>
+      <h3>Flow error handler (Try / Catch)</h3>
+      <p>Run-after settings, error expression and alert body for a Try / Catch scope.</p>
+    </a>
+    <a href="html-email-table.html" class="post post-live">
+      <svg class="card-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 7l8.5 6 8.5-6"/></svg>
+      <div class="meta">Power Automate · Email</div>
+      <h3>HTML email table styler</h3>
+      <p>Column headers and a colour, as an inline-styled email table.</p>
+    </a>
+    <a href="odata-filter-query-builder.html" class="post post-live">
+      <svg class="card-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/><path d="M8 10.5h5"/></svg>
+      <div class="meta">SharePoint · Dataverse</div>
+      <h3>OData filter query builder</h3>
+      <p>Conditions plus $select, $orderby and $top, as an OData query.</p>
+    </a>
+    <a href="fetchxml-builder.html" class="post post-live">
+      <svg class="card-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="7" ry="2.8"/><path d="M5 6v12c0 1.6 3.1 2.8 7 2.8s7-1.2 7-2.8V6"/><path d="M5 12c0 1.6 3.1 2.8 7 2.8s7-1.2 7-2.8"/></svg>
+      <div class="meta">Dataverse · Dynamics 365</div>
+      <h3>FetchXML builder</h3>
+      <p>Dataverse's own query language, for List rows or Advanced Find.</p>
+    </a>
+    <a href="../tools.html" class="post post-live">
+      <div class="meta">All tools</div>
+      <h3>Browse every tool →</h3>
+      <p>All thirteen free tools on one page.</p>
+    </a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div><a href="../index.html" style="color:inherit;">flownarrate.com</a> &middot; &copy; <span id="copyright-year"></span></div>
+  <div><a href="../privacy.html" style="color:inherit;">Privacy</a> · <a href="../feed.xml" style="color:inherit;">RSS</a> · <a href="https://linkedin.com/in/sptgb" target="_blank" rel="noopener" style="color:inherit;">LinkedIn</a> · AB-100 Certified · Microsoft Certified Trainer</div>
+</footer>
+
+<script src="../assets/tools.js"></script>
+
+</body>
+</html>
