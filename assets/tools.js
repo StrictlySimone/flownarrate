@@ -1012,7 +1012,8 @@ function pfApplyAnswers(text){
   const filled = [], missing = [], problems = [];
   pfQuestions.forEach(q => {
     const lines = blocks[q.number];
-    const answer = lines ? lines.join('\n').trim() : '';
+    let answer = lines ? lines.join('\n').trim() : '';
+    if (/^(not answered|unanswered|no answer|n\/a|none|-)\.?$/i.test(answer)) answer = '';
     if (!answer){ missing.push(q.number); return; }
     filled.push(q.number);
     if (q.type === 'multi'){
@@ -1220,7 +1221,7 @@ function pfAiPrompt(){
   });
   const start = pfBase + '?' + pfFixedParams.map(([name, value]) => name + '=' + enc(value)).join('&');
   return [
-    'I need to fill in a Microsoft Form. Using my notes at the end, answer every question you can. Do not write a review or a summary. Reply with only these two things:',
+    'I need to fill in a Microsoft Form. Using my notes at the end, answer every question you can. Do not write a review or a summary. Reply with only these things:',
     '1. List the answers, one line per question, as "Question 1: answer", in plain words as the form shows them (not encoded), so I can check them. For a grid question, put each row on its own line as "row name: column name".',
     '2. Give me a pre-filled link for the form on its own line, with nothing around it.',
     '',
@@ -1233,6 +1234,7 @@ function pfAiPrompt(){
     '- Choice, pick one or more: a list inside double quotes, with inner quotes escaped. "[\\"Radio\\",\\"Flyer\\"]" becomes %22%5B%5C%22Radio%5C%22%2C%5C%22Flyer%5C%22%5D%22. Put a typed "Other" answer in the list as its own item.',
     '- Date: "yyyy-mm-dd" in double quotes. "' + pfToday() + '" becomes %22' + pfToday() + '%22.',
     '- Grid: {"<row ID>":{"id":<column id>,"key":"<column key>"},...} with one entry per answered row, then URL-encoded.',
+    '- If my notes don\'t cover a question, don\'t guess: write "Question N: not answered", leave it out of the link, and after the link ask me about it in one short sentence.',
     '- Use each option\'s wording exactly as the form shows it. If an option is listed below with %C2%A0 in it, keep the %C2%A0: it is a hidden space the form needs.',
     '',
     'Questions:',
@@ -1241,7 +1243,7 @@ function pfAiPrompt(){
     '\nMy notes:',
     notes || '(none, ask me if you need more information)',
     '',
-    'Remember: reply with only the "Question 1: answer" lines and then the pre-filled link.'
+    'Remember: reply with only the "Question 1: answer" lines, then the pre-filled link, then a short question about anything my notes did not cover.'
   ].join('\n');
 }
 
@@ -1345,6 +1347,8 @@ function pfCheckReply(){
   let msg = source === 'link'
     ? 'Read the link from the reply: ' + answered + ' of ' + pfQuestions.length + ' questions answered.'
     : 'No link in the reply, so the tool built one from the answers: ' + answered + ' of ' + pfQuestions.length + ' questions answered.';
+  const blank = pfQuestions.filter(q => !pfDescribe(q)).map(q => q.number);
+  if (blank.length) msg += ' Not answered: question ' + blank.join(', ') + '. Fill ' + (blank.length === 1 ? 'it' : 'them') + ' in on the form, or add to your notes and ask the AI again.';
   if (problems.length) msg += ' Fixed or flagged: ' + problems.join('; ') + '.';
   msg += ' The answers are listed below. The Open the pre-filled form link uses them.';
   pfStatus('pf-reply-status', msg);
