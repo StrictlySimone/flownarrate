@@ -114,7 +114,7 @@
     overflow-x:hidden;
     width:100%;
   }
-  .mono{font-family:'JetBrains Mono',monospace;}
+  .mono{font-family:'JetBrains Mono',monospace;overflow-wrap:anywhere;}
   a{color:var(--succeeded);}
   a:focus-visible, button:focus-visible{
     outline:2px solid var(--succeeded);
@@ -328,6 +328,10 @@
     nav ul{gap:18px;}
     h1{font-size:1.7rem;}
   }
+
+  figure{margin:8px 0 32px;}
+  figure img{display:block;max-width:100%;height:auto;border:1px solid var(--rule);}
+  figcaption{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--ink-soft);margin-top:8px;}
 </style>
 <link rel="alternate" type="application/rss+xml" title="FlowNarrate" href="https://www.flownarrate.com/feed.xml">
 </head>
@@ -372,6 +376,11 @@
   </ol>
   <p>The privilege error appeared because incoming mail was set to server-side sync, which needs read rights for the owning user. A send-only mailbox doesn't need incoming mail, so no security role change was needed.</p>
 
+  <figure>
+    <img src="images/mailbox/test-email-configuration.png" width="654" height="602" style="max-width:min(100%,520px)" alt="The Test Email Configuration dialog. It explains that a test message will be sent to the mailbox owner and the results shown on the mailbox record, asks for the date to process incoming email from, and has OK and Cancel buttons.">
+    <figcaption>The dialog that opens when you choose Test &amp; Enable Mailbox. With incoming set to None, only outgoing email is tested. Screenshot: <a href="https://learn.microsoft.com/power-platform/admin/connect-exchange-online" target="_blank" rel="noopener">Microsoft Learn</a>, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>.</figcaption>
+  </figure>
+
   <h2>Problem 2: "The user selected in the From field does not have the option enabled to allow other users to send the email on their behalf"</h2>
   <p>This is the harder one.</p>
   <ul>
@@ -380,6 +389,16 @@
     <li>Admins can't set it for someone else in the UI, and a no-login service account is exactly the account nobody can sign into to tick it themselves.</li>
     <li>Under the hood it's the <span class="mono">issendasallowed</span> column on the user's settings record.</li>
   </ul>
+
+  <figure>
+    <img src="images/mailbox/send-email-as-another-user.png" width="269" height="290" style="max-width:min(100%,320px)" alt="Part of a security role's Miscellaneous Privileges list, with the Send Email as Another User privilege highlighted.">
+    <figcaption>Send Email as Another User, under Miscellaneous Privileges in a security role. The flow's connection account needs a role with this. Screenshot: <a href="https://learn.microsoft.com/power-platform/admin/send-email-on-behalf" target="_blank" rel="noopener">Microsoft Learn</a>, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>.</figcaption>
+  </figure>
+
+  <figure>
+    <img src="images/mailbox/allow-others-to-send-on-your-behalf.png" width="572" height="219" style="max-width:min(100%,520px)" alt="The Email tab of Set Personal Options, with the setting Allow other Microsoft Dynamics 365 users to send email on your behalf ticked and highlighted.">
+    <figcaption>The setting the From user has to tick for themselves, on the Email tab of their personal options. This is the <span class="mono">issendasallowed</span> flag that nobody can tick for a service account. Screenshot: <a href="https://learn.microsoft.com/power-platform/admin/send-email-on-behalf" target="_blank" rel="noopener">Microsoft Learn</a>, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>.</figcaption>
+  </figure>
 
   <h3>Fix: set it by impersonation</h3>
   <p>The service account had no security roles, so impersonating it failed with "has not been assigned any roles&hellip; need prvReadUserSettings". Impersonation only carries the privileges of the user being impersonated, so an account with nothing assigned can't be impersonated at all yet.</p>
