@@ -341,6 +341,10 @@
     nav ul{gap:18px;}
     h1{font-size:1.7rem;}
   }
+
+  figure{margin:8px 0 32px;}
+  figure img{display:block;max-width:100%;height:auto;border:1px solid var(--rule);background:#fff;}
+  figcaption{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--ink-soft);margin-top:8px;}
 </style>
 <link rel="alternate" type="application/rss+xml" title="FlowNarrate" href="https://www.flownarrate.com/feed.xml">
 </head>
@@ -432,6 +436,12 @@
 
   <h3>3. The approval action, assigned conditionally</h3>
   <p>Both branches use the same Approvals action, just with a different assignee. Keeping the approval step identical across branches (instead of duplicating separate approval logic per branch) is deliberate. When both branches later need a third field on the approval card, you change it once.</p>
+
+  <figure class="ms-shot">
+    <img src="images/microsoft-learn/start-and-wait-for-an-approval.png" width="610" height="590" style="max-width:min(100%,480px)" alt="The Start and wait for an approval action in the Power Automate designer, set to Approve/Reject - First to respond, with a title, an assignee and details built from the request." loading="lazy">
+    <figcaption>The Approvals action as it appears in the Power Automate designer. In this flow, only the Assigned to field changes between the two branches. Screenshot: <a href="https://learn.microsoft.com/power-automate/modern-approvals" target="_blank" rel="noopener">Microsoft Learn</a>, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>.</figcaption>
+  </figure>
+
 
   <h3>4. Checking before you assign, not after</h3>
   <p>The approval and escalation steps as built so far are honest but passive: assign the approval, start a clock, react if nobody answers. A version that's had a few more iterations checks something first, before the approval task even gets created: is the person about to be assigned actually around.</p>

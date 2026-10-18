@@ -585,3 +585,9 @@ textarea:focus-visible, summary:focus-visible, [tabindex="-1"]:focus-visible{
 .pf-example-btn[aria-pressed="true"]{border-width:2px;border-color:var(--succeeded);color:var(--ink);font-weight:600;}
 #pf-example-note{margin-top:16px;margin-bottom:24px;}
 .ex-banner{border:2px dashed var(--warning);padding:12px 16px;margin-bottom:24px;font-size:0.95rem;}
+
+/* Microsoft Learn screenshots in "How to use it" */
+.tool-guide .ms-shot{margin:8px 0 24px;}
+.tool-guide .ms-shot img{display:block;max-width:100%;height:auto;border:1px solid var(--rule);background:#fff;}
+.tool-guide .ms-shot figcaption{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--ink-soft);margin-top:8px;}
+.tool-guide .ms-shot figcaption a{color:inherit;}
