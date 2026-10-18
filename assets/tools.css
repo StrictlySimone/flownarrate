@@ -538,7 +538,7 @@ textarea:focus-visible, summary:focus-visible, [tabindex="-1"]:focus-visible{
 .pf-test-list{padding-left:22px;margin-top:12px;}
 .pf-test-list li{margin-bottom:8px;}
 .pf-test-list a{color:var(--ink);}
-#pf-link{white-space:pre-wrap;word-break:break-all;}
+#pf-link{word-break:break-all;}
 .pf-mode{border:none;margin-bottom:24px;}
 .pf-mode legend{margin-bottom:4px;}
 .check-label input[type="radio"]{width:18px;height:18px;accent-color:var(--succeeded);margin-right:6px;flex:none;}
@@ -548,4 +548,6 @@ textarea:focus-visible, summary:focus-visible, [tabindex="-1"]:focus-visible{
 .pf-answers-q{display:block;font-size:0.95rem;color:var(--ink-soft);}
 .pf-answers-a{display:block;color:var(--ink);font-weight:500;}
 .pf-answers-none{color:var(--failed);}
-#pf-ai-prompt{white-space:pre-wrap;word-break:break-word;max-height:24em;overflow-y:auto;}
+
+.pf-box{white-space:pre-wrap;word-break:break-word;margin-bottom:0;}
+.pf-box.pf-collapsed{max-height:6.6em;overflow:hidden;-webkit-mask-image:linear-gradient(#000 60%, transparent);mask-image:linear-gradient(#000 60%, transparent);}

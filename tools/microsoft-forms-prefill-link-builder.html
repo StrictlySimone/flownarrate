@@ -157,13 +157,15 @@
       <h2 class="pf-step-heading" id="pf-ai-heading" tabindex="-1">Step 2: Ask the AI</h2>
       <div class="expr-field">
         <label for="pf-notes">Your notes for the AI</label>
-        <textarea id="pf-notes" rows="5" aria-describedby="pf-notes-hint"></textarea>
+        <textarea id="pf-notes" rows="5" aria-describedby="pf-notes-hint" oninput="pfShowAiPrompt()"></textarea>
         <p class="pf-hint" id="pf-notes-hint">What you want to say, in your own words. The AI turns it into answers.</p>
       </div>
+      <p class="pf-label" id="pf-ai-prompt-label">AI prompt</p>
+      <pre id="pf-ai-prompt" class="mermaid-code pf-box pf-collapsed" tabindex="0" aria-labelledby="pf-ai-prompt-label"></pre>
       <button type="button" class="copy-btn" onclick="pfCopyAiPrompt()">Copy AI prompt</button>
+      <button type="button" class="copy-btn" aria-controls="pf-ai-prompt" aria-expanded="false" data-more="Show the whole prompt" data-less="Show less" onclick="pfToggleBox(this)">Show the whole prompt</button>
       <p id="pf-ai-status" class="pf-hint" role="status"></p>
-      <pre id="pf-ai-prompt" class="mermaid-code" tabindex="0" hidden></pre>
-      <p class="pf-hint">Paste the prompt into Copilot, ChatGPT, Claude or Gemini. It replies with your answers and a link.</p>
+      <p class="pf-hint">Paste the prompt into a new chat in Copilot, ChatGPT, Claude or Gemini. It replies with your answers and a link.</p>
 
       <h2 class="pf-step-heading">Step 3: Paste the AI's reply</h2>
       <div class="expr-field">
@@ -176,6 +178,7 @@
       <div id="pf-answers-block" hidden>
         <h3 class="pf-step-heading">Answers in the link</h3>
         <ol id="pf-answers" class="pf-answers"></ol>
+        <button type="button" class="copy-btn" onclick="pfCopyAnswers()">Copy the answers</button>
       </div>
     </div>
 
@@ -199,10 +202,9 @@
       <button type="button" class="copy-btn" onclick="pfCopyLink()">Copy link</button>
       <p id="pf-link-status" class="pf-hint" role="status"></p>
       <p class="pf-hint">Check every answer in the form before you press Submit. An answer that doesn't match an option exactly is left blank, without any warning.</p>
-      <details class="mermaid-toggle">
-        <summary>Show the link</summary>
-        <pre id="pf-link" class="mermaid-code" tabindex="0"></pre>
-      </details>
+      <p class="pf-label" id="pf-link-label">The link</p>
+      <pre id="pf-link" class="mermaid-code pf-box pf-collapsed" tabindex="0" aria-labelledby="pf-link-label"></pre>
+      <button type="button" class="copy-btn" aria-controls="pf-link" aria-expanded="false" data-more="Show the whole link" data-less="Show less" onclick="pfToggleBox(this)">Show the whole link</button>
 
       <div data-pf-mode="advanced" data-pf-after-read="true" hidden>
         <h3 class="pf-step-heading">Answers to paste by hand</h3>

@@ -791,6 +791,7 @@ function pfReadSample(moveFocus){
   pfGridNamesFromFormText();
   pfReady = true;
   pfShowMode();
+  pfShowAiPrompt();
   pfUpdateLink();
 
   const counts = {};
@@ -948,11 +949,36 @@ function pfUpdateLink(){
   document.getElementById('pf-length').textContent = 'The link is ' + len.toLocaleString('en-GB') + ' characters long. ' + advice;
 }
 
+// Copy with the Clipboard API, falling back to a selected textarea for the
+// browsers and app viewers that block it. Resolves to true or false.
+function pfCopyText(text){
+  const fallback = () => {
+    const area = pfEl('textarea', { value: text, readOnly: true });
+    area.style.position = 'fixed';
+    area.style.opacity = '0';
+    document.body.append(area);
+    area.select();
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch(e) { ok = false; }
+    area.remove();
+    return ok;
+  };
+  if (!navigator.clipboard) return Promise.resolve(fallback());
+  return navigator.clipboard.writeText(text).then(() => true, () => fallback());
+}
+
+// Long boxes show their first few lines until expanded.
+function pfToggleBox(button){
+  const box = document.getElementById(button.getAttribute('aria-controls'));
+  const open = button.getAttribute('aria-expanded') !== 'true';
+  box.classList.toggle('pf-collapsed', !open);
+  button.setAttribute('aria-expanded', open ? 'true' : 'false');
+  button.textContent = open ? button.dataset.less : button.dataset.more;
+}
+
 function pfCopyLink(){
-  navigator.clipboard.writeText(pfBuildUrl()).then(() => {
-    pfStatus('pf-link-status', 'Link copied to clipboard');
-  }).catch(() => {
-    pfStatus('pf-link-status', 'Copy failed. Use the Open the form link instead.');
+  pfCopyText(pfBuildUrl()).then(ok => {
+    pfStatus('pf-link-status', ok ? 'Link copied.' : 'Copying was blocked. Expand the link below, select it and copy it yourself.');
   });
 }
 
@@ -1031,10 +1057,8 @@ function pfCopilotPrompt(){
 }
 
 function pfCopyPrompt(){
-  navigator.clipboard.writeText(pfCopilotPrompt()).then(() => {
-    pfStatus('pf-paste-status', 'Copilot prompt copied to clipboard');
-  }).catch(() => {
-    pfStatus('pf-paste-status', 'Copy failed.');
+  pfCopyText(pfCopilotPrompt()).then(ok => {
+    pfStatus('pf-paste-status', ok ? 'AI prompt copied.' : 'Copying was blocked.');
   });
 }
 
@@ -1050,9 +1074,9 @@ function pfRenderCopyBlocks(){
   list.forEach(q => {
     const btn = pfEl('button', { type: 'button', className: 'copy-btn',
       textContent: 'Question ' + q.number + ': copy answer',
-      onclick: () => navigator.clipboard.writeText(q.answer).then(
-        () => pfStatus('pf-copy-status', 'Question ' + q.number + ' answer copied. ' + q.answer.length + ' characters.'),
-        () => pfStatus('pf-copy-status', 'Copy failed.')) });
+      onclick: () => pfCopyText(q.answer).then(ok => pfStatus('pf-copy-status', ok
+        ? 'Question ' + q.number + ' answer copied. ' + q.answer.length + ' characters.'
+        : 'Copying was blocked.')) });
     box.append(pfEl('div', { className: 'pf-copy-block' }, [
       pfEl('h3', { textContent: pfQuestionLabel(q) }),
       pfEl('p', { className: 'pf-hint', textContent: q.answer.length.toLocaleString('en-GB') + ' characters' }),
@@ -1221,18 +1245,24 @@ function pfAiPrompt(){
   ].join('\n');
 }
 
-// The prompt is always shown as well as copied, because some browsers and
-// app viewers block the clipboard without saying so.
+// The prompt is always shown as well, because some browsers and app viewers
+// block copying without saying so.
+function pfShowAiPrompt(){
+  if (pfReady) document.getElementById('pf-ai-prompt').textContent = pfAiPrompt();
+}
+
 function pfCopyAiPrompt(){
-  const prompt = pfAiPrompt();
-  const box = document.getElementById('pf-ai-prompt');
-  box.hidden = false;
-  box.textContent = prompt;
-  navigator.clipboard.writeText(prompt).then(() => {
-    pfStatus('pf-ai-status', 'AI prompt copied. It starts "I need to fill in a Microsoft Form". Paste it into a new chat in Copilot or another AI, then paste the whole reply in step 3. The prompt is also shown below.');
-  }).catch(() => {
-    pfStatus('pf-ai-status', 'Copying was blocked, so the prompt is shown below. Select it all and copy it yourself.');
+  pfShowAiPrompt();
+  pfCopyText(pfAiPrompt()).then(ok => {
+    pfStatus('pf-ai-status', ok
+      ? 'AI prompt copied. It starts "I need to fill in a Microsoft Form". Paste it into a new chat in Copilot or another AI, then paste the whole reply in step 3.'
+      : 'Copying was blocked. Expand the prompt below, select it all and copy it yourself.');
   });
+}
+
+function pfCopyAnswers(){
+  const text = pfQuestions.map(q => pfQuestionLabel(q) + '\n' + (pfDescribe(q) || 'No answer')).join('\n\n');
+  pfCopyText(text).then(ok => pfStatus('pf-reply-status', ok ? 'Answers copied.' : 'Copying was blocked.'));
 }
 
 // Read the answers back out of a link, so the AI's link can be checked and
