@@ -1267,18 +1267,18 @@ function pfCheckReply(){
 
   pfRenderQuestions();
   pfUpdateLink();
-  const list = document.getElementById('pf-review');
+  const list = document.getElementById('pf-answers');
   list.textContent = '';
   let answered = 0;
   pfQuestions.forEach(q => {
     const text = pfDescribe(q);
     if (text) answered++;
     list.append(pfEl('li', {}, [
-      pfEl('span', { className: 'pf-review-q', textContent: pfQuestionLabel(q) }),
-      pfEl('span', { className: text ? 'pf-review-a' : 'pf-review-a pf-review-none', textContent: text || 'No answer' })
+      pfEl('span', { className: 'pf-answers-q', textContent: pfQuestionLabel(q) }),
+      pfEl('span', { className: text ? 'pf-answers-a' : 'pf-answers-a pf-answers-none', textContent: text || 'No answer' })
     ]));
   });
-  document.getElementById('pf-review-block').hidden = false;
+  document.getElementById('pf-answers-block').hidden = false;
 
   let msg = source === 'link'
     ? 'Read the link from the reply: ' + answered + ' of ' + pfQuestions.length + ' questions answered.'

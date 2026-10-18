@@ -543,8 +543,8 @@ textarea:focus-visible, summary:focus-visible, [tabindex="-1"]:focus-visible{
 .pf-mode legend{margin-bottom:4px;}
 .check-label input[type="radio"]{width:18px;height:18px;accent-color:var(--succeeded);margin-right:6px;flex:none;}
 .expr-field input[type="file"]{font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:var(--ink);}
-.pf-review{padding-left:22px;margin-top:8px;}
-.pf-review li{margin-bottom:12px;}
-.pf-review-q{display:block;font-size:0.95rem;color:var(--ink-soft);}
-.pf-review-a{display:block;color:var(--ink);font-weight:500;}
-.pf-review-none{color:var(--failed);}
+.pf-answers{padding-left:22px;margin-top:8px;}
+.pf-answers li{margin-bottom:12px;}
+.pf-answers-q{display:block;font-size:0.95rem;color:var(--ink-soft);}
+.pf-answers-a{display:block;color:var(--ink);font-weight:500;}
+.pf-answers-none{color:var(--failed);}
