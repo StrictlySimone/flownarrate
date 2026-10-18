@@ -746,7 +746,7 @@ function pfDetectType(raw){
 }
 
 function pfReadSample(moveFocus){
-  pfSetExample(false);
+  pfSetExample(null);
   ['pf-ai-done', 'pf-reply-done'].forEach(id => { document.getElementById(id).hidden = true; });
   document.getElementById('pf-reply-before').hidden = false;
   const input = document.getElementById('pf-sample').value.trim();
@@ -1060,6 +1060,8 @@ function pfApplyAnswers(text){
     if (m){
       current = Number(m[1]);
       blocks[current] = [m[2]];
+    } else if (/:\/\/\S*\?id=/.test(line)){
+      current = null;
     } else if (current !== null){
       blocks[current].push(line);
     }
@@ -1068,7 +1070,15 @@ function pfApplyAnswers(text){
   const filled = [], missing = [], problems = [];
   pfQuestions.forEach(q => {
     const lines = blocks[q.number];
-    let answer = lines ? lines.join('\n').trim() : '';
+    // An answer ends at a blank line, so a closing question or remark from
+    // the AI isn't taken as part of it. One-line types take one line.
+    let kept = [];
+    if (lines){
+      const firstText = lines.findIndex(l => l.trim());
+      for (let i = Math.max(firstText, 0); i < lines.length && (i === firstText || lines[i].trim()); i++) kept.push(lines[i]);
+      if (['choice', 'date', 'number'].includes(q.type)) kept = kept.slice(0, 1);
+    }
+    let answer = kept.join('\n').trim();
     if (/^(not answered|unanswered|no answer|n\/a|none|-)\.?$/i.test(answer)) answer = '';
     if (!answer){ missing.push(q.number); return; }
     filled.push(q.number);
@@ -1433,7 +1443,7 @@ function pfCheckReply(){
   const problems = [];
   pfQuestions.forEach(q => { q.answer = ''; q.leaveOut = false; if (q.rows) q.rows.forEach(r => { r.answer = ''; }); });
 
-  const found = reply.match(/https:\/\/[^\s<>()\[\]`]*ResponsePage\.aspx\?[^\s<>()\[\]`]+/i);
+  const found = reply.match(/(?:https?|file):\/\/[^\s<>()\[\]`]+\?id=[^\s<>()\[\]`]+/i);
   let source;
   if (found){
     source = 'link';
@@ -1500,87 +1510,252 @@ function pfLoadFile(input){
   reader.readAsText(file);
 }
 
-// --- Example ---
-// A made-up form, so the example link can never reach a real form. Dates
-// are the visitor's today.
-let pfExample = false;
+// --- Examples ---
+// Made-up forms for trying the tool. Their links open example-form.html, a
+// stand-in that shows the answers filled in, so nothing reaches a real form.
+// Dates are the visitor's today. Shared by the tool and the stand-in page.
+const pfExamples = [
+  { slug: 'away-day', title: 'Team away day feedback',
+    notes: 'I went to the away day today. I went to the workshops and the team lunch. The venue was excellent, the food and activities were good, but the timing was only fair. Four stars out of five. There were six of us. Next time I\'d like a longer lunch break and the quiz earlier in the day.',
+    questions: [
+      { type: 'choice', title: 'Did you attend the away day?', options: ['Yes', 'No'], answer: 'Yes' },
+      { type: 'multi', title: 'Which sessions did you go to?', options: ['Planning', 'Workshops', 'Team lunch', 'Quiz'], answer: ['Workshops', 'Team lunch'] },
+      { type: 'grid', title: 'Please rate the following', rows: ['Venue', 'Food', 'Activities', 'Timing'], cols: ['Poor', 'Fair', 'Good', 'Excellent'], answer: ['Excellent', 'Good', 'Good', 'Fair'] },
+      { type: 'date', title: 'When did you attend?', answer: 'today' },
+      { type: 'rating', title: 'Rate the day out of 5', max: 5, answer: '4' },
+      { type: 'number', title: 'How many people were in your team?', answer: '6' },
+      { type: 'text', title: 'What would you change next time?', answer: 'A longer lunch break, and the quiz earlier in the day.' }
+    ] },
+  { slug: 'customer', title: 'Customer feedback: your recent order',
+    notes: 'I ordered on the app today. Delivery was quick and the packaging was good, but customer service took a while to reply. Four stars. I\'d probably recommend you, maybe 7 out of 10. It would help to have live chat.',
+    questions: [
+      { type: 'choice', title: 'How did you place your order?', options: ['Website', 'App', 'Phone'], answer: 'App', dropdown: true },
+      { type: 'date', title: 'When did you order?', answer: 'today' },
+      { type: 'multi', title: 'What went well?', options: ['Delivery speed', 'Packaging', 'Customer service', 'Price'], answer: ['Delivery speed', 'Packaging'] },
+      { type: 'rating', title: 'Rate your experience out of 5', max: 5, answer: '4' },
+      { type: 'nps', title: 'How likely are you to recommend us to a friend?', answer: '7' },
+      { type: 'text', title: 'Anything we could do better?', answer: 'Live chat, so questions get answered faster.' }
+    ] },
+  { slug: 'course', title: 'Course evaluation',
+    notes: 'I did the Power Automate intro course today. I agree the content was useful and the trainer was clear. The pace was a bit fast, so neutral on that. Materials were good, I agree. I\'d recommend it. I\'ll use it to automate our weekly report emails. Five stars.',
+    questions: [
+      { type: 'choice', title: 'Which course did you attend?', options: ['Excel basics', 'Power Automate intro', 'Copilot for beginners'], answer: 'Power Automate intro' },
+      { type: 'grid', title: 'How far do you agree?', rows: ['The content was useful', 'The trainer was clear', 'The pace was right', 'The materials helped', 'I could ask questions'], cols: ['Strongly disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly agree'], answer: ['Agree', 'Agree', 'Neutral', 'Agree', ''] },
+      { type: 'choice', title: 'Would you recommend this course?', options: ['Yes', 'No', 'Not sure'], answer: 'Yes' },
+      { type: 'text', title: 'How will you use what you learned?', answer: 'To automate our weekly report emails.' },
+      { type: 'rating', title: 'Rate the course out of 5', max: 5, answer: '5' }
+    ] },
+  { slug: 'booking', title: 'Event booking',
+    notes: 'Book me in for today. My name is Sam Taylor, two tickets please. One of us is vegetarian and one has a nut allergy. We\'d like front and centre seats. Step-free access would be great.',
+    questions: [
+      { type: 'text', title: 'Your full name', answer: 'Sam Taylor' },
+      { type: 'date', title: 'Which date are you booking?', answer: 'today' },
+      { type: 'number', title: 'How many tickets?', answer: '2' },
+      { type: 'multi', title: 'Any dietary needs?', options: ['Vegetarian', 'Vegan', 'Gluten free', 'Nut allergy', 'None'], answer: ['Vegetarian', 'Nut allergy'] },
+      { type: 'choice', title: 'Where would you like to sit?', options: ['Front & centre', 'Upper level / balcony', 'I\'d rather not say'], answer: 'Front & centre' },
+      { type: 'text', title: 'Anything else we should know?', answer: 'Step-free access, please.' }
+    ] }
+];
+
+// Question and grid ids are made up but shaped like real ones.
+function pfExampleIds(ex){
+  const n = pfExamples.indexOf(ex) + 1;
+  return {
+    form: 'EXAMPLE-' + ex.slug.toUpperCase(),
+    question: i => 'r' + n + String(i + 1).padStart(31, '0'),
+    row: (i, r) => 'r' + n + String(i + 1).padStart(3, '0') + String(r + 1).padStart(28, '0'),
+    key: c => '00000000-0000-4000-8000-' + String(c + 1).padStart(12, '0')
+  };
+}
+
+function pfExampleAnswer(q){
+  return q.answer === 'today' ? pfToday() : q.answer;
+}
+
+// The value a link carries for one example question, encoded as Forms does.
+function pfExampleValue(ex, q, i, answer){
+  const ids = pfExampleIds(ex);
+  if (q.type === 'choice' || q.type === 'date') return JSON.stringify(answer);
+  if (q.type === 'multi') return JSON.stringify(JSON.stringify(answer));
+  if (q.type === 'grid'){
+    const grid = {};
+    answer.forEach((col, r) => {
+      const c = q.cols.indexOf(col);
+      if (c >= 0) grid[ids.row(i, r)] = { id: c + 1, key: ids.key(c) };
+    });
+    return JSON.stringify(grid);
+  }
+  return String(answer);
+}
+
+function pfExampleBase(){
+  return new URL('example-form.html', location.href).href.split('?')[0];
+}
+
+// The sample link uses each grid column once, as a real sample should.
+function pfExampleSample(ex){
+  const ids = pfExampleIds(ex);
+  return pfExampleBase() + '?id=' + ids.form + ex.questions.map((q, i) => {
+    let sample;
+    if (q.type === 'choice') sample = q.options[0];
+    else if (q.type === 'multi') sample = [q.options[0]];
+    else if (q.type === 'grid') sample = q.rows.map((r, n) => q.cols[n % q.cols.length]);
+    else if (q.type === 'date') sample = pfToday();
+    else if (q.type === 'text') sample = 'test';
+    else sample = '1';
+    return '&' + ids.question(i) + '=' + encodeURIComponent(pfExampleValue(ex, q, i, sample));
+  }).join('');
+}
+
+function pfExampleFormText(ex){
+  const lines = [ex.title];
+  ex.questions.forEach((q, i) => {
+    lines.push((i + 1) + '. ' + q.title);
+    if (q.options) q.options.forEach(o => lines.push(o));
+    if (q.type === 'grid'){ lines.push(q.cols.join('\t')); q.rows.forEach(r => lines.push(r)); }
+  });
+  return lines.join('\n');
+}
+
+function pfExampleReply(ex){
+  const lines = ['Here are your answers:'];
+  ex.questions.forEach((q, i) => {
+    const a = pfExampleAnswer(q);
+    if (q.type === 'multi') lines.push('Question ' + (i + 1) + ':', ...a);
+    else if (q.type === 'grid'){
+      lines.push('Question ' + (i + 1) + ':');
+      q.rows.forEach((r, n) => { if (a[n]) lines.push(r + ': ' + a[n]); });
+    }
+    else if (q.type === 'date') lines.push('Question ' + (i + 1) + ': ' + a.split('-').reverse().join('/'));
+    else lines.push('Question ' + (i + 1) + ': ' + a);
+  });
+  return lines.join('\n');
+}
+
+let pfExample = null;
 
 function pfToday(){
   const d = new Date();
   return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
 }
 
-function pfSetExample(on){
-  pfExample = on;
-  document.getElementById('pf-open-text').textContent = on ? 'Example only: this link doesn\'t open a real form' : 'Open the pre-filled form';
+function pfSetExample(ex){
+  pfExample = ex;
+  const note = document.getElementById('pf-example-note');
+  note.hidden = !ex;
+  if (ex) note.textContent = 'You\'re looking at example ' + (pfExamples.indexOf(ex) + 1) + ': ' + ex.title +
+    '. It\'s a made-up form, and its link opens a stand-in form, not a real one. Choose another example, or start with your own form.';
+  document.getElementById('pf-open-text').textContent = ex ? 'Open the example form' : 'Open the pre-filled form';
+  document.querySelectorAll('.pf-example-btn').forEach(b => b.setAttribute('aria-pressed', b.dataset.example === (ex && ex.slug) ? 'true' : 'false'));
 }
 
-function pfOpenCheck(event){
-  if (!pfExample) return true;
-  event.preventDefault();
-  pfStatus('pf-link-status', 'This is the example, so there is no real form to open. Paste your own sample link in step 1 to use the tool.');
-  return false;
-}
-
-function pfLoadExample(){
-  const today = pfToday();
-  const ukToday = today.split('-').reverse().join('/');
-  const id = n => 'r' + String(n).padStart(32, '0');
-  const key = n => '00000000-0000-4000-8000-' + String(n).padStart(12, '0');
-  const rows = ['Venue', 'Food', 'Activities', 'Timing'];
-  const cols = ['Poor', 'Fair', 'Good', 'Excellent'];
-  const grid = {};
-  rows.forEach((r, i) => { grid[id(100 + i)] = { id: i + 1, key: key(i + 1) }; });
-  const sample = 'https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=EXAMPLE-NOT-A-REAL-FORM' + [
-    [id(1), JSON.stringify('Yes')],
-    [id(2), JSON.stringify(JSON.stringify(['Planning']))],
-    [id(3), JSON.stringify(grid)],
-    [id(4), JSON.stringify(today)],
-    [id(5), '3'],
-    [id(6), '5'],
-    [id(7), 'test']
-  ].map(([n, v]) => '&' + n + '=' + encodeURIComponent(v)).join('');
-  const formText = [
-    'Team away day feedback',
-    '1. Did you attend the away day?', 'Yes', 'No',
-    '2. Which sessions did you go to?', 'Planning', 'Workshops', 'Team lunch', 'Quiz',
-    '3. Please rate the following', cols.join('\t')].concat(rows, [
-    '4. When did you attend?',
-    '5. Rate the day out of 5',
-    '6. How many people were in your team?',
-    '7. What would you change next time?']).join('\n');
-  const answers = [
-    'Question 1: Yes',
-    'Question 2:', 'Workshops', 'Team lunch',
-    'Question 3:', 'Venue: Excellent', 'Food: Good', 'Activities: Good', 'Timing: Fair',
-    'Question 4: ' + ukToday,
-    'Question 5: 4',
-    'Question 6: 6',
-    'Question 7: A longer lunch break, and the quiz earlier in the day.'
-  ].join('\n');
-
+function pfLoadExample(slug){
+  const ex = pfExamples.find(e => e.slug === slug) || pfExamples[Math.floor(Math.random() * pfExamples.length)];
   document.getElementById('pf-mode-basic').checked = true;
-  document.getElementById('pf-sample').value = sample;
-  document.getElementById('pf-form-text').value = formText;
+  document.getElementById('pf-sample').value = pfExampleSample(ex);
+  document.getElementById('pf-form-text').value = pfExampleFormText(ex);
   document.getElementById('pf-titles').value = '';
   pfReadSample(false);
-  document.getElementById('pf-notes').value = 'I went to the away day today, ' + ukToday + '. I went to the workshops and the team lunch. ' +
-    'The venue was excellent, the food and activities were good, but the timing was only fair. ' +
-    'Four stars out of five. There were six of us. Next time I\'d like a longer lunch break and the quiz earlier in the day.';
+  document.getElementById('pf-notes').value = ex.notes.replace('today', 'today, ' + pfToday().split('-').reverse().join('/'));
+  pfShowAiPrompt();
+  const answers = pfExampleReply(ex);
   pfApplyAnswers(answers);
-  const link = pfBuildUrl();
-  document.getElementById('pf-reply').value = 'Here are your answers:\n' + answers + '\n\nYour pre-filled link:\n' + link;
+  document.getElementById('pf-reply').value = answers + '\n\nYour pre-filled link:\n' + pfBuildUrl();
   pfCheckReply();
   pfMarkDone('pf-ai-done');
-  pfSetExample(true);
-  pfStatus('pf-read-status', 'Example loaded: a made-up 7-question form, with notes, an AI reply and the checked answers filled in. Step 3 lists the answers.');
+  pfSetExample(ex);
+}
+
+// Clear everything, ready for the visitor's own form.
+function pfStartOwn(){
+  ['pf-sample', 'pf-form-text', 'pf-titles', 'pf-notes', 'pf-reply', 'pf-paste'].forEach(id => { document.getElementById(id).value = ''; });
+  pfQuestions = [];
+  pfReady = false;
+  pfSetExample(null);
+  ['pf-ai-done', 'pf-reply-done'].forEach(id => { document.getElementById(id).hidden = true; });
+  document.getElementById('pf-reply-before').hidden = false;
+  document.getElementById('pf-answers-block').hidden = true;
+  ['pf-questions', 'pf-answers', 'pf-ai-prompt'].forEach(id => { document.getElementById(id).textContent = ''; });
+  ['pf-read-status', 'pf-reply-status', 'pf-ai-status', 'pf-link-status'].forEach(id => { document.getElementById(id).textContent = ''; });
+  pfShowMode();
+  document.getElementById('pf-sample').focus();
 }
 
 // Browsers can restore the sample link after Back; read it straight away.
+// Otherwise open on a random example, so the first view shows the tool working.
 onPage('pf-sample', function(){
   pfShowMode();
   if (document.getElementById('pf-sample').value.trim()) pfReadSample();
+  else pfLoadExample();
 });
+
+// --- Example form stand-in ---
+// Shows an example form with the link's answers filled in, the way Microsoft
+// Forms would: an answer that doesn't match an option is left blank.
+function exRenderForm(){
+  const params = new URLSearchParams(location.search);
+  const ex = pfExamples.find(e => pfExampleIds(e).form === params.get('id'));
+  const box = document.getElementById('ex-questions');
+  if (!ex){
+    box.append(pfEl('p', { textContent: 'This example link doesn\'t match any of the examples. Go back to the link builder and choose an example.' }));
+    return;
+  }
+  const ids = pfExampleIds(ex);
+  document.getElementById('ex-title').textContent = ex.title;
+  const read = (i, parse) => { const v = params.get(ids.question(i)); if (v === null) return null; try { return parse ? JSON.parse(v) : v; } catch(e) { return null; } };
+  ex.questions.forEach((q, i) => {
+    const id = 'ex-q' + (i + 1);
+    const label = (i + 1) + '. ' + q.title;
+    const wrap = pfEl('div', { className: 'pf-question' });
+    if (q.type === 'choice' || q.type === 'multi'){
+      let picked = q.type === 'choice' ? [read(i, true)] : (() => { try { return JSON.parse(read(i, true)); } catch(e) { return []; } })();
+      picked = (picked || []).filter(v => typeof v === 'string');
+      if (q.dropdown){
+        const select = pfEl('select', { id: id }, [pfEl('option', { value: '', textContent: 'Select your answer' })].concat(q.options.map(o => pfEl('option', { value: o, textContent: o }))));
+        select.value = q.options.includes(picked[0]) ? picked[0] : '';
+        wrap.append(pfEl('label', { htmlFor: id, className: 'pf-label', textContent: label }), select);
+      } else {
+        const fieldset = pfEl('fieldset', {}, [pfEl('legend', { className: 'pf-label', textContent: label })]);
+        q.options.forEach((o, n) => {
+          const input = pfEl('input', { type: q.type === 'choice' ? 'radio' : 'checkbox', name: id, id: id + '-' + n, value: o, checked: picked.includes(o) });
+          fieldset.append(pfEl('label', { className: 'check-label', htmlFor: input.id }, [input, o]));
+        });
+        if (q.type === 'multi'){
+          const other = picked.filter(v => !q.options.includes(v)).join(', ');
+          const input = pfEl('input', { type: 'text', id: id + '-other', value: other });
+          fieldset.append(pfEl('div', { className: 'pf-sub' }, [pfEl('label', { htmlFor: input.id, textContent: 'Other' }), input]));
+        }
+        wrap.append(fieldset);
+      }
+    } else if (q.type === 'grid'){
+      const grid = read(i, true) || {};
+      const fieldset = pfEl('fieldset', {}, [pfEl('legend', { className: 'pf-label', textContent: label })]);
+      q.rows.forEach((r, n) => {
+        const cell = grid[ids.row(i, n)];
+        const select = pfEl('select', { id: id + '-r' + n }, [pfEl('option', { value: '', textContent: 'No answer' })].concat(q.cols.map(c => pfEl('option', { value: c, textContent: c }))));
+        const c = cell ? q.cols.findIndex((col, k) => ids.key(k) === cell.key) : -1;
+        select.value = c >= 0 ? q.cols[c] : '';
+        fieldset.append(pfEl('div', { className: 'pf-grid-row' }, [pfEl('label', { htmlFor: select.id, textContent: r }), select]));
+      });
+      wrap.append(fieldset);
+    } else {
+      const value = q.type === 'date' ? read(i, true) : read(i);
+      const field = pfEl(q.type === 'text' ? 'textarea' : 'input', { id: id, value: value || '' });
+      if (q.type === 'text') field.rows = 3;
+      else field.type = q.type === 'date' ? 'date' : 'text';
+      const hint = { rating: 'Stars, 1 to ' + q.max + '.', nps: '0 = not at all likely, 10 = extremely likely.' }[q.type];
+      wrap.append(pfEl('label', { htmlFor: id, className: 'pf-label', textContent: label }), field);
+      if (hint) wrap.append(pfEl('p', { className: 'pf-hint', textContent: hint }));
+    }
+    box.append(wrap);
+  });
+}
+
+function exSubmit(){
+  pfStatus('ex-status', 'This is an example, so nothing was sent. On a real form, you would press Submit only after checking every answer.');
+}
+
+onPage('ex-form', exRenderForm);
 
 function currentTheme(){
   var attr = document.documentElement.getAttribute("data-theme");

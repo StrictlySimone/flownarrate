@@ -120,7 +120,15 @@
 
 <section id="prefill-builder">
   <div class="expr-tool">
-    <button type="button" class="copy-btn" onclick="pfLoadExample()" style="margin:0 0 24px;">Try an example</button>
+    <div class="pf-examples" role="group" aria-labelledby="pf-examples-label">
+      <p class="pf-label" id="pf-examples-label">Examples</p>
+      <button type="button" class="copy-btn pf-example-btn" data-example="away-day" aria-pressed="false" onclick="pfLoadExample('away-day')">1. Team away day</button>
+      <button type="button" class="copy-btn pf-example-btn" data-example="customer" aria-pressed="false" onclick="pfLoadExample('customer')">2. Customer feedback</button>
+      <button type="button" class="copy-btn pf-example-btn" data-example="course" aria-pressed="false" onclick="pfLoadExample('course')">3. Course evaluation</button>
+      <button type="button" class="copy-btn pf-example-btn" data-example="booking" aria-pressed="false" onclick="pfLoadExample('booking')">4. Event booking</button>
+    </div>
+    <button type="button" class="copy-btn pf-primary" onclick="pfStartOwn()">Start with your own form</button>
+    <p class="pf-callout" id="pf-example-note" role="status" hidden></p>
     <fieldset class="pf-mode">
       <legend class="pf-label">Mode</legend>
       <label class="check-label" for="pf-mode-basic"><input type="radio" name="pf-mode" id="pf-mode-basic" value="basic" checked onchange="pfShowMode()">Basic: an AI writes the answers and the link</label>
@@ -203,7 +211,7 @@
     <div id="pf-step3" data-pf-after-read="true" hidden>
       <h2 class="pf-step-heading">Last step: Open the form</h2>
       <p id="pf-length" class="pf-hint"></p>
-      <a id="pf-open" class="pf-open" href="#" target="_blank" rel="noopener noreferrer" onclick="return pfOpenCheck(event)"><span id="pf-open-text">Open the pre-filled form</span><span class="sr-only"> (opens in a new tab)</span></a>
+      <a id="pf-open" class="pf-open" href="#" target="_blank" rel="noopener noreferrer"><span id="pf-open-text">Open the pre-filled form</span><span class="sr-only"> (opens in a new tab)</span></a>
       <button type="button" class="copy-btn pf-copy" onclick="pfCopyLink()">Copy link</button>
       <p id="pf-link-status" class="pf-hint" role="status"></p>
       <p class="pf-hint">Check every answer in the form before you press Submit. An answer that doesn't match an option exactly is left blank, without any warning.</p>
@@ -240,7 +248,7 @@
 <section>
   <div class="tool-guide">
     <h2>How to use it</h2>
-    <p>To see how it works first, choose <strong>Try an example</strong>. It fills everything in for a made-up form, with today's date, and its link doesn't open a real form.</p>
+    <p>The tool opens on one of four examples, picked at random: a team away day, customer feedback, a course evaluation and an event booking. Each is a made-up form with today's date, and its link opens a stand-in form that shows the answers filled in, so you can try every step without touching a real form. When you're ready, choose <strong>Start with your own form</strong>.</p>
     <p><strong>Basic mode</strong> lets an AI do the writing:</p>
     <ol>
       <li>Ask the form's owner for one pre-filled link with every question answered. Dummy answers such as "test" are fine. Paste it into step 1, and paste the form's text too if you can (open the form, select all, copy). Choose Read questions.</li>
