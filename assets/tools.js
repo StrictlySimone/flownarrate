@@ -1197,7 +1197,7 @@ function pfAiPrompt(){
   const start = pfBase + '?' + pfFixedParams.map(([name, value]) => name + '=' + enc(value)).join('&');
   return [
     'I need to fill in a Microsoft Form. Using my notes at the end, answer every question you can. Do not write a review or a summary. Reply with only these two things:',
-    '1. List the answers, one line per question, as "Question 1: answer", so I can check them.',
+    '1. List the answers, one line per question, as "Question 1: answer", in plain words as the form shows them (not encoded), so I can check them. For a grid question, put each row on its own line as "row name: column name".',
     '2. Give me a pre-filled link for the form on its own line, with nothing around it.',
     '',
     'How to build the link:',
