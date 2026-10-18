@@ -18,7 +18,7 @@
 <title>Filling in a whole Microsoft Form at once, with a pre-filled link: FlowNarrate</title>
 <meta name="description" content="Pasting answers into a Microsoft Form one box at a time is slow with a screen reader. Pre-filled links load every answer at once. How the link works for each question type, the hidden space that silently blanks an answer, and a tool that lets an AI write the link.">
 <link rel="canonical" href="https://www.flownarrate.com/microsoft-forms-pre-filled-links.html">
-<meta name="robots" content="noindex, follow">
+<meta name="robots" content="index, follow">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="FlowNarrate">
 <meta property="og:title" content="Filling in a whole Microsoft Form at once, with a pre-filled link">
@@ -363,16 +363,13 @@
 
 <main id="main">
 <article>
-  <div class="draft-note"><b>Draft:</b> not published. Hidden from search engines and not linked from the blog yet.</div>
-  <div class="meta">Accessibility · Microsoft Forms · <time datetime="2026-10-18">18 Oct 2026</time></div>
+  <div class="meta">System Explainer · <time datetime="2026-10-18">18 Oct 2026</time></div>
   <h1>Filling in a whole Microsoft Form at once, with a pre-filled link</h1>
 
-  <p>Someone I help is registered blind. When a Microsoft Form arrives, she drafts her answers with Copilot, then pastes them into the form one question at a time with a screen reader. Moving between Copilot and the form, finding the right box and checking the paste landed is slow, and it's easy to put an answer in the wrong place. I wanted a way to load every answer at once, so all she has to do is check them and press Submit.</p>
-
-  <div class="draft-note"><b>Check:</b> she isn't named or described beyond "registered blind" unless she agrees. Swap in her own words if she's happy to be quoted.</div>
+  <p>For someone who uses a screen reader, a long Microsoft Form is slow going. A common way to cope is to draft the answers with Copilot, then paste them into the form one question at a time: move to Copilot, copy an answer, move back, find the right box, paste, check it landed. It takes a long time, and it's easy to put an answer in the wrong place. I wanted a way to load every answer at once, so the only job left is to check them and press Submit.</p>
 
   <h2>Why not an API?</h2>
-  <p>Microsoft Forms has no official API for submitting responses. Microsoft Graph doesn't cover it, and the Power Automate Forms connector only reads responses. The form page itself talks to internal endpoints, but they're undocumented and can change without warning. Submitting for her would also skip the step that matters most: her reviewing the answers.</p>
+  <p>Microsoft Forms has no official API for submitting responses. Microsoft Graph doesn't cover it, and the Power Automate Forms connector only reads responses. The form page itself talks to internal endpoints, but they're undocumented and can change without warning. Submitting on someone's behalf would also skip the step that matters most: them checking the answers.</p>
 
   <h2>Pre-filled links</h2>
   <p>Forms has a built-in feature for this. The form's owner opens the "..." menu, chooses <strong>Get Pre-filled URL</strong>, switches on <strong>Enable pre-filled answers</strong>, fills in some answers and copies the link. Anyone who opens that link sees the form with those answers already in place. The form never submits itself.</p>
@@ -466,7 +463,7 @@
   </figure>
 
   <h2>A helper for writing the links</h2>
-  <p>Writing these links by hand isn't practical, so I made a small tool with two modes. In basic mode, you paste the sample link and your notes, and the tool gives you a prompt for Copilot or another AI. The AI writes the answers and the link. You paste its reply back, and the tool checks every answer against the form, fixes hidden-space mistakes, and reads the answers back to you question by question. Advanced mode is for typing answers yourself or loading them from a file. Try an example fills it all in for a made-up form, so you can see how it works without touching a real one.</p>
+  <p>Writing these links by hand isn't practical, so I made a small tool with two modes. In basic mode, you paste the sample link and your notes, and the tool gives you a prompt for Copilot or another AI. The AI writes the answers and the link. You paste its reply back, and the tool checks every answer against the form, fixes hidden-space mistakes, and reads the answers back to you question by question. Advanced mode is for typing answers yourself or loading them from a file. It opens on one of four made-up example forms, so you can see how it works without touching a real one.</p>
 
   <p><a href="tools/microsoft-forms-prefill-link-builder.html">Try the Microsoft Forms pre-filled link builder &rarr;</a> It opens on an example form, so you can try every step before using your own.</p>
 
