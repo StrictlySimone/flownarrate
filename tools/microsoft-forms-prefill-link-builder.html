@@ -150,11 +150,13 @@
         <p class="pf-hint" id="pf-file-hint">One line "Sample link: " followed by the link, then one line per answer: "Question 1: Yes". Loading it reads the questions and fills in the answers.</p>
       </div>
     </div>
-    <button type="button" class="copy-btn" onclick="pfReadSample(true)">Read questions</button>
+    <button type="button" class="copy-btn pf-primary" onclick="pfReadSample(true)">Read questions</button>
     <p id="pf-read-status" class="pf-hint" role="status"></p>
 
     <div data-pf-mode="basic" data-pf-after-read="true" hidden>
-      <h2 class="pf-step-heading" id="pf-ai-heading" tabindex="-1">Step 2: Ask the AI</h2>
+      <div class="pf-focus">
+      <h2 class="pf-step-heading" id="pf-ai-heading" tabindex="-1">Step 2: Ask the AI <span class="pf-done" id="pf-ai-done" hidden>Done</span></h2>
+      <p class="pf-hint">Do this before step 3: copy the prompt below and paste it into a new chat with an AI.</p>
       <div class="expr-field">
         <label for="pf-notes">Your notes for the AI</label>
         <textarea id="pf-notes" rows="5" aria-describedby="pf-notes-hint" oninput="pfShowAiPrompt()"></textarea>
@@ -162,23 +164,26 @@
       </div>
       <p class="pf-label" id="pf-ai-prompt-label">AI prompt</p>
       <pre id="pf-ai-prompt" class="mermaid-code pf-box pf-collapsed" tabindex="0" aria-labelledby="pf-ai-prompt-label"></pre>
-      <button type="button" class="copy-btn" onclick="pfCopyAiPrompt()">Copy AI prompt</button>
+      <button type="button" class="copy-btn pf-primary pf-copy" onclick="pfCopyAiPrompt()">Copy AI prompt</button>
       <button type="button" class="copy-btn" aria-controls="pf-ai-prompt" aria-expanded="false" data-more="Show the whole prompt" data-less="Show less" onclick="pfToggleBox(this)">Show the whole prompt</button>
       <p id="pf-ai-status" class="pf-hint" role="status"></p>
       <p class="pf-hint">Paste the prompt into a new chat in Copilot, ChatGPT, Claude or Gemini. It replies with your answers and a link.</p>
+      </div>
 
-      <h2 class="pf-step-heading">Step 3: Paste the AI's reply</h2>
+      <h2 class="pf-step-heading">Step 3: Paste the AI's reply <span class="pf-done" id="pf-reply-done" hidden>Done</span></h2>
+      <p class="pf-callout" id="pf-reply-before">Do step 2 first: copy the AI prompt and paste it into a new AI chat. Then paste the AI's whole reply here.</p>
       <div class="expr-field">
         <label for="pf-reply">The AI's whole reply</label>
         <textarea id="pf-reply" rows="6" aria-describedby="pf-reply-hint"></textarea>
         <p class="pf-hint" id="pf-reply-hint">The tool reads the link out of the reply, checks every answer against the form, and fixes what it can. If there's no link, it builds one from the answers.</p>
       </div>
-      <button type="button" class="copy-btn" onclick="pfCheckReply()">Check the reply</button>
+      <button type="button" class="copy-btn pf-primary" onclick="pfCheckReply()">Check the reply</button>
       <p id="pf-reply-status" class="pf-hint" role="status"></p>
       <div id="pf-answers-block" hidden>
         <h3 class="pf-step-heading">Answers in the link</h3>
+        <p class="pf-hint">Change any answer, or add one the AI left out. The link updates as you go.</p>
         <ol id="pf-answers" class="pf-answers"></ol>
-        <button type="button" class="copy-btn" onclick="pfCopyAnswers()">Copy the answers</button>
+        <button type="button" class="copy-btn pf-copy" onclick="pfCopyAnswers()">Copy the answers</button>
       </div>
     </div>
 
@@ -190,7 +195,7 @@
         <p class="pf-hint" id="pf-paste-hint">Each answer starts on a new line with "Question", its number and a colon, for example "Question 3: Radio". Copy the prompt to get answers from an AI in this format.</p>
       </div>
       <button type="button" class="copy-btn" onclick="pfFillFromPaste()">Fill the answer boxes</button>
-      <button type="button" class="copy-btn" onclick="pfCopyPrompt()">Copy a prompt for an AI</button>
+      <button type="button" class="copy-btn pf-copy" onclick="pfCopyPrompt()">Copy a prompt for an AI</button>
       <p id="pf-paste-status" class="pf-hint" role="status"></p>
       <div id="pf-questions"></div>
     </div>
@@ -199,7 +204,7 @@
       <h2 class="pf-step-heading">Last step: Open the form</h2>
       <p id="pf-length" class="pf-hint"></p>
       <a id="pf-open" class="pf-open" href="#" target="_blank" rel="noopener noreferrer" onclick="return pfOpenCheck(event)"><span id="pf-open-text">Open the pre-filled form</span><span class="sr-only"> (opens in a new tab)</span></a>
-      <button type="button" class="copy-btn" onclick="pfCopyLink()">Copy link</button>
+      <button type="button" class="copy-btn pf-copy" onclick="pfCopyLink()">Copy link</button>
       <p id="pf-link-status" class="pf-hint" role="status"></p>
       <p class="pf-hint">Check every answer in the form before you press Submit. An answer that doesn't match an option exactly is left blank, without any warning.</p>
       <p class="pf-label" id="pf-link-label">The link</p>

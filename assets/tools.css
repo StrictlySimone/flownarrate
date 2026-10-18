@@ -551,3 +551,31 @@ textarea:focus-visible, summary:focus-visible, [tabindex="-1"]:focus-visible{
 
 .pf-box{white-space:pre-wrap;word-break:break-word;margin-bottom:0;}
 .pf-box.pf-collapsed{max-height:6.6em;overflow:hidden;-webkit-mask-image:linear-gradient(#000 60%, transparent);mask-image:linear-gradient(#000 60%, transparent);}
+/* Copy buttons carry a copy icon; the next action is filled */
+.pf-copy{display:inline-flex;align-items:center;gap:8px;}
+.pf-copy::before{
+  content:"";width:16px;height:16px;flex:none;background:currentColor;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='9' y='9' width='12' height='12' rx='2'/%3E%3Cpath d='M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1'/%3E%3C/svg%3E") center/contain no-repeat;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='9' y='9' width='12' height='12' rx='2'/%3E%3Cpath d='M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+.copy-btn.pf-primary{background:var(--ink);color:var(--paper);font-weight:600;}
+.copy-btn.pf-primary:hover{background:var(--succeeded);border-color:var(--succeeded);}
+.pf-focus{border:2px solid var(--succeeded);border-radius:6px;padding:4px 20px 20px;margin-top:28px;}
+.pf-focus .pf-step-heading{margin-top:18px;}
+.pf-done{
+  display:inline-block;margin-left:10px;vertical-align:middle;
+  font-family:'JetBrains Mono',monospace;font-size:0.72rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:0.05em;
+  color:var(--ok);border:1px solid var(--ok);border-radius:4px;padding:2px 8px;
+}
+.pf-done::before{content:"✓ ";}
+.pf-done[hidden]{display:none;}
+.pf-callout{
+  border-left:3px solid var(--warning);background:var(--paper);
+  padding:10px 14px;margin:0 0 16px;font-size:0.95rem;color:var(--ink);
+}
+.pf-answers .pf-change{margin-top:6px;min-height:36px;padding:4px 12px;}
+.pf-inline-edit{border:1px solid var(--rule);border-radius:4px;padding:4px 14px 14px;margin-top:8px;}
+.pf-inline-edit .pf-question{border-top:none;padding-top:8px;}
+.pf-question select{margin-bottom:4px;}
+@media (max-width:640px){ .pf-focus{padding:4px 14px 16px;} }

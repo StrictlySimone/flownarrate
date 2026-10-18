@@ -747,6 +747,8 @@ function pfDetectType(raw){
 
 function pfReadSample(moveFocus){
   pfSetExample(false);
+  ['pf-ai-done', 'pf-reply-done'].forEach(id => { document.getElementById(id).hidden = true; });
+  document.getElementById('pf-reply-before').hidden = false;
   const input = document.getElementById('pf-sample').value.trim();
   let url;
   try {
@@ -774,6 +776,7 @@ function pfReadSample(moveFocus){
       type: found.type,
       sample: found.sample || '',
       options: found.options || [],
+      formOptions: [],
       answer: '',
       leaveOut: false
     };
@@ -789,6 +792,7 @@ function pfReadSample(moveFocus){
   pfRenderQuestions();
   pfRenderTestOptions();
   pfGridNamesFromFormText();
+  pfOptionsFromFormText();
   pfReady = true;
   pfShowMode();
   pfShowAiPrompt();
@@ -811,7 +815,7 @@ function pfRenderQuestions(){
   pfQuestions.forEach(q => box.append(pfRenderQuestion(q)));
 }
 
-function pfRenderQuestion(q){
+function pfRenderQuestion(q, inline){
   const id = 'pf-q' + q.number;
   const wrap = pfEl('div', { className: 'pf-question', id: id + '-block' });
   const hint = pfEl('p', { className: 'pf-hint', id: id + '-hint' });
@@ -848,6 +852,31 @@ function pfRenderQuestion(q){
     });
     wrap.append(fieldset);
     pfRefreshGridSelects(q);
+  } else if (q.type === 'choice' && q.formOptions.length){
+    const select = pfEl('select', { id: id, onchange: e => { q.answer = e.target.value; pfUpdateLink(); } });
+    select.append(pfEl('option', { value: '', textContent: 'No answer' }));
+    q.formOptions.forEach(o => select.append(pfEl('option', { value: o, textContent: o.trim() })));
+    select.value = q.formOptions.includes(pfExactOption(q, q.answer)) ? pfExactOption(q, q.answer) : '';
+    select.setAttribute('aria-describedby', hint.id);
+    wrap.append(pfEl('label', { htmlFor: id, className: 'pf-label', textContent: pfQuestionLabel(q) }), select, hint);
+  } else if (q.type === 'multi' && q.formOptions.length){
+    const fieldset = pfEl('fieldset', {}, [pfEl('legend', { className: 'pf-label', textContent: pfQuestionLabel(q) })]);
+    const picked = q.answer.split('\n').filter(Boolean);
+    const isOption = v => q.formOptions.some(o => pfExactOption({ options: [o] }, v) === o);
+    const other = pfEl('input', { type: 'text', id: id + '-other', value: picked.filter(v => !isOption(v)).join(', ') });
+    const sync = () => {
+      const ticked = Array.from(fieldset.querySelectorAll('input[type="checkbox"]:checked')).map(c => c.value);
+      const typed = other.value.split(',').map(v => v.trim()).filter(Boolean);
+      q.answer = ticked.concat(typed).join('\n');
+      pfUpdateLink();
+    };
+    q.formOptions.forEach((o, i) => {
+      const box = pfEl('input', { type: 'checkbox', id: id + '-o' + i, value: o, checked: picked.some(v => pfExactOption({ options: [o] }, v) === o), onchange: sync });
+      fieldset.append(pfEl('label', { className: 'check-label', htmlFor: box.id }, [box, o.trim()]));
+    });
+    other.oninput = sync;
+    fieldset.append(pfEl('div', { className: 'pf-sub' }, [pfEl('label', { htmlFor: other.id, textContent: 'Other (typed answer)' }), other]), hint);
+    wrap.append(fieldset);
   } else {
     const multiline = q.type === 'text' || q.type === 'multi';
     const field = pfEl(multiline ? 'textarea' : 'input', { id: id,
@@ -860,9 +889,11 @@ function pfRenderQuestion(q){
     wrap.append(pfEl('label', { htmlFor: id, className: 'pf-label', textContent: pfQuestionLabel(q) }), field, hint);
   }
 
-  const leaveOut = pfEl('input', { type: 'checkbox', id: id + '-out', checked: q.leaveOut,
-    onchange: e => { q.leaveOut = e.target.checked; pfUpdateLink(); } });
-  wrap.append(pfEl('label', { className: 'check-label', htmlFor: leaveOut.id }, [leaveOut, 'Leave question ' + q.number + ' out of the link (paste it by hand instead)']));
+  if (!inline){
+    const leaveOut = pfEl('input', { type: 'checkbox', id: id + '-out', checked: q.leaveOut,
+      onchange: e => { q.leaveOut = e.target.checked; pfUpdateLink(); } });
+    wrap.append(pfEl('label', { className: 'check-label', htmlFor: leaveOut.id }, [leaveOut, 'Leave question ' + q.number + ' out of the link (paste it by hand instead)']));
+  }
   pfUpdateHint(q, hint);
   return wrap;
 }
@@ -886,6 +917,10 @@ function pfUpdateHint(q, el){
   if (q.type === 'text'){
     hint.textContent = 'Text answer. ' + len.toLocaleString('en-GB') + ' characters.' +
       (len > 4000 ? ' Over 4,000 characters, which is more than a long answer box takes.' : '');
+  } else if (q.type === 'choice' && q.formOptions.length){
+    hint.textContent = 'Choice, pick one.';
+  } else if (q.type === 'multi' && q.formOptions.length){
+    hint.textContent = 'Choice, pick one or more. Tick each that applies.';
   } else if (q.type === 'choice'){
     hint.textContent = 'Choice, pick one. Type the option exactly as the form shows it. Sample answer: ' + pfShowOption(q.sample);
   } else if (q.type === 'multi'){
@@ -996,6 +1031,27 @@ function pfFillFromPaste(){
   return msg;
 }
 
+// Several picks may come one per line, or on one line with commas. When the
+// form's options are known, they are found by name, so an option that itself
+// contains a comma stays whole; whatever is left over is a typed "Other".
+function pfSplitMulti(q, answer){
+  const clean = v => v.replace(/^\s*[-*•]\s*/, '').trim();
+  const norm = v => v.replace(/\u00a0/g, ' ').trim().toLowerCase();
+  if (q.formOptions.length){
+    let rest = ' ' + answer.replace(/\u00a0/g, ' ') + ' ';
+    const picks = [];
+    q.formOptions.slice().sort((x, y) => y.length - x.length).forEach(o => {
+      const at = rest.toLowerCase().indexOf(norm(o));
+      if (at >= 0){ picks.push(o); rest = rest.slice(0, at) + '\n' + rest.slice(at + norm(o).length); }
+    });
+    const ordered = q.formOptions.filter(o => picks.includes(o));
+    const other = rest.split(/[\n,;]/).map(clean).filter(v => v && !/^(and|other:?)$/i.test(v));
+    return ordered.concat(other);
+  }
+  const parts = /[\n;]/.test(answer) ? answer.split(/[\n;]/) : answer.split(',');
+  return parts.map(clean).filter(Boolean);
+}
+
 function pfApplyAnswers(text){
   const blocks = {};
   let current = null;
@@ -1017,9 +1073,11 @@ function pfApplyAnswers(text){
     if (!answer){ missing.push(q.number); return; }
     filled.push(q.number);
     if (q.type === 'multi'){
-      q.answer = answer.split(/\n|;/).map(s => s.replace(/^\s*[-*•]\s*/, '').trim()).filter(Boolean).join('\n');
+      q.answer = pfSplitMulti(q, answer).join('\n');
     } else if (q.type === 'grid'){
-      answer.split('\n').forEach(line => {
+      // One row per line, or several on a line split by ; or by a comma
+      // that starts the next "row: column" pair.
+      answer.split(/\n|;|,(?=[^,:]+:)/).forEach(line => {
         const m = line.replace(/^\s*[-*•]\s*/, '').match(/^(.+?)\s*[:=]\s*(.+)$/);
         if (!m) return;
         const rowText = m[1].trim().toLowerCase(), colText = m[2].trim().toLowerCase();
@@ -1075,6 +1133,7 @@ function pfRenderCopyBlocks(){
   list.forEach(q => {
     const btn = pfEl('button', { type: 'button', className: 'copy-btn',
       textContent: 'Question ' + q.number + ': copy answer',
+      className: 'copy-btn pf-copy',
       onclick: () => pfCopyText(q.answer).then(ok => pfStatus('pf-copy-status', ok
         ? 'Question ' + q.number + ' answer copied. ' + q.answer.length + ' characters.'
         : 'Copying was blocked.')) });
@@ -1161,6 +1220,11 @@ function pfShowMode(){
     el.hidden = el.dataset.pfMode !== mode || (el.dataset.pfAfterRead === 'true' && !pfReady);
   });
   document.querySelectorAll('[data-pf-after-read]:not([data-pf-mode])').forEach(el => { el.hidden = !pfReady; });
+  // Close any answer being changed in place, so each field exists once.
+  if (pfReady && document.querySelector('.pf-inline-edit')){
+    pfRenderAnswerList();
+    pfRenderQuestions();
+  }
 }
 
 // Question titles: the titles box, or else lines like "3. How did you hear
@@ -1179,6 +1243,24 @@ function pfTitles(){
 // Grid row and column names from the copied form text: the lines under the
 // grid question are the column headings (tab-separated, or one per line)
 // followed by one line per row.
+// Choice options from the copied form text, so answers can be picked from
+// a list. An option the sample link used keeps the sample's exact spelling.
+const pfNotOptions = /^(enter your answer|select your answer|please input date.*|the value must be a number|not at all likely|extremely likely|required|other|\*)$/i;
+
+function pfOptionsFromFormText(){
+  const lines = document.getElementById('pf-form-text').value.split(/\r?\n/);
+  pfQuestions.forEach(q => {
+    q.formOptions = [];
+    if (q.type !== 'choice' && q.type !== 'multi') return;
+    const startAt = lines.findIndex(l => new RegExp('^\\s*' + q.number + '\\.\\s').test(l));
+    if (startAt < 0) return;
+    for (let i = startAt + 1; i < lines.length && !/^\s*\d+\.\s/.test(lines[i]); i++){
+      const text = lines[i].trim();
+      if (text && !pfNotOptions.test(text)) q.formOptions.push(pfExactOption(q, text));
+    }
+  });
+}
+
 function pfGridNamesFromFormText(){
   const lines = document.getElementById('pf-form-text').value.split(/\r?\n/);
   pfQuestions.filter(q => q.type === 'grid').forEach(q => {
@@ -1256,10 +1338,51 @@ function pfShowAiPrompt(){
 function pfCopyAiPrompt(){
   pfShowAiPrompt();
   pfCopyText(pfAiPrompt()).then(ok => {
+    if (ok) pfMarkDone('pf-ai-done');
     pfStatus('pf-ai-status', ok
       ? 'AI prompt copied. It starts "I need to fill in a Microsoft Form". Paste it into a new chat in Copilot or another AI, then paste the whole reply in step 3.'
       : 'Copying was blocked. Expand the prompt below, select it all and copy it yourself.');
   });
+}
+
+// The checked answers, each with a button to change it in place. Editing
+// borrows the advanced-mode field for that question, so the ids stay unique.
+function pfRenderAnswerList(){
+  const list = document.getElementById('pf-answers');
+  list.textContent = '';
+  let answered = 0;
+  pfQuestions.forEach(q => {
+    const text = pfDescribe(q);
+    if (text) answered++;
+    const change = pfEl('button', { type: 'button', className: 'copy-btn pf-change', id: 'pf-change-' + q.number,
+      textContent: text ? 'Change answer' : 'Add answer', onclick: () => pfEditAnswer(q) });
+    change.setAttribute('aria-label', (text ? 'Change answer to question ' : 'Add answer to question ') + q.number);
+    list.append(pfEl('li', { id: 'pf-answer-' + q.number }, [
+      pfEl('span', { className: 'pf-answers-q', textContent: pfQuestionLabel(q) }),
+      pfEl('span', { className: text ? 'pf-answers-a' : 'pf-answers-a pf-answers-none', textContent: text || 'No answer' }),
+      change
+    ]));
+  });
+  return answered;
+}
+
+function pfEditAnswer(q){
+  const item = document.getElementById('pf-answer-' + q.number);
+  const old = document.getElementById('pf-q' + q.number + '-block');
+  if (old) old.remove();
+  const editor = pfRenderQuestion(q, true);
+  const done = pfEl('button', { type: 'button', className: 'copy-btn pf-primary', textContent: 'Done',
+    onclick: () => {
+      pfRenderAnswerList();
+      pfRenderQuestions();
+      pfUpdateLink();
+      document.getElementById('pf-change-' + q.number).focus();
+      pfStatus('pf-reply-status', 'Question ' + q.number + ' ' + (pfDescribe(q) ? 'updated: ' + pfDescribe(q) : 'has no answer') + '. The link uses it.');
+    } });
+  done.setAttribute('aria-label', 'Done with question ' + q.number);
+  item.querySelector('.pf-change').replaceWith(pfEl('div', { className: 'pf-inline-edit' }, [editor, done]));
+  const field = editor.querySelector('input, select, textarea');
+  if (field) field.focus();
 }
 
 function pfCopyAnswers(){
@@ -1294,8 +1417,19 @@ function pfDescribe(q){
   return q.answer.replace(/\n/g, ', ');
 }
 
+function pfMarkDone(id){
+  const el = document.getElementById(id);
+  if (el) el.hidden = false;
+  const before = document.getElementById('pf-reply-before');
+  if (before && id === 'pf-ai-done') before.hidden = true;
+}
+
 function pfCheckReply(){
   const reply = document.getElementById('pf-reply').value;
+  if (!reply.trim()){
+    pfStatus('pf-reply-status', 'Paste the AI\'s reply first. Copy the AI prompt in step 2, paste it into a new AI chat, then paste the whole reply here.');
+    return;
+  }
   const problems = [];
   pfQuestions.forEach(q => { q.answer = ''; q.leaveOut = false; if (q.rows) q.rows.forEach(r => { r.answer = ''; }); });
 
@@ -1327,19 +1461,10 @@ function pfCheckReply(){
 
   pfRenderQuestions();
   pfUpdateLink();
-  const list = document.getElementById('pf-answers');
-  list.textContent = '';
-  let answered = 0;
-  pfQuestions.forEach(q => {
-    const text = pfDescribe(q);
-    if (text) answered++;
-    list.append(pfEl('li', {}, [
-      pfEl('span', { className: 'pf-answers-q', textContent: pfQuestionLabel(q) }),
-      pfEl('span', { className: text ? 'pf-answers-a' : 'pf-answers-a pf-answers-none', textContent: text || 'No answer' })
-    ]));
-  });
+  const answered = pfRenderAnswerList();
   document.getElementById('pf-answers-block').hidden = false;
 
+  if (answered > 0) pfMarkDone('pf-reply-done');
   if (answered === 0){
     pfStatus('pf-reply-status', 'No answers found in that reply: it has no form link and no lines starting "Question 1:". The AI probably did not get the whole prompt. Check that what you pasted into the AI starts "I need to fill in a Microsoft Form", then try again in a new chat.');
     return;
@@ -1348,7 +1473,7 @@ function pfCheckReply(){
     ? 'Read the link from the reply: ' + answered + ' of ' + pfQuestions.length + ' questions answered.'
     : 'No link in the reply, so the tool built one from the answers: ' + answered + ' of ' + pfQuestions.length + ' questions answered.';
   const blank = pfQuestions.filter(q => !pfDescribe(q)).map(q => q.number);
-  if (blank.length) msg += ' Not answered: question ' + blank.join(', ') + '. Fill ' + (blank.length === 1 ? 'it' : 'them') + ' in on the form, or add to your notes and ask the AI again.';
+  if (blank.length) msg += ' Not answered: question ' + blank.join(', ') + '. Use Add answer in the list below, or fill ' + (blank.length === 1 ? 'it' : 'them') + ' in on the form.';
   if (problems.length) msg += ' Fixed or flagged: ' + problems.join('; ') + '.';
   msg += ' The answers are listed below. The Open the pre-filled form link uses them.';
   pfStatus('pf-reply-status', msg);
@@ -1446,6 +1571,7 @@ function pfLoadExample(){
   const link = pfBuildUrl();
   document.getElementById('pf-reply').value = 'Here are your answers:\n' + answers + '\n\nYour pre-filled link:\n' + link;
   pfCheckReply();
+  pfMarkDone('pf-ai-done');
   pfSetExample(true);
   pfStatus('pf-read-status', 'Example loaded: a made-up 7-question form, with notes, an AI reply and the checked answers filled in. Step 3 lists the answers.');
 }
