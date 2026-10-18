@@ -563,7 +563,28 @@ function copyOdataQuery(){
   });
 }
 
+// Example dates follow the visitor's clock (in UTC, as Power Automate does),
+// so the samples always show today rather than a fixed date.
+function showDateExamples(){
+  const now = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  const y = now.getUTCFullYear(), mo = pad(now.getUTCMonth() + 1), d = pad(now.getUTCDate());
+  const h = now.getUTCHours(), mi = pad(now.getUTCMinutes());
+  const samples = {
+    'yyyy-MM-dd': y + '-' + mo + '-' + d,
+    'dd/MM/yyyy': d + '/' + mo + '/' + y,
+    'dddd, MMMM d': now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' }),
+    'HH:mm': pad(h) + ':' + mi,
+    'hh:mm tt': pad(h % 12 || 12) + ':' + mi + ' ' + (h < 12 ? 'AM' : 'PM')
+  };
+  document.querySelectorAll('#df-format option[data-example]').forEach(opt => {
+    opt.textContent = samples[opt.value] + ' (' + opt.dataset.example + ')';
+  });
+  document.getElementById('df-example-utc').textContent = y + '-' + mo + '-' + d + 'T' + pad(h) + ':' + mi + ':00Z';
+}
+
 onPage('df-result', updateDateFormatter);
+onPage('df-example-utc', showDateExamples);
 onPage('loosen-result', updateLoosenedSchema);
 onPage('ac-result', updateAdaptiveCard);
 onPage('eh-runafter', updateErrorHandler);
@@ -725,6 +746,7 @@ function pfDetectType(raw){
 }
 
 function pfReadSample(moveFocus){
+  pfSetExample(false);
   const input = document.getElementById('pf-sample').value.trim();
   let url;
   try {
@@ -1185,7 +1207,7 @@ function pfAiPrompt(){
     '- Text and number questions: the text or number itself. A star rating is the number of stars.',
     '- Choice, pick one: the option in double quotes. "Yes" becomes %22Yes%22.',
     '- Choice, pick one or more: a list inside double quotes, with inner quotes escaped. "[\\"Radio\\",\\"Flyer\\"]" becomes %22%5B%5C%22Radio%5C%22%2C%5C%22Flyer%5C%22%5D%22. Put a typed "Other" answer in the list as its own item.',
-    '- Date: "yyyy-mm-dd" in double quotes. "2026-10-18" becomes %222026-10-18%22.',
+    '- Date: "yyyy-mm-dd" in double quotes. "' + pfToday() + '" becomes %22' + pfToday() + '%22.',
     '- Grid: {"<row ID>":{"id":<column id>,"key":"<column key>"},...} with one entry per answered row, then URL-encoded.',
     '- Use each option\'s wording exactly as the form shows it. If an option is listed below with %C2%A0 in it, keep the %C2%A0: it is a hidden space the form needs.',
     '',
@@ -1307,6 +1329,81 @@ function pfLoadFile(input){
     pfStatus('pf-read-status', 'Loaded ' + file.name + '. ' + pfFillFromPaste());
   };
   reader.readAsText(file);
+}
+
+// --- Example ---
+// A made-up form, so the example link can never reach a real form. Dates
+// are the visitor's today.
+let pfExample = false;
+
+function pfToday(){
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+function pfSetExample(on){
+  pfExample = on;
+  document.getElementById('pf-open-text').textContent = on ? 'Example only: this link doesn\'t open a real form' : 'Open the pre-filled form';
+}
+
+function pfOpenCheck(event){
+  if (!pfExample) return true;
+  event.preventDefault();
+  pfStatus('pf-link-status', 'This is the example, so there is no real form to open. Paste your own sample link in step 1 to use the tool.');
+  return false;
+}
+
+function pfLoadExample(){
+  const today = pfToday();
+  const ukToday = today.split('-').reverse().join('/');
+  const id = n => 'r' + String(n).padStart(32, '0');
+  const key = n => '00000000-0000-4000-8000-' + String(n).padStart(12, '0');
+  const rows = ['Venue', 'Food', 'Activities', 'Timing'];
+  const cols = ['Poor', 'Fair', 'Good', 'Excellent'];
+  const grid = {};
+  rows.forEach((r, i) => { grid[id(100 + i)] = { id: i + 1, key: key(i + 1) }; });
+  const sample = 'https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=EXAMPLE-NOT-A-REAL-FORM' + [
+    [id(1), JSON.stringify('Yes')],
+    [id(2), JSON.stringify(JSON.stringify(['Planning']))],
+    [id(3), JSON.stringify(grid)],
+    [id(4), JSON.stringify(today)],
+    [id(5), '3'],
+    [id(6), '5'],
+    [id(7), 'test']
+  ].map(([n, v]) => '&' + n + '=' + encodeURIComponent(v)).join('');
+  const formText = [
+    'Team away day feedback',
+    '1. Did you attend the away day?', 'Yes', 'No',
+    '2. Which sessions did you go to?', 'Planning', 'Workshops', 'Team lunch', 'Quiz',
+    '3. Please rate the following', cols.join('\t')].concat(rows, [
+    '4. When did you attend?',
+    '5. Rate the day out of 5',
+    '6. How many people were in your team?',
+    '7. What would you change next time?']).join('\n');
+  const answers = [
+    'Question 1: Yes',
+    'Question 2:', 'Workshops', 'Team lunch',
+    'Question 3:', 'Venue: Excellent', 'Food: Good', 'Activities: Good', 'Timing: Fair',
+    'Question 4: ' + ukToday,
+    'Question 5: 4',
+    'Question 6: 6',
+    'Question 7: A longer lunch break, and the quiz earlier in the day.'
+  ].join('\n');
+
+  document.getElementById('pf-mode-basic').checked = true;
+  document.getElementById('pf-sample').value = sample;
+  document.getElementById('pf-form-text').value = formText;
+  document.getElementById('pf-titles').value = '';
+  pfReadSample(false);
+  document.getElementById('pf-notes').value = 'I went to the away day today, ' + ukToday + '. I went to the workshops and the team lunch. ' +
+    'The venue was excellent, the food and activities were good, but the timing was only fair. ' +
+    'Four stars out of five. There were six of us. Next time I\'d like a longer lunch break and the quiz earlier in the day.';
+  pfApplyAnswers(answers);
+  const link = pfBuildUrl();
+  document.getElementById('pf-reply').value = 'Here are your answers:\n' + answers + '\n\nYour pre-filled link:\n' + link;
+  pfCheckReply();
+  pfSetExample(true);
+  pfStatus('pf-read-status', 'Example loaded: a made-up 7-question form, with notes, an AI reply and the checked answers filled in. Step 3 lists the answers.');
 }
 
 // Browsers can restore the sample link after Back; read it straight away.

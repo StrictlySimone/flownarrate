@@ -120,6 +120,7 @@
 
 <section id="prefill-builder">
   <div class="expr-tool">
+    <button type="button" class="copy-btn" onclick="pfLoadExample()" style="margin:0 0 24px;">Try an example</button>
     <fieldset class="pf-mode">
       <legend class="pf-label">Mode</legend>
       <label class="check-label" for="pf-mode-basic"><input type="radio" name="pf-mode" id="pf-mode-basic" value="basic" checked onchange="pfShowMode()">Basic: an AI writes the answers and the link</label>
@@ -194,7 +195,7 @@
     <div id="pf-step3" data-pf-after-read="true" hidden>
       <h2 class="pf-step-heading">Last step: Open the form</h2>
       <p id="pf-length" class="pf-hint"></p>
-      <a id="pf-open" class="pf-open" href="#" target="_blank" rel="noopener noreferrer">Open the pre-filled form<span class="sr-only"> (opens in a new tab)</span></a>
+      <a id="pf-open" class="pf-open" href="#" target="_blank" rel="noopener noreferrer" onclick="return pfOpenCheck(event)"><span id="pf-open-text">Open the pre-filled form</span><span class="sr-only"> (opens in a new tab)</span></a>
       <button type="button" class="copy-btn" onclick="pfCopyLink()">Copy link</button>
       <p id="pf-link-status" class="pf-hint" role="status"></p>
       <p class="pf-hint">Check every answer in the form before you press Submit. An answer that doesn't match an option exactly is left blank, without any warning.</p>
@@ -232,6 +233,7 @@
 <section>
   <div class="tool-guide">
     <h2>How to use it</h2>
+    <p>To see how it works first, choose <strong>Try an example</strong>. It fills everything in for a made-up form, with today's date, and its link doesn't open a real form.</p>
     <p><strong>Basic mode</strong> lets an AI do the writing:</p>
     <ol>
       <li>Ask the form's owner for one pre-filled link with every question answered. Dummy answers such as "test" are fine. Paste it into step 1, and paste the form's text too if you can (open the form, select all, copy). Choose Read questions.</li>
