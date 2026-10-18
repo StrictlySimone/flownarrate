@@ -1667,6 +1667,7 @@ function pfLoadExample(slug){
   const answers = pfExampleReply(ex);
   pfApplyAnswers(answers);
   document.getElementById('pf-reply').value = answers + '\n\nYour pre-filled link:\n' + pfBuildUrl();
+  document.getElementById('pf-paste').value = answers;
   pfCheckReply();
   pfMarkDone('pf-ai-done');
   pfSetExample(ex);
