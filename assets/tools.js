@@ -740,7 +740,7 @@ function pfReadSample(moveFocus){
     return;
   }
 
-  const titles = document.getElementById('pf-titles').value.split('\n').map(t => t.trim()).filter(Boolean);
+  const titles = pfTitles();
   pfBase = url.origin + url.pathname;
   pfFixedParams = params.filter(([name]) => !isQuestion(name));
   pfQuestions = params.filter(([name]) => isQuestion(name)).map(([name, value], i) => {
@@ -766,15 +766,15 @@ function pfReadSample(moveFocus){
 
   pfRenderQuestions();
   pfRenderTestOptions();
-  document.getElementById('pf-step2').hidden = false;
-  document.getElementById('pf-step3').hidden = false;
-  document.getElementById('pf-step4').hidden = false;
+  pfGridNamesFromFormText();
+  pfReady = true;
+  pfShowMode();
   pfUpdateLink();
 
   const counts = {};
   pfQuestions.forEach(q => { counts[q.type] = (counts[q.type] || 0) + 1; });
   const summary = Object.keys(counts).map(t => counts[t] + ' ' + pfTypeNames[t]).join(', ');
-  if (moveFocus) document.getElementById('pf-step2-heading').focus();
+  if (moveFocus) document.getElementById(pfMode() === 'basic' ? 'pf-ai-heading' : 'pf-step2-heading').focus();
   pfStatus('pf-read-status', 'Found ' + pfQuestions.length + ' questions: ' + summary + '. Step 2 is next.');
 }
 
@@ -937,7 +937,18 @@ function pfCopyLink(){
 // "Question 3: answer" blocks from Copilot. Markdown bold around the
 // heading is common, so it is stripped.
 function pfFillFromPaste(){
-  const text = document.getElementById('pf-paste').value;
+  const result = pfApplyAnswers(document.getElementById('pf-paste').value);
+  pfRenderQuestions();
+  pfUpdateLink();
+  let msg = 'Filled ' + result.filled.length + ' of ' + pfQuestions.length + ' questions.';
+  if (result.missing.length) msg += ' No answer found for question ' + result.missing.join(', ') + '.';
+  if (result.problems.length) msg += ' Could not use: ' + result.problems.join('; ') + '.';
+  msg += ' Check the answers in the boxes below.';
+  pfStatus('pf-paste-status', msg);
+  return msg;
+}
+
+function pfApplyAnswers(text){
   const blocks = {};
   let current = null;
   text.split(/\r?\n/).forEach(line => {
@@ -976,14 +987,7 @@ function pfFillFromPaste(){
       q.answer = answer;
     }
   });
-
-  pfRenderQuestions();
-  pfUpdateLink();
-  let msg = 'Filled ' + filled.length + ' of ' + pfQuestions.length + ' questions.';
-  if (missing.length) msg += ' No answer found for question ' + missing.join(', ') + '.';
-  if (problems.length) msg += ' Could not use: ' + problems.join('; ') + '.';
-  msg += ' Check the answers in the boxes below.';
-  pfStatus('pf-paste-status', msg);
+  return { filled: filled, missing: missing, problems: problems };
 }
 
 function pfCopilotPrompt(){
@@ -1095,8 +1099,219 @@ function pfMakeTests(){
   pfStatus('pf-test-status', msg);
 }
 
+// --- Basic and advanced modes ---
+// Basic: the AI writes the answers and the link, and the tool checks the
+// link. Advanced: answers typed into boxes or loaded from a file.
+let pfReady = false;
+
+function pfMode(){
+  return document.getElementById('pf-mode-advanced').checked ? 'advanced' : 'basic';
+}
+
+function pfShowMode(){
+  const mode = pfMode();
+  document.querySelectorAll('[data-pf-mode]').forEach(el => {
+    el.hidden = el.dataset.pfMode !== mode || (el.dataset.pfAfterRead === 'true' && !pfReady);
+  });
+  document.querySelectorAll('[data-pf-after-read]:not([data-pf-mode])').forEach(el => { el.hidden = !pfReady; });
+}
+
+// Question titles: the titles box, or else lines like "3. How did you hear
+// about this event?" in the copied form text.
+function pfTitles(){
+  const typed = document.getElementById('pf-titles').value.split('\n').map(t => t.trim()).filter(Boolean);
+  if (typed.length) return typed;
+  const titles = [];
+  document.getElementById('pf-form-text').value.split(/\r?\n/).forEach(line => {
+    const m = line.match(/^\s*(\d+)\.\s+(.+?)\s*$/);
+    if (m) titles[Number(m[1]) - 1] = m[2];
+  });
+  return titles;
+}
+
+// Grid row and column names from the copied form text: the lines under the
+// grid question are the column headings (tab-separated, or one per line)
+// followed by one line per row.
+function pfGridNamesFromFormText(){
+  const lines = document.getElementById('pf-form-text').value.split(/\r?\n/);
+  pfQuestions.filter(q => q.type === 'grid').forEach(q => {
+    const startAt = lines.findIndex(l => new RegExp('^\\s*' + q.number + '\\.\\s').test(l));
+    if (startAt < 0) return;
+    const block = [];
+    for (let i = startAt + 1; i < lines.length && !/^\s*\d+\.\s/.test(lines[i]); i++){
+      if (lines[i].trim()) block.push(lines[i]);
+    }
+    let cols, rows;
+    if (block.length && block[0].includes('\t')){
+      cols = block[0].split('\t').map(c => c.trim()).filter(Boolean);
+      rows = block.slice(1).map(r => r.split('\t')[0].trim());
+    } else {
+      const k = block.length - q.rows.length;
+      if (k < 1) return;
+      cols = block.slice(0, k).map(c => c.trim());
+      rows = block.slice(k).map(r => r.trim());
+    }
+    if (rows.length !== q.rows.length || cols.length < Math.max(...q.cols.map(c => c.id))) return;
+    q.rows.forEach((r, i) => { r.name = rows[i]; });
+    q.cols.forEach(c => { c.name = cols[c.id - 1]; });
+  });
+}
+
+// The prompt carries everything the AI needs to write the link: the IDs, the
+// exact options seen in the sample, and how each question type is encoded.
+function pfAiPrompt(){
+  const notes = document.getElementById('pf-notes').value.trim();
+  const formText = document.getElementById('pf-form-text').value.trim();
+  const enc = v => encodeURIComponent(v);
+  const lines = pfQuestions.map(q => {
+    let line = 'Question ' + q.number + (q.title ? ' (' + q.title + ')' : '') + ': ID ' + q.param + ', ' + pfTypeNames[q.type] + '.';
+    if (q.options.length) line += ' Option(s) seen in the sample, encoded exactly: ' + q.options.map(o => enc(o)).join(', ') + '.';
+    if (q.type === 'grid'){
+      line += ' Rows in order: ' + q.rows.map((r, i) => (r.name || 'Row ' + (i + 1)) + ' = ' + r.param).join(', ') + '.';
+      line += ' Columns: ' + q.cols.map(c => 'id ' + c.id + (c.name ? ' (' + c.name + ')' : '') + ' key ' + c.key).join(', ') + '. Column id 1 is the first column on the form.';
+    }
+    return line;
+  });
+  const start = pfBase + '?' + pfFixedParams.map(([name, value]) => name + '=' + enc(value)).join('&');
+  return [
+    'I need to fill in a Microsoft Form. Using my notes, answer every question you can. Then:',
+    '1. List the answers, one line per question, as "Question 1: answer", so I can check them.',
+    '2. Give me a pre-filled link for the form on its own line, with nothing around it.',
+    '',
+    'How to build the link:',
+    '- Start with exactly: ' + start,
+    '- For each answered question add &<question ID>=<value>. Leave out questions you cannot answer.',
+    '- URL-encode every value: space %20, " %22, & %26, comma %2C, colon %3A, / %2F, [ %5B, ] %5D, \\ %5C, { %7B, } %7D.',
+    '- Text and number questions: the text or number itself. A star rating is the number of stars.',
+    '- Choice, pick one: the option in double quotes. "Yes" becomes %22Yes%22.',
+    '- Choice, pick one or more: a list inside double quotes, with inner quotes escaped. "[\\"Radio\\",\\"Flyer\\"]" becomes %22%5B%5C%22Radio%5C%22%2C%5C%22Flyer%5C%22%5D%22. Put a typed "Other" answer in the list as its own item.',
+    '- Date: "yyyy-mm-dd" in double quotes. "2026-10-18" becomes %222026-10-18%22.',
+    '- Grid: {"<row ID>":{"id":<column id>,"key":"<column key>"},...} with one entry per answered row, then URL-encoded.',
+    '- Use each option\'s wording exactly as the form shows it. If an option is listed below with %C2%A0 in it, keep the %C2%A0: it is a hidden space the form needs.',
+    '',
+    'Questions:',
+    lines.join('\n'),
+    formText ? '\nThe form as it appears on screen (for question wording and options):\n' + formText : '',
+    '\nMy notes:',
+    notes || '(none, ask me if you need more information)'
+  ].join('\n');
+}
+
+function pfCopyAiPrompt(){
+  navigator.clipboard.writeText(pfAiPrompt()).then(() => {
+    pfStatus('pf-ai-status', 'AI prompt copied. Paste it into Copilot or another AI, then paste its reply in step 3.');
+  }).catch(() => {
+    document.getElementById('pf-ai-prompt').hidden = false;
+    document.getElementById('pf-ai-prompt').textContent = pfAiPrompt();
+    pfStatus('pf-ai-status', 'Copy failed. The prompt is shown below; select it and copy it yourself.');
+  });
+}
+
+// Read the answers back out of a link, so the AI's link can be checked and
+// rebuilt with the tool's exact encoding.
+function pfDecodeInto(q, raw, problems){
+  const fail = () => problems.push('question ' + q.number + ' could not be read');
+  try {
+    if (q.type === 'text' || q.type === 'number'){ q.answer = raw; return; }
+    if (q.type === 'choice' || q.type === 'date'){ q.answer = JSON.parse(raw); return; }
+    if (q.type === 'multi'){ q.answer = JSON.parse(JSON.parse(raw)).join('\n'); return; }
+    const grid = JSON.parse(raw);
+    q.rows.forEach(row => {
+      const cell = grid[row.param];
+      const col = cell && q.cols.find(c => c.key === cell.key || c.id === cell.id);
+      row.answer = col ? col.key : '';
+      if (cell && !col) problems.push('question ' + q.number + ', ' + row.name + ' uses a column the sample link never used');
+    });
+  } catch(e) { fail(); }
+}
+
+function pfDescribe(q){
+  if (q.type === 'grid'){
+    const done = q.rows.filter(r => r.answer).map(r => r.name + ': ' + (q.cols.find(c => c.key === r.answer).name || 'column ' + q.cols.find(c => c.key === r.answer).id));
+    return done.length ? done.join('; ') : '';
+  }
+  if (q.type === 'date' && q.answer) return q.answer.split('-').reverse().join('/');
+  return q.answer.replace(/\n/g, ', ');
+}
+
+function pfCheckReply(){
+  const reply = document.getElementById('pf-reply').value;
+  const problems = [];
+  pfQuestions.forEach(q => { q.answer = ''; q.leaveOut = false; if (q.rows) q.rows.forEach(r => { r.answer = ''; }); });
+
+  const found = reply.match(/https:\/\/[^\s<>()\[\]`]*ResponsePage\.aspx\?[^\s<>()\[\]`]+/i);
+  let source;
+  if (found){
+    source = 'link';
+    let url;
+    try { url = new URL(found[0]); } catch(e) { url = null; }
+    if (!url){
+      problems.push('the link in the reply is broken');
+    } else {
+      if (url.searchParams.get('id') !== new URLSearchParams(pfFixedParams).get('id')) problems.push('the link is for a different form');
+      url.searchParams.forEach((value, name) => {
+        const q = pfQuestions.find(x => x.param === name);
+        if (q) pfDecodeInto(q, value, problems);
+        else if (/^r[0-9a-f]{32}$/i.test(name)) problems.push('the link has a question ID the form does not have');
+      });
+      // Choice answers that only matched after fixing spaces or capitals.
+      pfQuestions.forEach(q => {
+        if (q.type === 'choice' && q.answer && pfExactOption(q, q.answer) !== q.answer) problems.push('question ' + q.number + ' needed its hidden space fixing');
+      });
+    }
+  } else {
+    source = 'answers';
+    const result = pfApplyAnswers(reply);
+    result.problems.forEach(p => problems.push(p));
+  }
+
+  pfRenderQuestions();
+  pfUpdateLink();
+  const list = document.getElementById('pf-review');
+  list.textContent = '';
+  let answered = 0;
+  pfQuestions.forEach(q => {
+    const text = pfDescribe(q);
+    if (text) answered++;
+    list.append(pfEl('li', {}, [
+      pfEl('span', { className: 'pf-review-q', textContent: pfQuestionLabel(q) }),
+      pfEl('span', { className: text ? 'pf-review-a' : 'pf-review-a pf-review-none', textContent: text || 'No answer' })
+    ]));
+  });
+  document.getElementById('pf-review-block').hidden = false;
+
+  let msg = source === 'link'
+    ? 'Read the link from the reply: ' + answered + ' of ' + pfQuestions.length + ' questions answered.'
+    : 'No link in the reply, so the tool built one from the answers: ' + answered + ' of ' + pfQuestions.length + ' questions answered.';
+  if (problems.length) msg += ' Fixed or flagged: ' + problems.join('; ') + '.';
+  msg += ' The answers are listed below. The Open the pre-filled form link uses them.';
+  pfStatus('pf-reply-status', msg);
+}
+
+// Advanced: a .txt or .md file with a "Sample link:" line and
+// "Question 1: answer" lines.
+function pfLoadFile(input){
+  const file = input.files && input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    const text = String(reader.result);
+    const link = text.match(/https:\/\/\S*ResponsePage\.aspx\?\S+/i);
+    if (!link){
+      pfStatus('pf-read-status', 'No form link found in ' + file.name + '. Add a line starting "Sample link:" with the pre-filled link.');
+      return;
+    }
+    document.getElementById('pf-sample').value = link[0];
+    pfReadSample(false);
+    document.getElementById('pf-paste').value = text;
+    pfStatus('pf-read-status', 'Loaded ' + file.name + '. ' + pfFillFromPaste());
+  };
+  reader.readAsText(file);
+}
+
 // Browsers can restore the sample link after Back; read it straight away.
 onPage('pf-sample', function(){
+  pfShowMode();
   if (document.getElementById('pf-sample').value.trim()) pfReadSample();
 });
 

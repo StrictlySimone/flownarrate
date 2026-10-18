@@ -114,60 +114,107 @@
     <svg class="tool-hero-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8"/><path d="M8.5 16.5l1.5 1.5 3-3"/></svg>
     <div class="status-line"><span class="status-dot"></span>FREE · RUNS ENTIRELY IN YOUR BROWSER</div>
     <h1>Microsoft Forms <span class="accent">pre-filled</span> link builder</h1>
-    <p class="sub" style="max-width:600px;margin-bottom:14px;">Filling in a long form one box at a time is slow, and slower still with a screen reader. Microsoft Forms can open with answers already filled in from a pre-filled link. Paste one sample pre-filled link from the form, put in all your answers here, then open the form, check every answer and press Submit yourself. Nothing is ever submitted for you.</p>
+    <p class="sub" style="max-width:600px;margin-bottom:14px;">Filling in a long form one box at a time is slow, and slower still with a screen reader. Microsoft Forms can open with answers already filled in from a pre-filled link. Paste one sample pre-filled link from the form, then let an AI such as Copilot write your answers and the link, or type them in yourself. The tool checks the link, then you open the form, check every answer and press Submit yourself. Nothing is ever submitted for you.</p>
   </div>
 </section>
 
 <section id="prefill-builder">
   <div class="expr-tool">
-    <h2 class="pf-step-heading">Step 1: Read the questions from a sample link</h2>
+    <fieldset class="pf-mode">
+      <legend class="pf-label">Mode</legend>
+      <label class="check-label" for="pf-mode-basic"><input type="radio" name="pf-mode" id="pf-mode-basic" value="basic" checked onchange="pfShowMode()">Basic: an AI writes the answers and the link</label>
+      <label class="check-label" for="pf-mode-advanced"><input type="radio" name="pf-mode" id="pf-mode-advanced" value="advanced" onchange="pfShowMode()">Advanced: type the answers, or load them from a file</label>
+    </fieldset>
+
+    <h2 class="pf-step-heading">Step 1: The form</h2>
     <div class="expr-field">
       <label for="pf-sample">Sample pre-filled link</label>
       <textarea id="pf-sample" rows="4" aria-describedby="pf-sample-hint"></textarea>
-      <p class="pf-hint" id="pf-sample-hint">The form's owner makes this in Microsoft Forms: the "..." menu, Get Pre-filled URL, switch on Enable pre-filled answers, answer every question with anything, then Get Prefilled Link. A question left blank in the sample is missing from the link.</p>
+      <p class="pf-hint" id="pf-sample-hint">The form's owner makes this in Microsoft Forms: the "..." menu, Get Pre-filled URL, switch on Enable pre-filled answers, answer every question with anything, then Get Prefilled Link. You only need it once per form.</p>
     </div>
-    <div class="expr-field">
-      <label for="pf-titles">Question titles, one per line, in form order (optional)</label>
-      <textarea id="pf-titles" rows="4" aria-describedby="pf-titles-hint"></textarea>
-      <p class="pf-hint" id="pf-titles-hint">Used as labels below, so you hear "Question 2: Did you attend alone?" rather than just "Question 2".</p>
+    <div class="expr-field" data-pf-mode="basic">
+      <label for="pf-form-text">The form's questions and options (optional)</label>
+      <textarea id="pf-form-text" rows="5" aria-describedby="pf-form-text-hint"></textarea>
+      <p class="pf-hint" id="pf-form-text-hint">Open the form, select all, copy, and paste here. The AI uses it to see the question wording and every option, so its answers match the form.</p>
+    </div>
+    <div data-pf-mode="advanced" hidden>
+      <div class="expr-field">
+        <label for="pf-titles">Question titles, one per line, in form order (optional)</label>
+        <textarea id="pf-titles" rows="4" aria-describedby="pf-titles-hint"></textarea>
+        <p class="pf-hint" id="pf-titles-hint">Used as labels, so you hear "Question 2: Did you attend alone?" rather than just "Question 2".</p>
+      </div>
+      <div class="expr-field">
+        <label for="pf-file">Or load a file of answers (.txt or .md)</label>
+        <input type="file" id="pf-file" accept=".txt,.md,text/plain,text/markdown" onchange="pfLoadFile(this)" aria-describedby="pf-file-hint">
+        <p class="pf-hint" id="pf-file-hint">One line "Sample link: " followed by the link, then one line per answer: "Question 1: Yes". Loading it reads the questions and fills in the answers.</p>
+      </div>
     </div>
     <button type="button" class="copy-btn" onclick="pfReadSample(true)">Read questions</button>
     <p id="pf-read-status" class="pf-hint" role="status"></p>
 
-    <div id="pf-step2" hidden>
+    <div data-pf-mode="basic" data-pf-after-read="true" hidden>
+      <h2 class="pf-step-heading" id="pf-ai-heading" tabindex="-1">Step 2: Ask the AI</h2>
+      <div class="expr-field">
+        <label for="pf-notes">Your notes for the AI</label>
+        <textarea id="pf-notes" rows="5" aria-describedby="pf-notes-hint"></textarea>
+        <p class="pf-hint" id="pf-notes-hint">What you want to say, in your own words. The AI turns it into answers.</p>
+      </div>
+      <button type="button" class="copy-btn" onclick="pfCopyAiPrompt()">Copy AI prompt</button>
+      <p id="pf-ai-status" class="pf-hint" role="status"></p>
+      <pre id="pf-ai-prompt" class="mermaid-code" tabindex="0" hidden></pre>
+      <p class="pf-hint">Paste the prompt into Copilot, ChatGPT, Claude or Gemini. It replies with your answers and a link.</p>
+
+      <h2 class="pf-step-heading">Step 3: Paste the AI's reply</h2>
+      <div class="expr-field">
+        <label for="pf-reply">The AI's whole reply</label>
+        <textarea id="pf-reply" rows="6" aria-describedby="pf-reply-hint"></textarea>
+        <p class="pf-hint" id="pf-reply-hint">The tool reads the link out of the reply, checks every answer against the form, and fixes what it can. If there's no link, it builds one from the answers.</p>
+      </div>
+      <button type="button" class="copy-btn" onclick="pfCheckReply()">Check the reply</button>
+      <p id="pf-reply-status" class="pf-hint" role="status"></p>
+      <div id="pf-review-block" hidden>
+        <h3 class="pf-step-heading">Answers in the link</h3>
+        <ol id="pf-review" class="pf-review"></ol>
+      </div>
+    </div>
+
+    <div id="pf-step2" data-pf-mode="advanced" data-pf-after-read="true" hidden>
       <h2 class="pf-step-heading" id="pf-step2-heading" tabindex="-1">Step 2: Answers</h2>
       <div class="expr-field">
         <label for="pf-paste">Paste all answers at once (optional)</label>
         <textarea id="pf-paste" rows="6" aria-describedby="pf-paste-hint"></textarea>
-        <p class="pf-hint" id="pf-paste-hint">Each answer starts on a new line with "Question", its number and a colon, for example "Question 3: Radio". Copy the Copilot prompt to get answers in this format.</p>
+        <p class="pf-hint" id="pf-paste-hint">Each answer starts on a new line with "Question", its number and a colon, for example "Question 3: Radio". Copy the prompt to get answers from an AI in this format.</p>
       </div>
       <button type="button" class="copy-btn" onclick="pfFillFromPaste()">Fill the answer boxes</button>
-      <button type="button" class="copy-btn" onclick="pfCopyPrompt()">Copy a prompt for Copilot</button>
+      <button type="button" class="copy-btn" onclick="pfCopyPrompt()">Copy a prompt for an AI</button>
       <p id="pf-paste-status" class="pf-hint" role="status"></p>
       <div id="pf-questions"></div>
     </div>
 
-    <div id="pf-step3" hidden>
-      <h2 class="pf-step-heading">Step 3: Open the form</h2>
+    <div id="pf-step3" data-pf-after-read="true" hidden>
+      <h2 class="pf-step-heading">Last step: Open the form</h2>
       <p id="pf-length" class="pf-hint"></p>
       <a id="pf-open" class="pf-open" href="#" target="_blank" rel="noopener noreferrer">Open the pre-filled form<span class="sr-only"> (opens in a new tab)</span></a>
       <button type="button" class="copy-btn" onclick="pfCopyLink()">Copy link</button>
       <p id="pf-link-status" class="pf-hint" role="status"></p>
+      <p class="pf-hint">Check every answer in the form before you press Submit. An answer that doesn't match an option exactly is left blank, without any warning.</p>
       <details class="mermaid-toggle">
         <summary>Show the link</summary>
         <pre id="pf-link" class="mermaid-code" tabindex="0"></pre>
       </details>
 
-      <h3 class="pf-step-heading">Answers to paste by hand</h3>
-      <p class="pf-hint">For answers too long for the link. Each button copies one answer, so you can paste it into the matching box in the form.</p>
-      <label class="check-label" for="pf-copy-only-left"><input type="checkbox" id="pf-copy-only-left" checked>Only answers left out of the link</label>
-      <button type="button" class="copy-btn" onclick="pfRenderCopyBlocks()">Make copy buttons</button>
-      <p id="pf-copy-status" class="pf-hint" role="status"></p>
-      <div id="pf-copy-blocks"></div>
+      <div data-pf-mode="advanced" data-pf-after-read="true" hidden>
+        <h3 class="pf-step-heading">Answers to paste by hand</h3>
+        <p class="pf-hint">For answers too long for the link. Each button copies one answer, so you can paste it into the matching box in the form.</p>
+        <label class="check-label" for="pf-copy-only-left"><input type="checkbox" id="pf-copy-only-left" checked>Only answers left out of the link</label>
+        <button type="button" class="copy-btn" onclick="pfRenderCopyBlocks()">Make copy buttons</button>
+        <p id="pf-copy-status" class="pf-hint" role="status"></p>
+        <div id="pf-copy-blocks"></div>
+      </div>
     </div>
 
-    <div id="pf-step4" hidden>
-      <h2 class="pf-step-heading">Step 4 (optional): Length test</h2>
+    <div id="pf-step4" data-pf-mode="advanced" data-pf-after-read="true" hidden>
+      <h2 class="pf-step-heading">Optional: Length test</h2>
       <p class="pf-hint">Makes test links from about 2,000 to 32,000 characters. Open them shortest first. The longest one where the form opens and the answer ends with "End of test" is your limit. Test links never submit anything; close the tab without submitting.</p>
       <div class="expr-field" style="margin-top:14px;">
         <label for="pf-test-question">Make the link longer using</label>
@@ -178,22 +225,23 @@
       <div id="pf-test-links"></div>
     </div>
 
-    <p class="expr-note">Your answers end up in the link, so they are saved in your browser history. A private window avoids that, and also stops the form showing answers from an earlier visit.</p>
+    <p class="expr-note">Your answers end up in the link, so they are saved in your browser history. A private window avoids that, and also stops the form showing answers from an earlier visit. The tool itself sends nothing anywhere; only the AI you choose sees your prompt.</p>
   </div>
 </section>
 
 <section>
   <div class="tool-guide">
     <h2>How to use it</h2>
+    <p><strong>Basic mode</strong> lets an AI do the writing:</p>
     <ol>
-      <li>Ask the form's owner for one pre-filled link with every question answered. Dummy answers such as "test" are fine. The link reveals each question's ID, and tells this tool whether a question takes text, one choice, several choices or a grid of choices.</li>
-      <li>Paste the link into step 1 and choose Read questions. If you have the question titles, paste them one per line first so each answer box is labelled with its question.</li>
-      <li>Type each answer into its box, or paste answers from Copilot all at once. Choice answers must match the option wording in the form exactly, including capital letters.</li>
-      <li>Choose Open the pre-filled form. The form opens in a new tab with your answers in place. Check each one, change anything that is wrong, then submit it yourself.</li>
-      <li>If the form does not open, or a long answer is cut short, the link is too long. Tick Leave out of the link for the longest answers, open the form again, and paste those answers using the copy buttons.</li>
+      <li>Ask the form's owner for one pre-filled link with every question answered. Dummy answers such as "test" are fine. Paste it into step 1, and paste the form's text too if you can (open the form, select all, copy). Choose Read questions.</li>
+      <li>Write your notes in your own words and choose Copy AI prompt. Paste the prompt into Copilot, ChatGPT, Claude or Gemini.</li>
+      <li>Paste the AI's whole reply into step 3 and choose Check the reply. The tool reads the link, lists every answer under its question, and fixes hidden-space mistakes.</li>
+      <li>Choose Open the pre-filled form. Check each answer, change anything that is wrong, then submit it yourself.</li>
     </ol>
-    <p>Grid (Likert) questions can only use the columns that appear somewhere in the sample link, so when making the sample, use every column at least once. File upload questions cannot be pre-filled.</p>
-    <p>Pre-filled links are a standard Microsoft Forms feature. The form owner has to switch them on, and the form always waits for you to submit. Nothing you type here is sent anywhere. The tool runs entirely in your browser.</p>
+    <p><strong>Advanced mode</strong> is for typing the answers yourself, pasting them all at once, or loading them from a text or Markdown file. It also has copy buttons for answers too long for the link, and a test to find how long a link the form accepts.</p>
+    <p>Choice answers must match the form's options exactly, and an option the owner typed with a stray space keeps a hidden character that has to match too. When the sample link used an option, the tool copies it exactly. Grid (Likert) questions can only use columns that appear somewhere in the sample link, so when making the sample, use every column at least once. File upload questions cannot be pre-filled.</p>
+    <p>Pre-filled links are a standard Microsoft Forms feature. The form owner has to switch them on, and the form always waits for you to submit. Nothing you type here is sent anywhere by the tool, which runs entirely in your browser.</p>
   </div>
 </section>
 
