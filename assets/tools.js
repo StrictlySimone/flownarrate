@@ -1395,6 +1395,12 @@ function pfEditAnswer(q){
   if (field) field.focus();
 }
 
+function pfCopyOwnerMessage(){
+  pfCopyText(document.getElementById('pf-owner-message').textContent).then(ok => {
+    pfStatus('pf-owner-status', ok ? 'Message copied. Paste it into an email or chat to the form\'s owner.' : 'Copying was blocked. Select the message and copy it yourself.');
+  });
+}
+
 function pfCopyAnswers(){
   const text = pfQuestions.map(q => pfQuestionLabel(q) + '\n' + (pfDescribe(q) || 'No answer')).join('\n\n');
   pfCopyText(text).then(ok => pfStatus('pf-reply-status', ok ? 'Answers copied.' : 'Copying was blocked.'));
