@@ -115,6 +115,35 @@
     <div class="status-line"><span class="status-dot"></span>FREE · RUNS ENTIRELY IN YOUR BROWSER</div>
     <h1>Microsoft Forms <span class="accent">pre-filled</span> link builder</h1>
     <p class="sub" style="max-width:600px;margin-bottom:14px;">Filling in a long form one box at a time is slow, and slower still with a screen reader. Microsoft Forms can open with answers already filled in from a pre-filled link. Paste one sample pre-filled link from the form, then let an AI such as Copilot write your answers and the link, or type them in yourself. The tool checks the link, then you open the form, check every answer and press Submit yourself. Nothing is ever submitted for you.</p>
+    <p class="sub" style="max-width:600px;margin-top:0;margin-bottom:14px;">How it works, and what we found testing it: <a href="../microsoft-forms-pre-filled-links.html">Filling in a whole Microsoft Form at once, with a pre-filled link</a>.</p>
+  </div>
+</section>
+
+<section id="before-you-start">
+  <div class="tool-guide">
+    <h2>Before you start</h2>
+    <p>You need three things:</p>
+    <ol>
+      <li><strong>A sample link from the form's owner.</strong> The person who made the form has to switch on pre-filled answers and send you one link. It takes them about two minutes. You can send them the message below.</li>
+      <li><strong>An AI chat</strong>, such as Microsoft Copilot, ChatGPT, Claude or Gemini, to write the answers. If you'd rather type the answers yourself, choose Advanced mode and you won't need one.</li>
+      <li><strong>A web browser.</strong> There's nothing to install and no account to make. If the form is only for people in your organisation, you'll sign in to it as usual when you open it.</li>
+    </ol>
+    <h3 class="pf-step-heading" id="pf-owner-label">Message for the form's owner</h3>
+    <pre id="pf-owner-message" class="mermaid-code pf-box" tabindex="0" aria-labelledby="pf-owner-label">Hi,
+
+Could you send me a pre-filled link for your Microsoft Form? It lets me load all my answers at once and check them before I submit. It takes about two minutes:
+
+1. Open the form in Microsoft Forms, where you edit it.
+2. Select the three dots (...) at the top right, then Get Pre-filled URL.
+3. Switch on Enable pre-filled answers.
+4. Answer every question with anything. "Test" is fine. For a grid question, use each column at least once.
+5. Select Get Prefilled Link, then Copy link, and send the link to me.
+
+This doesn't submit a response, and your questions stay as they are. You'll only get my response when I press Submit.
+
+Thank you!</pre>
+    <button type="button" class="copy-btn pf-copy" onclick="pfCopyOwnerMessage()">Copy the message</button>
+    <p id="pf-owner-status" class="pf-hint" role="status"></p>
   </div>
 </section>
 
