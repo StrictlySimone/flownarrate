@@ -104,15 +104,17 @@
   nav ul li a:hover{color:var(--ink);}
   .nav-toggle{
     display:none;
-    flex-direction:column;
-    justify-content:center;
-    gap:5px;
+    align-items:center;
+    gap:10px;
+    font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:var(--ink);
+    text-transform:uppercase;letter-spacing:0.06em;
     background:none;
     border:none;
     cursor:pointer;
     padding:8px;
   }
-  .nav-toggle span{
+  .nav-toggle-bars{display:flex;flex-direction:column;gap:5px;}
+  .nav-toggle-bars span{
     display:block;
     width:22px;
     height:2px;
@@ -226,14 +228,14 @@
 
 <nav>
   <a href="index.html" class="brand">flow<span class="dot">&middot;</span>narrate</a>
-  <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menu" onclick="toggleNav()">
-    <span></span><span></span><span></span>
+  <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" onclick="toggleNav()">
+    <span class="nav-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>Menu
   </button>
   <ul id="nav-links">
     <li><a href="blog.html">Blog</a></li>
     <li><a href="tools.html">Tools</a></li>
     <li><a href="index.html#about">About</a></li>
-    <li><button type="button" id="theme-toggle" class="theme-toggle" aria-pressed="false" onclick="toggleTheme()">Dark</button></li>
+    <li><button type="button" id="theme-toggle" class="theme-toggle" onclick="toggleTheme()">Dark</button></li>
   </ul>
 </nav>
 
@@ -282,7 +284,6 @@
     if (!btn) return;
     var theme = currentTheme();
     btn.textContent = theme === "dark" ? "Light" : "Dark";
-    btn.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
   }
   function toggleTheme(){
     var next = currentTheme() === "dark" ? "light" : "dark";

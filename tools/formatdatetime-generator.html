@@ -95,14 +95,14 @@
 
 <nav>
   <a href="../index.html" class="brand">flow<span class="dot">·</span>narrate</a>
-  <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menu" onclick="toggleNav()">
-    <span></span><span></span><span></span>
+  <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" onclick="toggleNav()">
+    <span class="nav-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>Menu
   </button>
   <ul id="nav-links">
     <li><a href="../blog.html">Blog</a></li>
     <li><a href="../tools.html">Tools</a></li>
     <li><a href="../index.html#about">About</a></li>
-    <li><button type="button" id="theme-toggle" class="theme-toggle" aria-pressed="false" onclick="toggleTheme()">Dark</button></li>
+    <li><button type="button" id="theme-toggle" class="theme-toggle" onclick="toggleTheme()">Dark</button></li>
   </ul>
 </nav>
 
@@ -112,7 +112,7 @@
   <div class="hero-text" style="max-width:720px;">
     <div class="breadcrumb"><a href="../tools.html">Tools</a> / formatDateTime generator</div>
     <svg class="tool-hero-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M8.5 3v4M15.5 3v4"/><path d="M8 14h2M12 14h2M8 17h2"/></svg>
-    <div class="status-line"><span class="status-dot"></span>FREE · RUNS ENTIRELY IN YOUR BROWSER</div>
+    <div class="status-line">Free · runs entirely in your browser</div>
     <h1><span class="accent">formatDateTime</span> generator</h1>
     <p class="sub" style="max-width:600px;margin-bottom:14px;">Dates in Power Automate arrive as UTC timestamps like <code id="df-example-utc">2026-08-14T13:05:00Z</code>, which nobody wants to read in an email. Pick where the date comes from and how it should look, optionally convert it out of UTC with <code>convertTimeZone</code>, and copy the finished expression.</p>
   </div>
@@ -123,7 +123,7 @@
     <div>
       <h2>Date Formatter</h2>
     </div>
-    <p>PICK A SOURCE AND A FORMAT<br>GENERATE THE formatDateTime EXPRESSION</p>
+    <p>Pick a source and a format to get the formatDateTime expression.</p>
   </div>
 
   <div class="expr-tool">
@@ -188,7 +188,6 @@
     <div>
       <h2>More free tools</h2>
     </div>
-    <p>EVERY TOOL RUNS IN YOUR BROWSER<br>NO SIGN-IN, NOTHING STORED</p>
   </div>
   <div class="posts">
     <a href="power-automate-expression-builder.html" class="post post-live">

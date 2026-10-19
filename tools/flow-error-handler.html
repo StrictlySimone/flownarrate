@@ -95,14 +95,14 @@
 
 <nav>
   <a href="../index.html" class="brand">flow<span class="dot">·</span>narrate</a>
-  <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menu" onclick="toggleNav()">
-    <span></span><span></span><span></span>
+  <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" onclick="toggleNav()">
+    <span class="nav-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>Menu
   </button>
   <ul id="nav-links">
     <li><a href="../blog.html">Blog</a></li>
     <li><a href="../tools.html">Tools</a></li>
     <li><a href="../index.html#about">About</a></li>
-    <li><button type="button" id="theme-toggle" class="theme-toggle" aria-pressed="false" onclick="toggleTheme()">Dark</button></li>
+    <li><button type="button" id="theme-toggle" class="theme-toggle" onclick="toggleTheme()">Dark</button></li>
   </ul>
 </nav>
 
@@ -112,7 +112,7 @@
   <div class="hero-text" style="max-width:720px;">
     <div class="breadcrumb"><a href="../tools.html">Tools</a> / Flow error handler (Try / Catch)</div>
     <svg class="tool-hero-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l9 16H3z"/><path d="M12 10v4"/><circle cx="12" cy="16.8" r="0.4" fill="currentColor"/></svg>
-    <div class="status-line"><span class="status-dot"></span>FREE · RUNS ENTIRELY IN YOUR BROWSER</div>
+    <div class="status-line">Free · runs entirely in your browser</div>
     <h1>Flow <span class="accent">error</span> handler</h1>
     <p class="sub" style="max-width:600px;margin-bottom:14px;">Power Automate has no try / catch action. The usual pattern is two scopes: a Try scope that holds the real work, and a Catch scope that only runs if the Try scope fails, is skipped or times out. Enter the Try scope's name and get the run-after configuration, an expression that pulls out the error message, and a notification body that includes the run ID.</p>
   </div>
@@ -123,7 +123,7 @@
     <div>
       <h2>Flow Error Handler</h2>
     </div>
-    <p>RUN-AFTER SETTINGS, ERROR EXPRESSIONS<br>AND A NOTIFICATION BODY, FROM ONE SCOPE NAME</p>
+    <p>Run-after settings, error expressions and a notification body, from one scope name.</p>
   </div>
 
   <div class="expr-tool">
@@ -181,7 +181,6 @@
     <div>
       <h2>More free tools</h2>
     </div>
-    <p>EVERY TOOL RUNS IN YOUR BROWSER<br>NO SIGN-IN, NOTHING STORED</p>
   </div>
   <div class="posts">
     <a href="power-automate-expression-builder.html" class="post post-live">

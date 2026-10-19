@@ -37,8 +37,12 @@ The site speaks the language of a flow's run history: "Run summary", "Succeeded"
 - Lists and rules rather than card grids on the homepage: posts read like a run log, newest first.
 - Each homepage section uses a different composition (run summary, post list, format grid, tool list, about with credentials).
 - No arrows on links or buttons. An arrow only appears where it shows a real path, such as a menu path or connector to action ("Office 365 Users → Get manager").
+- The one exception is the "← Back to FlowNarrate" link at the end of posts and pages: the arrow says "back", which is its job.
+- The "More free tools" grid and `tools.html` use identical cards on purpose: the tools are peers, and none of them outranks another.
+- Tool pages open with one plain line ("Free · runs entirely in your browser") and no status dot. A dot only appears where it marks a real state, as in the homepage run summary.
 
 ## Motion and controls
 
 - Motion: hover colour changes and a short theme fade only, switched off under `prefers-reduced-motion`.
 - Every control is at least 44px tall, and keyboard focus is a visible plum outline.
+- On phones the menu button shows the word "Menu" next to the icon, and sections use 48px of vertical padding instead of 72px.

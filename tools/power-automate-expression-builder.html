@@ -95,14 +95,14 @@
 
 <nav>
   <a href="../index.html" class="brand">flow<span class="dot">·</span>narrate</a>
-  <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menu" onclick="toggleNav()">
-    <span></span><span></span><span></span>
+  <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" onclick="toggleNav()">
+    <span class="nav-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>Menu
   </button>
   <ul id="nav-links">
     <li><a href="../blog.html">Blog</a></li>
     <li><a href="../tools.html">Tools</a></li>
     <li><a href="../index.html#about">About</a></li>
-    <li><button type="button" id="theme-toggle" class="theme-toggle" aria-pressed="false" onclick="toggleTheme()">Dark</button></li>
+    <li><button type="button" id="theme-toggle" class="theme-toggle" onclick="toggleTheme()">Dark</button></li>
   </ul>
 </nav>
 
@@ -112,7 +112,7 @@
   <div class="hero-text" style="max-width:720px;">
     <div class="breadcrumb"><a href="../tools.html">Tools</a> / Power Automate expression builder</div>
     <svg class="tool-hero-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4c-2 0-2 2-2 4s-1 4-2 4c1 0 2 2 2 4s0 4 2 4"/><path d="M16 4c2 0 2 2 2 4s1 4 2 4c-1 0-2 2-2 4s0 4-2 4"/><path d="M10 12h4"/></svg>
-    <div class="status-line"><span class="status-dot"></span>FREE · RUNS ENTIRELY IN YOUR BROWSER</div>
+    <div class="status-line">Free · runs entirely in your browser</div>
     <h1>Power Automate <span class="accent">expression</span> builder</h1>
     <p class="sub" style="max-width:600px;margin-bottom:14px;">The expression box in Power Automate gives you an empty field and no hints about argument order, quotes or where the question marks go. Pick a function, fill in the values, and copy an expression you can paste straight into your flow.</p>
   </div>
@@ -123,7 +123,7 @@
     <div>
       <h2>Dynamic Expressions</h2>
     </div>
-    <p>BUILD CORRECT EXPRESSIONS<br>FOR TRIGGERS, ACTIONS, LOOPS, AND VARIABLES</p>
+    <p>Expressions for triggers, actions, loops and variables.</p>
   </div>
 
   <div class="expr-tool">
@@ -173,7 +173,6 @@
     <div>
       <h2>More free tools</h2>
     </div>
-    <p>EVERY TOOL RUNS IN YOUR BROWSER<br>NO SIGN-IN, NOTHING STORED</p>
   </div>
   <div class="posts">
     <a href="trigger-condition-builder.html" class="post post-live">

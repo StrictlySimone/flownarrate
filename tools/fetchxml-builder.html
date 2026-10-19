@@ -95,14 +95,14 @@
 
 <nav>
   <a href="../index.html" class="brand">flow<span class="dot">·</span>narrate</a>
-  <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menu" onclick="toggleNav()">
-    <span></span><span></span><span></span>
+  <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" onclick="toggleNav()">
+    <span class="nav-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>Menu
   </button>
   <ul id="nav-links">
     <li><a href="../blog.html">Blog</a></li>
     <li><a href="../tools.html">Tools</a></li>
     <li><a href="../index.html#about">About</a></li>
-    <li><button type="button" id="theme-toggle" class="theme-toggle" aria-pressed="false" onclick="toggleTheme()">Dark</button></li>
+    <li><button type="button" id="theme-toggle" class="theme-toggle" onclick="toggleTheme()">Dark</button></li>
   </ul>
 </nav>
 
@@ -112,7 +112,7 @@
   <div class="hero-text" style="max-width:720px;">
     <div class="breadcrumb"><a href="../tools.html">Tools</a> / FetchXML builder</div>
     <svg class="tool-hero-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="7" ry="2.8"/><path d="M5 6v12c0 1.6 3.1 2.8 7 2.8s7-1.2 7-2.8V6"/><path d="M5 12c0 1.6 3.1 2.8 7 2.8s7-1.2 7-2.8"/></svg>
-    <div class="status-line"><span class="status-dot"></span>FREE · RUNS ENTIRELY IN YOUR BROWSER</div>
+    <div class="status-line">Free · runs entirely in your browser</div>
     <h1>D365 <span class="accent">FetchXML</span> builder</h1>
     <p class="sub" style="max-width:600px;margin-bottom:14px;">FetchXML is Dataverse's own query language, the same one Advanced Find uses behind the scenes. Enter the table's logical name, the columns you want and your conditions, and copy a query you can use in a flow, a report or Advanced Find.</p>
   </div>
@@ -123,7 +123,7 @@
     <div>
       <h2>D365 FetchXML Builder</h2>
     </div>
-    <p>DATAVERSE'S OWN QUERY LANGUAGE<br>NOT AN OData TRANSLATION, THE REAL SYNTAX ADVANCED FIND USES</p>
+    <p>Dataverse's own query language: the syntax Advanced Find uses, not an OData translation.</p>
   </div>
 
   <div class="expr-tool">
@@ -190,7 +190,6 @@
     <div>
       <h2>More free tools</h2>
     </div>
-    <p>EVERY TOOL RUNS IN YOUR BROWSER<br>NO SIGN-IN, NOTHING STORED</p>
   </div>
   <div class="posts">
     <a href="power-automate-expression-builder.html" class="post post-live">

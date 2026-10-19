@@ -95,14 +95,14 @@
 
 <nav>
   <a href="../index.html" class="brand">flow<span class="dot">·</span>narrate</a>
-  <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menu" onclick="toggleNav()">
-    <span></span><span></span><span></span>
+  <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" onclick="toggleNav()">
+    <span class="nav-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>Menu
   </button>
   <ul id="nav-links">
     <li><a href="../blog.html">Blog</a></li>
     <li><a href="../tools.html">Tools</a></li>
     <li><a href="../index.html#about">About</a></li>
-    <li><button type="button" id="theme-toggle" class="theme-toggle" aria-pressed="false" onclick="toggleTheme()">Dark</button></li>
+    <li><button type="button" id="theme-toggle" class="theme-toggle" onclick="toggleTheme()">Dark</button></li>
   </ul>
 </nav>
 
@@ -112,7 +112,7 @@
   <div class="hero-text" style="max-width:720px;">
     <div class="breadcrumb"><a href="../tools.html">Tools</a> / Adaptive Card builder</div>
     <svg class="tool-hero-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M6.5 8.5h11M6.5 11.5h7"/><rect x="6.5" y="14.5" width="4.5" height="2.5" rx="0.6"/><rect x="13" y="14.5" width="4.5" height="2.5" rx="0.6"/></svg>
-    <div class="status-line"><span class="status-dot"></span>FREE · RUNS ENTIRELY IN YOUR BROWSER</div>
+    <div class="status-line">Free · runs entirely in your browser</div>
     <h1>Adaptive Card <span class="accent">builder</span></h1>
     <p class="sub" style="max-width:600px;margin-bottom:14px;">Adaptive Cards turn a Teams message into something people can act on, but writing the card JSON by hand means a lot of nesting for a simple result. Enter a title and body text, decide whether you want Approve and Reject buttons, and copy the card.</p>
   </div>
@@ -123,7 +123,7 @@
     <div>
       <h2>Adaptive Card Builder</h2>
     </div>
-    <p>TITLE, BODY TEXT, APPROVE / REJECT BUTTONS<br>OUTPUT CARD JSON FOR TEAMS OR APPROVALS</p>
+    <p>Title, body text and Approve / Reject buttons, as card JSON for Teams or Approvals.</p>
   </div>
 
   <div class="expr-tool">
@@ -167,7 +167,6 @@
     <div>
       <h2>More free tools</h2>
     </div>
-    <p>EVERY TOOL RUNS IN YOUR BROWSER<br>NO SIGN-IN, NOTHING STORED</p>
   </div>
   <div class="posts">
     <a href="power-automate-expression-builder.html" class="post post-live">

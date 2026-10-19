@@ -95,14 +95,14 @@
 
 <nav>
   <a href="../index.html" class="brand">flow<span class="dot">·</span>narrate</a>
-  <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menu" onclick="toggleNav()">
-    <span></span><span></span><span></span>
+  <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" onclick="toggleNav()">
+    <span class="nav-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>Menu
   </button>
   <ul id="nav-links">
     <li><a href="../blog.html">Blog</a></li>
     <li><a href="../tools.html">Tools</a></li>
     <li><a href="../index.html#about">About</a></li>
-    <li><button type="button" id="theme-toggle" class="theme-toggle" aria-pressed="false" onclick="toggleTheme()">Dark</button></li>
+    <li><button type="button" id="theme-toggle" class="theme-toggle" onclick="toggleTheme()">Dark</button></li>
   </ul>
 </nav>
 
@@ -112,7 +112,7 @@
   <div class="hero-text" style="max-width:720px;">
     <div class="breadcrumb"><a href="../tools.html">Tools</a> / Parse JSON schema loosener</div>
     <svg class="tool-hero-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.6-1.8"/><path d="M12 15v2"/></svg>
-    <div class="status-line"><span class="status-dot"></span>FREE · RUNS ENTIRELY IN YOUR BROWSER</div>
+    <div class="status-line">Free · runs entirely in your browser</div>
     <h1>Parse JSON schema <span class="accent">loosener</span></h1>
     <p class="sub" style="max-width:600px;margin-bottom:14px;">A schema generated from one sample payload assumes every future payload will look exactly the same. The first time a field arrives empty, Parse JSON fails with <code>Invalid type. Expected String but got Null</code>, or with <code>Required properties are missing from object</code> when a field is left out altogether.</p>
     <p class="sub" style="max-width:600px;margin-bottom:14px;">This tool removes every <code>required</code> array and adds <code>null</code> to every property type, so the action accepts the data and the rest of your flow can deal with the gaps.</p>
@@ -124,7 +124,7 @@
     <div>
       <h2>JSON Schema Loosener</h2>
     </div>
-    <p>PASTE AN EXISTING SCHEMA<br>MAKE PARSE JSON RESILIENT TO MISSING OR NULL VALUES</p>
+    <p>Paste an existing schema so Parse JSON stops failing on missing or null values.</p>
   </div>
 
   <div class="expr-tool">
@@ -148,7 +148,7 @@
       <span id="loosen-copy-status" class="sr-only" aria-live="polite"></span>
     </div>
 
-    <p class="expr-note" id="loosen-error">Removes every "required" array and allows null on every property type, so the action stops throwing when a field is missing.</p>
+    <p class="expr-note" id="loosen-error" aria-live="polite">Removes every "required" array and allows null on every property type, so the action stops throwing when a field is missing.</p>
   </div>
 </section>
 
@@ -173,7 +173,6 @@
     <div>
       <h2>More free tools</h2>
     </div>
-    <p>EVERY TOOL RUNS IN YOUR BROWSER<br>NO SIGN-IN, NOTHING STORED</p>
   </div>
   <div class="posts">
     <a href="power-automate-expression-builder.html" class="post post-live">
