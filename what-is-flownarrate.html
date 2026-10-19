@@ -148,15 +148,17 @@
   nav ul li a:hover{color:var(--ink);}
   .nav-toggle{
     display:none;
-    flex-direction:column;
-    justify-content:center;
-    gap:5px;
+    align-items:center;
+    gap:10px;
+    font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:var(--ink);
+    text-transform:uppercase;letter-spacing:0.06em;
     background:none;
     border:none;
     cursor:pointer;
     padding:8px;
   }
-  .nav-toggle span{
+  .nav-toggle-bars{display:flex;flex-direction:column;gap:5px;}
+  .nav-toggle-bars span{
     display:block;
     width:22px;
     height:2px;
@@ -255,6 +257,12 @@
     nav ul{gap:18px;}
     h1{font-size:1.7rem;}
   }
+  /* Touch targets: every control is at least 44px tall on any screen */
+  .brand, nav ul li a, footer a{display:inline-flex;align-items:center;min-height:44px;}
+  footer a{min-width:24px;justify-content:center;}
+  .nav-toggle{min-width:44px;min-height:44px;align-items:center;}
+  .theme-toggle, .copy-btn{min-height:44px;}
+  summary{padding:12px 0;}
 </style>
 <link rel="alternate" type="application/rss+xml" title="FlowNarrate" href="https://www.flownarrate.com/feed.xml">
 </head>
@@ -264,14 +272,14 @@
 
 <nav>
   <a href="index.html" class="brand">flow<span class="dot">·</span>narrate</a>
-  <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menu" onclick="toggleNav()">
-    <span></span><span></span><span></span>
+  <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" onclick="toggleNav()">
+    <span class="nav-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>Menu
   </button>
   <ul id="nav-links">
     <li><a href="blog.html">Blog</a></li>
     <li><a href="tools.html">Tools</a></li>
     <li><a href="index.html#about">About</a></li>
-    <li><button type="button" id="theme-toggle" class="theme-toggle" aria-pressed="false" onclick="toggleTheme()">Dark</button></li>
+    <li><button type="button" id="theme-toggle" class="theme-toggle" onclick="toggleTheme()">Dark</button></li>
   </ul>
 </nav>
 
@@ -283,15 +291,15 @@
   <p>If you've ever opened a Power Automate flow someone else built (no comments, no scope names, just twelve conditions deep and a "Compose 3" that does something nobody can explain) you already know why this blog exists.</p>
 
   <h2>The gap nobody documents</h2>
-  <p>Power Platform and Dynamics 365 make complex business logic accessible, but documentation of that logic rarely gets the same treatment. Flows get built under deadline pressure. Business rules get configured and forgotten. Six months later, someone new inherits the environment and has to reverse-engineer intent from a canvas full of unlabeled steps.</p>
+  <p>Power Platform and Dynamics 365 make complex business logic accessible, but documentation of that logic rarely gets the same treatment. Flows get built under deadline pressure. Business rules get configured and forgotten. Six months later, someone new inherits the environment and has to reverse-engineer intent from a canvas full of unlabelled steps.</p>
   <p>I see this gap constantly, both as an AB-100 certified Power Platform consultant and as a Microsoft Certified Trainer teaching people how these tools actually work. Building a flow and explaining a flow clearly are different skills. Most people are only taught the first one.</p>
 
   <h2>What FlowNarrate is for</h2>
-  <p>This blog takes real, anonymized Power Automate flows, D365 configurations, and Power Platform patterns and narrates them: walking through not just what each step does, but why it's there, what problem it solves, and where it tends to break.</p>
-  <p>You'll find flow narrations (plain-English walkthroughs of real automation logic, step by step), D365 explainers written for the people who use these systems rather than the people who built them, an AB-100 certification corner with study notes and exam guidance, and case studies covering real problems, real solutions, real outcomes.</p>
+  <p>This blog takes real, anonymised Power Automate flows, D365 configurations, and Power Platform patterns and narrates them: what each step does, why it's there, what problem it solves, and where it tends to break.</p>
+  <p>You'll find flow narrations (plain-English walkthroughs of real automation logic, step by step), D365 explainers written for the people who use these systems rather than the people who built them, an AB-100 certification corner with study notes and exam guidance, and case studies of real problems and how they were solved.</p>
 
   <h2>Why "Narrate"</h2>
-  <p>A flow is a sequence of decisions someone made under specific constraints. Reading the raw JSON or the unlabeled canvas tells you what happened. Narrating it tells you why, which is the part that actually transfers to the next person who has to maintain it.</p>
+  <p>A flow is a sequence of decisions someone made under specific constraints. Reading the raw JSON or the unlabelled canvas tells you what happened. Narrating it tells you why, which is the part that actually transfers to the next person who has to maintain it.</p>
   <p>That's the premise here: automation logic deserves to be told as clearly as it was built.</p>
   <p>More soon.</p>
 
@@ -316,7 +324,6 @@
     if (!btn) return;
     var theme = currentTheme();
     btn.textContent = theme === "dark" ? "Light" : "Dark";
-    btn.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
   }
 
   function toggleTheme(){

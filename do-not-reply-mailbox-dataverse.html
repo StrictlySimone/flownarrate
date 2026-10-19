@@ -77,6 +77,9 @@
     --succeeded: #A01A7D;
     --warning: #B54708;
     --failed: #9E3B32;
+    --code-bg: #1A1A17;
+    --code-ink: #E8E6D8;
+    --code-ok: #6CC495;
   }
   [data-theme="dark"]{
     --paper: #141418;
@@ -154,15 +157,17 @@
   nav ul li a:hover{color:var(--ink);}
   .nav-toggle{
     display:none;
-    flex-direction:column;
-    justify-content:center;
-    gap:5px;
+    align-items:center;
+    gap:10px;
+    font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:var(--ink);
+    text-transform:uppercase;letter-spacing:0.06em;
     background:none;
     border:none;
     cursor:pointer;
     padding:8px;
   }
-  .nav-toggle span{
+  .nav-toggle-bars{display:flex;flex-direction:column;gap:5px;}
+  .nav-toggle-bars span{
     display:block;
     width:22px;
     height:2px;
@@ -256,8 +261,8 @@
   }
   .code-block{
     margin-top:12px;
-    background:#1A1A17;
-    color:#E8E6D8;
+    background:var(--code-bg);
+    color:var(--code-ink);
     padding:16px 18px;
     font-family:'JetBrains Mono',monospace;
     font-size:0.76rem;
@@ -332,6 +337,12 @@
   .recreation dl{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;margin:0;font-family:'JetBrains Mono',monospace;font-size:0.85rem;}
   .recreation dt{color:var(--ink-soft);}
   .recreation dd{margin:0;overflow-wrap:anywhere;}
+  /* Touch targets: every control is at least 44px tall on any screen */
+  .brand, nav ul li a, footer a{display:inline-flex;align-items:center;min-height:44px;}
+  footer a{min-width:24px;justify-content:center;}
+  .nav-toggle{min-width:44px;min-height:44px;align-items:center;}
+  .theme-toggle, .copy-btn{min-height:44px;}
+  summary{padding:12px 0;}
 </style>
 <link rel="alternate" type="application/rss+xml" title="FlowNarrate" href="https://www.flownarrate.com/feed.xml">
 </head>
@@ -341,14 +352,14 @@
 
 <nav>
   <a href="index.html" class="brand">flow<span class="dot">·</span>narrate</a>
-  <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menu" onclick="toggleNav()">
-    <span></span><span></span><span></span>
+  <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" onclick="toggleNav()">
+    <span class="nav-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>Menu
   </button>
   <ul id="nav-links">
     <li><a href="blog.html">Blog</a></li>
     <li><a href="tools.html">Tools</a></li>
     <li><a href="index.html#about">About</a></li>
-    <li><button type="button" id="theme-toggle" class="theme-toggle" aria-pressed="false" onclick="toggleTheme()">Dark</button></li>
+    <li><button type="button" id="theme-toggle" class="theme-toggle" onclick="toggleTheme()">Dark</button></li>
   </ul>
 </nav>
 
@@ -413,7 +424,7 @@
   </figure>
   <p>This is the harder one.</p>
   <ul>
-    <li>Sending as another user needs two things: the sender has a role with Send Email as Another User (<span class="mono">prvSendAsUser</span>) &mdash; for a flow, that's the flow owner or connection account &mdash; and the From user has switched on the "allow other users to send email on my behalf" option.</li>
+    <li>Sending as another user needs two things: the sender has a role with Send Email as Another User (<span class="mono">prvSendAsUser</span>; for a flow, that's the flow owner or connection account), and the From user has switched on the "allow other users to send email on my behalf" option.</li>
     <li>The second option isn't on the user or mailbox record. It lives in that user's own Personalization Settings, on the Email tab.</li>
     <li>Admins can't set it for someone else in the UI, and a no-login service account is exactly the account nobody can sign into to tick it themselves.</li>
     <li>Under the hood it's the <span class="mono">issendasallowed</span> column on the user's settings record.</li>
@@ -460,8 +471,8 @@ OData-Version: 4.0
   </details>
   <p>Three things worth being precise about:</p>
   <ul>
-    <li>The bearer token is the admin's, not the service account's &mdash; you authenticate as yourself. <span class="mono">CallerObjectId</span> is what makes Dataverse treat the call as if the service account did it themselves, which is what satisfies this being a self-service setting.</li>
-    <li><span class="mono">CallerObjectId</span> must be the service account's Entra object ID, found on their <span class="mono">SystemUser.azureactivedirectoryobjectid</span> column &mdash; not the admin's.</li>
+    <li>The bearer token is the admin's, not the service account's: you authenticate as yourself. <span class="mono">CallerObjectId</span> is what makes Dataverse treat the call as if the service account did it themselves, which is what satisfies this being a self-service setting.</li>
+    <li><span class="mono">CallerObjectId</span> must be the service account's Entra object ID, found on their <span class="mono">SystemUser.azureactivedirectoryobjectid</span> column, not the admin's.</li>
     <li>The <span class="mono">UserSettings</span> table's primary key is the same GUID as the user's <span class="mono">systemuserid</span>. There's no separate "user settings ID" to look up; you address the record by the user's own ID.</li>
   </ul>
   <p>The temporary-role step (1 and 3 above) still applies either way: the impersonated account needs enough privilege during the call to write its own <span class="mono">UserSettings</span> row, whether you're doing that call through Level Up or through this request directly.</p>
@@ -524,7 +535,6 @@ OData-Version: 4.0
     if (!btn) return;
     var theme = currentTheme();
     btn.textContent = theme === "dark" ? "Light" : "Dark";
-    btn.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
   }
 
   function toggleTheme(){

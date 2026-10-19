@@ -119,18 +119,15 @@ function copyExpr(){
 
 onPage('expr-fn', renderExprInputs);
 
-// Rows below are built with innerHTML + template literals; field/value
-// always land in an HTML attribute, so they're escaped before insertion.
-// Not exploitable today (every call site passes hardcoded example
-// strings or nothing at all) but cheap to close off now rather than
-// wait for a "load from URL" feature to make it a real DOM-XSS bug.
+// Rows are built with innerHTML, so field and value are escaped before
+// they land in an HTML attribute.
 function escapeHtml(str){
   return String(str).replace(/[&<>"']/g, function (ch) {
     return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch];
   });
 }
 
-// --- Filter / condition builder ---
+// Filter / condition builder
 let filterRowId = 0;
 const operators = ['equals','not equals','greater than','less than','contains'];
 
@@ -227,7 +224,7 @@ onPage('filter-rows', function(){
   addFilterRow('Status', 'not equals', 'Closed');
 });
 
-// --- SharePoint column formatting ---
+// SharePoint column formatting
 function updateColumnFormat(){
   const field = document.getElementById('cf-field').value || 'FieldName';
   const op = document.getElementById('cf-operator').value;
@@ -254,11 +251,15 @@ function copyColumnFormat(){
   });
 }
 
-// --- SVG to Power Apps image data URI ---
+// SVG to Power Apps image data URI
 function updateSvgOutput(){
   const svg = document.getElementById('svg-input').value.trim();
   let result;
-  try {
+  if (!svg) {
+    result = 'Paste SVG markup above to get its data URI.';
+  } else if (!/^(<\?xml[^>]*>\s*)?(<!--[\s\S]*?-->\s*)*<svg[\s>]/i.test(svg)) {
+    result = 'That doesn\'t look like SVG markup: it should start with <svg.';
+  } else try {
     const encoded = btoa(unescape(encodeURIComponent(svg)));
     result = `"data:image/svg+xml;base64,${encoded}"`;
   } catch(e){
@@ -269,6 +270,10 @@ function updateSvgOutput(){
 
 function copySvg(){
   const text = document.getElementById('svg-result').textContent;
+  if (!text.startsWith('"data:')) {
+    document.getElementById('svg-copy-status').textContent = 'Nothing to copy yet: paste SVG markup first';
+    return;
+  }
   navigator.clipboard.writeText(text).then(() => {
     document.getElementById('svg-copy-status').textContent = 'Data URI copied to clipboard';
   }).catch(() => {
@@ -279,7 +284,7 @@ function copySvg(){
 onPage('cf-result', updateColumnFormat);
 onPage('svg-result', updateSvgOutput);
 
-// --- Parse JSON schema generator ---
+// Parse JSON schema generator
 function inferSchema(value){
   if (value === null) return { type: "string" };
   if (Array.isArray(value)) {
@@ -304,6 +309,11 @@ function inferSchema(value){
 function updateJsonSchema(){
   const raw = document.getElementById('json-input').value;
   const errorEl = document.getElementById('json-error');
+  if (!raw.trim()) {
+    errorEl.textContent = 'Paste a sample payload above to get its schema.';
+    document.getElementById('json-schema-result').textContent = '';
+    return;
+  }
   try {
     const parsed = JSON.parse(raw);
     const schema = inferSchema(parsed);
@@ -326,7 +336,7 @@ function copyJsonSchema(){
 
 onPage('json-schema-result', updateJsonSchema);
 
-// --- Date Formatter ---
+// formatDateTime generator
 function updateDateFormatter(){
   const sourceSel = document.getElementById('df-source').value;
   document.getElementById('df-custom-field').style.display = sourceSel === 'custom' ? 'block' : 'none';
@@ -354,7 +364,7 @@ function copyDateFormatter(){
   });
 }
 
-// --- JSON Schema Loosener ---
+// Parse JSON schema loosener
 function loosenSchema(node){
   if (node === null || typeof node !== 'object') return node;
   if (Array.isArray(node)) return node.map(loosenSchema);
@@ -383,13 +393,18 @@ function loosenSchema(node){
 function updateLoosenedSchema(){
   const raw = document.getElementById('loosen-input').value;
   const errorEl = document.getElementById('loosen-error');
+  if (!raw.trim()) {
+    errorEl.textContent = 'Paste a Parse JSON schema above to loosen it.';
+    document.getElementById('loosen-result').textContent = '';
+    return;
+  }
   try {
     const parsed = JSON.parse(raw);
     const loosened = loosenSchema(parsed);
     document.getElementById('loosen-result').textContent = JSON.stringify(loosened, null, 2);
     errorEl.textContent = 'Removes every "required" array and allows null on every property type, so the action stops throwing when a field is missing.';
   } catch(e){
-    errorEl.textContent = 'That is not valid JSON, paste a schema (the output of the JSON Schema Converter above works directly).';
+    errorEl.textContent = 'That is not valid JSON, paste a schema (the output of the Parse JSON schema generator works directly).';
   }
 }
 
@@ -402,7 +417,7 @@ function copyLoosenedSchema(){
   });
 }
 
-// --- Adaptive Card Builder ---
+// Adaptive Card builder
 function updateAdaptiveCard(){
   const title = document.getElementById('ac-title').value || 'Title';
   const body = document.getElementById('ac-body').value || '';
@@ -435,7 +450,7 @@ function copyAdaptiveCard(){
   });
 }
 
-// --- Flow Error Handler ---
+// Flow error handler
 function updateErrorHandler(){
   const scope = document.getElementById('eh-scope').value || 'Try_scope';
   const statuses = Array.from(document.querySelectorAll('#error-handler input[type=checkbox]:checked')).map(el => el.value);
@@ -463,7 +478,7 @@ function copyErrorHandler(){
   });
 }
 
-// --- HTML Table Styler ---
+// HTML email table styler
 function updateHtmlTable(){
   const columns = document.getElementById('ht-columns').value.split(',').map(c => c.trim()).filter(Boolean);
   const color = document.getElementById('ht-color').value;
@@ -494,7 +509,7 @@ function copyHtmlTable(){
   });
 }
 
-// --- OData Query ---
+// OData filter query builder
 let odataRowId = 0;
 const odataOperators = { 'equals':'eq', 'not equals':'ne', 'greater than':'gt', 'less than':'lt', 'contains':'substringof' };
 
@@ -591,7 +606,7 @@ onPage('eh-runafter', updateErrorHandler);
 onPage('ht-result', updateHtmlTable);
 onPage('odata-rows', function(){ addOdataRow('Priority', 'equals', 'Urgent'); });
 
-// --- D365 FetchXML Builder ---
+// FetchXML builder
 let fxRowId = 0;
 const fxOperators = { 'equals':'eq', 'not equals':'ne', 'greater than':'gt', 'less than':'lt', 'contains':'like' };
 
@@ -677,7 +692,7 @@ function copyFetchXml(){
 
 onPage('fx-rows', function(){ addFetchXmlRow('prioritycode', 'equals', '1'); });
 
-// --- Microsoft Forms pre-filled link builder ---
+// Microsoft Forms pre-filled link builder
 // Everything is learned from one sample pre-filled link. Forms encodes each
 // question type differently, so the sample's values tell us the type:
 //   text:   Dfffff                                  (raw)
@@ -1156,7 +1171,7 @@ function pfRenderCopyBlocks(){
   pfStatus('pf-copy-status', list.length + (list.length === 1 ? ' copy button' : ' copy buttons') + ' ready below.');
 }
 
-// --- Length test ---
+// Length test
 function pfRenderTestOptions(){
   const select = document.getElementById('pf-test-question');
   select.textContent = '';
@@ -1215,7 +1230,7 @@ function pfMakeTests(){
   pfStatus('pf-test-status', msg);
 }
 
-// --- Basic and advanced modes ---
+// Basic and advanced modes
 // Basic: the AI writes the answers and the link, and the tool checks the
 // link. Advanced: answers typed into boxes or loaded from a file.
 let pfReady = false;
@@ -1516,7 +1531,7 @@ function pfLoadFile(input){
   reader.readAsText(file);
 }
 
-// --- Examples ---
+// Examples
 // Made-up forms for trying the tool. Their links open example-form.html, a
 // stand-in that shows the answers filled in, so nothing reaches a real form.
 // Dates are the visitor's today. Shared by the tool and the stand-in page.
@@ -1696,7 +1711,7 @@ onPage('pf-sample', function(){
   else pfLoadExample();
 });
 
-// --- Example form stand-in ---
+// Example form stand-in
 // Shows an example form with the link's answers filled in, the way Microsoft
 // Forms would: an answer that doesn't match an option is left blank.
 function exRenderForm(){
@@ -1775,7 +1790,6 @@ function syncThemeButton(){
   if (!btn) return;
   var theme = currentTheme();
   btn.textContent = theme === "dark" ? "Light" : "Dark";
-  btn.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
 }
 
 function toggleTheme(){

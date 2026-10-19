@@ -95,14 +95,14 @@
 
 <nav>
   <a href="../index.html" class="brand">flow<span class="dot">·</span>narrate</a>
-  <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menu" onclick="toggleNav()">
-    <span></span><span></span><span></span>
+  <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" onclick="toggleNav()">
+    <span class="nav-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>Menu
   </button>
   <ul id="nav-links">
     <li><a href="../blog.html">Blog</a></li>
     <li><a href="../tools.html">Tools</a></li>
     <li><a href="../index.html#about">About</a></li>
-    <li><button type="button" id="theme-toggle" class="theme-toggle" aria-pressed="false" onclick="toggleTheme()">Dark</button></li>
+    <li><button type="button" id="theme-toggle" class="theme-toggle" onclick="toggleTheme()">Dark</button></li>
   </ul>
 </nav>
 
@@ -112,7 +112,7 @@
   <div class="hero-text" style="max-width:720px;">
     <div class="breadcrumb"><a href="../tools.html">Tools</a> / OData filter query builder</div>
     <svg class="tool-hero-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/><path d="M8 10.5h5"/></svg>
-    <div class="status-line"><span class="status-dot"></span>FREE · RUNS ENTIRELY IN YOUR BROWSER</div>
+    <div class="status-line">Free · runs entirely in your browser</div>
     <h1>OData <span class="accent">filter query</span> builder</h1>
     <p class="sub" style="max-width:600px;margin-bottom:14px;">Get items and List rows actions are much faster when the filtering happens at the source instead of in a loop afterwards, but OData syntax is easy to get wrong: <code>eq</code> instead of <code>=</code>, quotes around text but not numbers. Add your conditions and copy the query.</p>
   </div>
@@ -123,7 +123,7 @@
     <div>
       <h2>OData Query</h2>
     </div>
-    <p>ADD CONDITIONS, COMBINE WITH AND / OR<br>PLUS $select, $orderby, AND $top</p>
+    <p>Add conditions, combine them with AND or OR, then add $select, $orderby and $top.</p>
   </div>
 
   <div class="expr-tool">
@@ -183,7 +183,6 @@
     <div>
       <h2>More free tools</h2>
     </div>
-    <p>EVERY TOOL RUNS IN YOUR BROWSER<br>NO SIGN-IN, NOTHING STORED</p>
   </div>
   <div class="posts">
     <a href="power-automate-expression-builder.html" class="post post-live">
@@ -260,7 +259,7 @@
     </a>
     <a href="../tools.html" class="post post-live">
       <div class="meta">All tools</div>
-      <h3>Browse every tool →</h3>
+      <h3>Browse every tool</h3>
       <p>All thirteen free tools on one page.</p>
     </a>
   </div>

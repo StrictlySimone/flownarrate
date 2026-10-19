@@ -143,14 +143,14 @@
 
 <nav>
   <a href="index.html" class="brand">flow<span class="dot">·</span>narrate</a>
-  <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menu" onclick="toggleNav()">
-    <span></span><span></span><span></span>
+  <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" onclick="toggleNav()">
+    <span class="nav-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>Menu
   </button>
   <ul id="nav-links">
     <li><a href="blog.html">Blog</a></li>
     <li><a href="tools.html">Tools</a></li>
     <li><a href="index.html#about">About</a></li>
-    <li><button type="button" id="theme-toggle" class="theme-toggle" aria-pressed="false" onclick="toggleTheme()">Dark</button></li>
+    <li><button type="button" id="theme-toggle" class="theme-toggle" onclick="toggleTheme()">Dark</button></li>
   </ul>
 </nav>
 
@@ -158,7 +158,6 @@
 
 <section class="hero" style="border-bottom:none;grid-template-columns:1fr;max-width:720px;">
   <div class="hero-text">
-    <div class="status-line"><span class="status-dot"></span>RUNS ENTIRELY IN YOUR BROWSER</div>
     <h1>Free Power Platform <span class="accent">tools</span></h1>
     <p class="sub" style="max-width:600px;">Thirteen tools covering expressions, conditions, JSON, dates, Adaptive Cards, error handling, Microsoft Forms and more, all without opening the app. Nothing you type here is sent anywhere.</p>
   </div>
