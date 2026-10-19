@@ -254,10 +254,13 @@
     background:none;
     color:var(--ink-soft);
     padding:8px 14px;
+    min-height:44px;
     cursor:pointer;
   }
+  .filter-pill[hidden]{display:none;}
   .filter-pill:hover{color:var(--ink);border-color:var(--ink-soft);}
-  .filter-pill.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+  .filter-pill[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+  .post-empty{padding:24px 0;font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:var(--ink-soft);}
 
   section{padding:40px 56px 72px;max-width:1240px;margin:0 auto;}
 
@@ -296,6 +299,12 @@
     .page-head, section{padding-left:22px;padding-right:22px;}
     nav ul{gap:18px;}
   }
+  /* Touch targets: every control is at least 44px tall on any screen */
+  .brand, nav ul li a, footer a{display:inline-flex;align-items:center;min-height:44px;}
+  footer a{min-width:24px;justify-content:center;}
+  .nav-toggle{min-width:44px;min-height:44px;align-items:center;}
+  .theme-toggle, .copy-btn{min-height:44px;}
+  summary{padding:12px 0;}
 </style>
 <link rel="alternate" type="application/rss+xml" title="FlowNarrate" href="https://www.flownarrate.com/feed.xml">
 </head>
@@ -321,15 +330,15 @@
 <div class="page-head">
   <div class="eyebrow">All posts</div>
   <h1>Every narration, in one place</h1>
-  <p class="sub">Flow narrations, system explainers, certification notes, and quick tips, in the order they were written. Filter by format if you're after one kind of thing.</p>
+  <p class="sub">Every post, newest first. Filter by format if you're after one kind of thing.</p>
   <div class="filters" role="group" aria-label="Filter posts by format">
-    <button type="button" class="filter-pill active" data-filter="all" onclick="filterPosts('all', this)">All</button>
-    <button type="button" class="filter-pill" data-filter="Origin" onclick="filterPosts('Origin', this)">Origin</button>
-    <button type="button" class="filter-pill" data-filter="Flow Narration" onclick="filterPosts('Flow Narration', this)">Flow Narration</button>
-    <button type="button" class="filter-pill" data-filter="Quick Tip" onclick="filterPosts('Quick Tip', this)">Quick Tip</button>
-    <button type="button" class="filter-pill" data-filter="System Explainer" onclick="filterPosts('System Explainer', this)">System Explainer</button>
-    <button type="button" class="filter-pill" data-filter="Certification Corner" onclick="filterPosts('Certification Corner', this)">Certification Corner</button>
-    <button type="button" class="filter-pill" data-filter="Opinion" onclick="filterPosts('Opinion', this)">Opinion</button>
+    <button type="button" class="filter-pill" data-filter="all" aria-pressed="true">All</button>
+    <button type="button" class="filter-pill" data-filter="Origin" aria-pressed="false">Origin</button>
+    <button type="button" class="filter-pill" data-filter="Flow Narration" aria-pressed="false">Flow Narration</button>
+    <button type="button" class="filter-pill" data-filter="Quick Tip" aria-pressed="false">Quick Tip</button>
+    <button type="button" class="filter-pill" data-filter="System Explainer" aria-pressed="false">System Explainer</button>
+    <button type="button" class="filter-pill" data-filter="Certification Corner" aria-pressed="false">Certification Corner</button>
+    <button type="button" class="filter-pill" data-filter="Opinion" aria-pressed="false">Opinion</button>
   </div>
 </div>
 
@@ -361,6 +370,8 @@
       <p>Why automation logic deserves to be told as clearly as it was built.</p>
     </a>
   </div>
+  <p class="post-empty" id="post-empty" hidden>Nothing in this format yet. It's on the list.</p>
+  <p class="sr-only" id="filter-status" aria-live="polite"></p>
 </section>
 
 </main>
@@ -408,13 +419,29 @@
     });
   });
 
-  function filterPosts(format, btn){
-    document.querySelectorAll('.filter-pill').forEach(function(p){ p.classList.remove('active'); });
-    btn.classList.add('active');
-    document.querySelectorAll('#posts-grid .post').forEach(function(post){
-      post.style.display = (format === 'all' || post.getAttribute('data-format') === format) ? '' : 'none';
+  (function(){
+    var pills = Array.prototype.slice.call(document.querySelectorAll('.filter-pill'));
+    var posts = Array.prototype.slice.call(document.querySelectorAll('#posts-grid .post'));
+    var empty = document.getElementById('post-empty');
+    var status = document.getElementById('filter-status');
+    function matches(post, format){ return format === 'all' || post.getAttribute('data-format') === format; }
+    pills.forEach(function(pill){
+      var format = pill.getAttribute('data-filter');
+      // Formats with no posts yet stay out of the way until their first post goes up.
+      if (format !== 'all' && !posts.some(function(post){ return matches(post, format); })) pill.hidden = true;
+      pill.addEventListener('click', function(){
+        var shown = 0;
+        posts.forEach(function(post){
+          var match = matches(post, format);
+          post.style.display = match ? '' : 'none';
+          if (match) shown++;
+        });
+        pills.forEach(function(p){ p.setAttribute('aria-pressed', p === pill ? 'true' : 'false'); });
+        empty.hidden = shown !== 0;
+        status.textContent = shown + (shown === 1 ? ' post' : ' posts') + ' shown';
+      });
     });
-  }
+  })();
 
   var yearEl = document.getElementById('copyright-year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();

@@ -255,6 +255,12 @@
     nav ul{gap:18px;}
     h1{font-size:1.7rem;}
   }
+  /* Touch targets: every control is at least 44px tall on any screen */
+  .brand, nav ul li a, footer a{display:inline-flex;align-items:center;min-height:44px;}
+  footer a{min-width:24px;justify-content:center;}
+  .nav-toggle{min-width:44px;min-height:44px;align-items:center;}
+  .theme-toggle, .copy-btn{min-height:44px;}
+  summary{padding:12px 0;}
 </style>
 <link rel="alternate" type="application/rss+xml" title="FlowNarrate" href="https://www.flownarrate.com/feed.xml">
 </head>

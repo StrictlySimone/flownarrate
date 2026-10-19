@@ -77,6 +77,9 @@
     --succeeded: #A01A7D;
     --warning: #B54708;
     --failed: #9E3B32;
+    --code-bg: #1A1A17;
+    --code-ink: #E8E6D8;
+    --code-ok: #6CC495;
   }
   [data-theme="dark"]{
     --paper: #141418;
@@ -256,8 +259,8 @@
   }
   .code-block{
     margin-top:12px;
-    background:#1A1A17;
-    color:#E8E6D8;
+    background:var(--code-bg);
+    color:var(--code-ink);
     padding:16px 18px;
     font-family:'JetBrains Mono',monospace;
     font-size:0.76rem;
@@ -330,8 +333,15 @@
   td code, li code, p code{font-family:'JetBrains Mono',monospace;font-size:0.86em;}
   td code{white-space:nowrap;}
   .ok{color:var(--ok);} .bad{color:var(--failed);}
+  .code-block .ok{color:var(--code-ok);}
   .draft-note{border:1px dashed var(--warning);padding:14px 18px;margin:0 0 28px;font-family:'JetBrains Mono',monospace;font-size:0.78rem;line-height:1.6;color:var(--ink-soft);}
   .draft-note b{color:var(--warning);text-transform:uppercase;letter-spacing:0.06em;}
+  /* Touch targets: every control is at least 44px tall on any screen */
+  .brand, nav ul li a, footer a{display:inline-flex;align-items:center;min-height:44px;}
+  footer a{min-width:24px;justify-content:center;}
+  .nav-toggle{min-width:44px;min-height:44px;align-items:center;}
+  .theme-toggle, .copy-btn{min-height:44px;}
+  summary{padding:12px 0;}
 </style>
 <link rel="alternate" type="application/rss+xml" title="FlowNarrate" href="https://www.flownarrate.com/feed.xml">
 </head>
@@ -456,7 +466,7 @@
   <h2>A helper for writing the links</h2>
   <p>Writing these links by hand isn't practical, so I made a small tool with two modes. In basic mode, you paste the sample link and your notes, and the tool gives you a prompt for Copilot or another AI. The AI writes the answers and the link. You paste its reply back, and the tool checks every answer against the form, fixes hidden-space mistakes, and reads the answers back to you question by question. Advanced mode is for typing answers yourself or loading them from a file. It opens on one of four made-up example forms, so you can see how it works without touching a real one.</p>
 
-  <p><a href="tools/microsoft-forms-prefill-link-builder.html">Try the Microsoft Forms pre-filled link builder &rarr;</a> It opens on an example form, so you can try every step before using your own.</p>
+  <p><a href="tools/microsoft-forms-prefill-link-builder.html">Try the Microsoft Forms pre-filled link builder.</a> It opens on an example form, so you can try every step before using your own.</p>
 
   <h2>Useful Microsoft pages</h2>
   <ul>

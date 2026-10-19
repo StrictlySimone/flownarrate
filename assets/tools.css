@@ -7,14 +7,11 @@
   --ink-soft: #4A4A55;
   --rule: #D9D6CC;
   --succeeded: #A01A7D;
-  --accent-hover: #A01A7D;
-  --bronze: #E09F7D;
-  --pink: #E58AC8;
-  --magenta: #A01A7D;
-  --plum: #A01A7D;
-  --amethyst: #16161D;
   --warning: #B54708;
   --failed: #9E3B32;
+  --code-bg: #1A1A17;
+  --code-ink: #E8E6D8;
+  --code-ok: #6CC495;
 }
 [data-theme="dark"]{
   --paper: #141418;
@@ -25,7 +22,6 @@
   --ink-soft: #B4B2BD;
   --rule: #34343E;
   --succeeded: #E58AC8;
-  --accent-hover: #E58AC8;
   --warning: #F0A35E;
   --failed: #E2564A;
 }
@@ -39,7 +35,6 @@
     --ink-soft: #B4B2BD;
     --rule: #34343E;
     --succeeded: #E58AC8;
-    --accent-hover: #E58AC8;
     --warning: #F0A35E;
     --failed: #E2564A;
   }
@@ -82,8 +77,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 }
 .mermaid-code{
   margin-top:12px;
-  background:#1A1A17;
-  color:#E8E6D8;
+  background:var(--code-bg);
+  color:var(--code-ink);
   padding:14px 16px;
   font-family:'JetBrains Mono',monospace;
   font-size:0.78rem;
@@ -574,7 +569,7 @@ textarea:focus-visible, summary:focus-visible, [tabindex="-1"]:focus-visible{
   border-left:3px solid var(--warning);background:var(--paper);
   padding:10px 14px;margin:0 0 16px;font-size:0.95rem;color:var(--ink);
 }
-.pf-answers .pf-change{margin-top:6px;min-height:36px;padding:4px 12px;}
+.pf-answers .pf-change{margin-top:6px;min-height:44px;padding:4px 12px;}
 .pf-inline-edit{border:1px solid var(--rule);border-radius:4px;padding:4px 14px 14px;margin-top:8px;}
 .pf-inline-edit .pf-question{border-top:none;padding-top:8px;}
 .pf-question select{margin-bottom:4px;}
@@ -591,3 +586,13 @@ textarea:focus-visible, summary:focus-visible, [tabindex="-1"]:focus-visible{
 .tool-guide .ms-shot img{display:block;max-width:100%;height:auto;border:1px solid var(--rule);background:#fff;}
 .tool-guide .ms-shot figcaption{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--ink-soft);margin-top:8px;}
 .tool-guide .ms-shot figcaption a{color:inherit;}
+
+/* Touch targets: every control is at least 44px tall on any screen */
+.brand, nav ul li a, footer a, .breadcrumb a{display:inline-flex;align-items:center;min-height:44px;}
+footer a{min-width:24px;justify-content:center;}
+.nav-toggle{min-width:44px;min-height:44px;align-items:center;}
+.theme-toggle, .copy-btn{min-height:44px;}
+summary{padding:12px 0;}
+.check-label{min-height:44px;}
+label:not(.check-label):has(> input[type="checkbox"], > input[type="radio"]){display:inline-flex;align-items:center;min-height:44px;}
+.expr-field input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), .expr-field select, .filter-row input, .filter-row select, .expr-row input{min-height:44px;}

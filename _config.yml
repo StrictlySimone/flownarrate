@@ -2,3 +2,4 @@
 exclude:
   - CLAUDE.md
   - anti-slop
+  - DESIGN.md
