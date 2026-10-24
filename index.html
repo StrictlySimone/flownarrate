@@ -60,8 +60,17 @@
   ]
 }
 </script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" href="/assets/fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+  @font-face{font-family:'Source Serif 4';font-style:normal;font-weight:400 600;font-display:swap;src:url(/assets/fonts/source-serif-4-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+  @font-face{font-family:'Source Serif 4';font-style:normal;font-weight:400 600;font-display:swap;src:url(/assets/fonts/source-serif-4-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+  @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 600;font-display:swap;src:url(/assets/fonts/jetbrains-mono-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+  @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 600;font-display:swap;src:url(/assets/fonts/jetbrains-mono-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+  /* Fallbacks scaled to the web fonts' metrics, so text barely moves when they swap in */
+  @font-face{font-family:'Source Serif 4 Fallback';src:local('Times New Roman'),local('Liberation Serif');size-adjust:113.4%;ascent-override:91.4%;descent-override:29.5%;line-gap-override:0%;}
+  @font-face{font-family:'JetBrains Mono Fallback';src:local('Courier New'),local('Liberation Mono');size-adjust:100%;ascent-override:102%;descent-override:30%;line-gap-override:0%;}
+</style>
 <style>
   :root{
     --paper: #F6F5F1;
@@ -105,7 +114,7 @@
   body{
     background:var(--paper);
     color:var(--ink);
-    font-family:'Source Serif 4', serif;
+    font-family:'Source Serif 4','Source Serif 4 Fallback',serif;
     font-size:17px;
     line-height:1.65;
     overflow-x:hidden;
@@ -121,7 +130,7 @@
     position:absolute;left:-9999px;top:0;
     background:var(--ink);color:var(--paper);
     padding:12px 20px;z-index:100;
-    font-family:'JetBrains Mono',monospace;font-size:0.85rem;
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-size:0.85rem;
     text-decoration:none;
   }
   .skip-link:focus{left:12px;top:12px;}
@@ -138,7 +147,7 @@
     flex-wrap:wrap;
   }
   .brand{
-    font-family:'JetBrains Mono',monospace;
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;
     font-size:1rem;font-weight:600;
     letter-spacing:0.02em;
     white-space:nowrap;
@@ -146,7 +155,7 @@
   .brand .dot{color:var(--succeeded);}
   nav ul{display:flex;gap:34px;list-style:none;}
   nav ul li a{
-    font-family:'JetBrains Mono',monospace;
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;
     font-size:0.8rem;text-decoration:none;color:var(--ink-soft);
     text-transform:uppercase;letter-spacing:0.06em;
   }
@@ -155,7 +164,7 @@
     display:none;
     align-items:center;
     gap:10px;
-    font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:var(--ink);
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-size:0.8rem;color:var(--ink);
     text-transform:uppercase;letter-spacing:0.06em;
     background:none;
     border:none;
@@ -190,7 +199,7 @@
     nav{position:relative;}
   }
   .theme-toggle{
-    font-family:'JetBrains Mono',monospace;
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;
     font-size:0.8rem;
     color:var(--ink-soft);
     background:none;
@@ -233,7 +242,7 @@
     display:flex;gap:14px;flex-wrap:wrap;
   }
   .btn{
-    font-family:'JetBrains Mono',monospace;
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;
     font-size:0.82rem;font-weight:500;
     padding:12px 22px;
     text-decoration:none;
@@ -255,12 +264,12 @@
   .section-head h2{
     font-weight:500;font-size:1.7rem;margin-top:6px;
   }
-  .section-head p{color:var(--ink-soft);font-size:0.92rem;max-width:380px;font-family:'JetBrains Mono',monospace;line-height:1.5;}
+  .section-head p{color:var(--ink-soft);font-size:0.92rem;max-width:380px;font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;line-height:1.5;}
 
   footer{
     padding:34px 56px;
     display:flex;justify-content:space-between;
-    font-family:'JetBrains Mono',monospace;
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;
     font-size:0.75rem;color:var(--ink-soft);
     flex-wrap:wrap;gap:10px;
   }
@@ -281,11 +290,11 @@
   .hero p.sub{max-width:560px;}
   .run-summary{border-top:1px solid var(--ink);margin-top:8px;}
   .rs-head{
-    font-family:'JetBrains Mono',monospace;font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;
     color:var(--ink-soft);padding:12px 0;border-bottom:1px solid var(--rule);
   }
   .rs-row{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:16px 0;border-bottom:1px solid var(--rule);font-size:1.02rem;}
-  .rs-status{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap;}
+  .rs-status{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap;}
   .rs-dot{width:7px;height:7px;border-radius:50%;background:currentColor;display:inline-block;}
   .rs-ok{color:var(--ok);}
   .rs-wait{color:var(--warning);}
@@ -296,12 +305,12 @@
   .section-head{align-items:baseline;margin-bottom:20px;}
   .section-head h2{margin-top:0;}
   .section-sub{color:var(--ink-soft);margin:-8px 0 22px;}
-  .text-link{font-family:'JetBrains Mono',monospace;font-size:0.8rem;min-height:44px;display:inline-flex;align-items:center;}
+  .text-link{font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-size:0.8rem;min-height:44px;display:inline-flex;align-items:center;}
   .topic-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;}
   .topic-filters[hidden]{display:none;}
   .topic-filters button{
     min-height:44px;padding:0 14px;border-radius:4px;cursor:pointer;
-    font-family:'JetBrains Mono',monospace;font-size:0.78rem;
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-size:0.78rem;
     background:transparent;color:var(--ink);border:1px solid var(--ink-soft);
   }
   .topic-filters button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink);}
@@ -312,15 +321,15 @@
   }
   .post-list a:hover .post-title{color:var(--succeeded);}
   .post-row-icon{width:24px;height:24px;color:var(--succeeded);align-self:center;}
-  .post-format{font-family:'JetBrains Mono',monospace;font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--succeeded);}
+  .post-format{font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--succeeded);}
   .post-title{font-size:1.22rem;line-height:1.35;}
-  .post-list time{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--ink-soft);white-space:nowrap;}
-  .post-empty{padding:22px 0;border-bottom:1px solid var(--rule);font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:var(--ink-soft);}
+  .post-list time{font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-size:0.75rem;color:var(--ink-soft);white-space:nowrap;}
+  .post-empty{padding:22px 0;border-bottom:1px solid var(--rule);font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-size:0.85rem;color:var(--ink-soft);}
   .formats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:0 40px;border-top:1px solid var(--ink);}
   .formats div{padding:20px 0;border-bottom:1px solid var(--rule);}
   .formats h3{font-weight:500;font-size:1.12rem;margin-bottom:6px;}
   .formats p{color:var(--ink-soft);font-size:0.95rem;}
-  .formats p.format-soon{font-family:'JetBrains Mono',monospace;font-size:0.75rem;margin-top:8px;}
+  .formats p.format-soon{font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-size:0.75rem;margin-top:8px;}
   .tool-list{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(250px,100%),1fr));gap:0 40px;border-top:1px solid var(--ink);}
   .tool-list a{display:flex;align-items:center;gap:14px;min-height:56px;padding:12px 0;border-bottom:1px solid var(--rule);text-decoration:none;color:inherit;}
   .tool-list a:hover span{color:var(--succeeded);}
@@ -330,11 +339,11 @@
   .about-text h2{font-weight:500;font-size:1.7rem;margin-bottom:18px;}
   .about-text p{margin-bottom:14px;max-width:640px;}
   .about-text p a{color:var(--succeeded);}
-  .kicker{font-family:'JetBrains Mono',monospace;font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--succeeded);margin-bottom:10px !important;}
+  .kicker{font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--succeeded);margin-bottom:10px !important;}
   .cred-list{flex:1 1 320px;min-width:0;border-top:1px solid var(--ink);align-self:flex-start;}
   .cred-list a{display:flex;align-items:baseline;gap:18px;min-height:52px;padding:14px 0;border-bottom:1px solid var(--rule);text-decoration:none;color:inherit;}
   .cred-list a:hover{color:var(--succeeded);}
-  .cred-code{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--succeeded);min-width:76px;}
+  .cred-code{font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-weight:600;color:var(--succeeded);min-width:76px;}
   @media(max-width:900px){
     .hero{grid-template-columns:1fr;gap:36px;}
   }
@@ -491,7 +500,7 @@
 </main>
 
 <footer>
-  <div><a href="index.html" style="color:inherit;">flownarrate.com</a> &middot; &copy; <span id="copyright-year"></span></div>
+  <div><a href="/" style="color:inherit;">flownarrate.com</a> &middot; &copy; <span id="copyright-year"></span></div>
   <div><a href="privacy.html" style="color:inherit;">Privacy</a> · <a href="feed.xml" style="color:inherit;">RSS</a> · <a href="https://linkedin.com/in/sptgb" target="_blank" rel="noopener" style="color:inherit;">LinkedIn</a> · AB-100 Certified · Microsoft Certified Trainer</div>
 </footer>
 
