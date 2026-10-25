@@ -63,8 +63,17 @@
   }
 }
 </script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" href="/assets/fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+  @font-face{font-family:'Source Serif 4';font-style:normal;font-weight:400 600;font-display:swap;src:url(/assets/fonts/source-serif-4-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+  @font-face{font-family:'Source Serif 4';font-style:normal;font-weight:400 600;font-display:swap;src:url(/assets/fonts/source-serif-4-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+  @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 600;font-display:swap;src:url(/assets/fonts/jetbrains-mono-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+  @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 600;font-display:swap;src:url(/assets/fonts/jetbrains-mono-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+  /* Fallbacks scaled to the web fonts' metrics, so text barely moves when they swap in */
+  @font-face{font-family:'Source Serif 4 Fallback';src:local('Times New Roman'),local('Liberation Serif');size-adjust:113.4%;ascent-override:91.4%;descent-override:29.5%;line-gap-override:0%;}
+  @font-face{font-family:'JetBrains Mono Fallback';src:local('Courier New'),local('Liberation Mono');size-adjust:100%;ascent-override:102%;descent-override:30%;line-gap-override:0%;}
+</style>
 <style>
   :root{
     --paper: #F6F5F1;
@@ -111,13 +120,13 @@
   body{
     background:var(--paper);
     color:var(--ink);
-    font-family:'Source Serif 4', serif;
+    font-family:'Source Serif 4','Source Serif 4 Fallback',serif;
     font-size:18px;
     line-height:1.7;
     overflow-x:hidden;
     width:100%;
   }
-  .mono{font-family:'JetBrains Mono',monospace;overflow-wrap:anywhere;}
+  .mono{font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;overflow-wrap:anywhere;}
   a{color:var(--succeeded);}
   a:focus-visible, button:focus-visible{
     outline:2px solid var(--succeeded);
@@ -127,7 +136,7 @@
     position:absolute;left:-9999px;top:0;
     background:var(--ink);color:var(--paper);
     padding:12px 20px;z-index:100;
-    font-family:'JetBrains Mono',monospace;font-size:0.85rem;
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-size:0.85rem;
     text-decoration:none;
   }
   .skip-link:focus{left:12px;top:12px;}
@@ -140,7 +149,7 @@
     flex-wrap:wrap;
   }
   .brand{
-    font-family:'JetBrains Mono',monospace;
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;
     font-size:1rem;font-weight:600;
     letter-spacing:0.02em;
     white-space:nowrap;
@@ -150,7 +159,7 @@
   .brand .dot{color:var(--succeeded);}
   nav ul{display:flex;gap:34px;list-style:none;}
   nav ul li a{
-    font-family:'JetBrains Mono',monospace;
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;
     font-size:0.8rem;text-decoration:none;color:var(--ink-soft);
     text-transform:uppercase;letter-spacing:0.06em;
   }
@@ -159,7 +168,7 @@
     display:none;
     align-items:center;
     gap:10px;
-    font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:var(--ink);
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-size:0.8rem;color:var(--ink);
     text-transform:uppercase;letter-spacing:0.06em;
     background:none;
     border:none;
@@ -194,7 +203,7 @@
     nav{position:relative;}
   }
   .theme-toggle{
-    font-family:'JetBrains Mono',monospace;
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;
     font-size:0.8rem;
     color:var(--ink-soft);
     background:none;
@@ -214,7 +223,7 @@
     padding:64px 24px 100px;
   }
   .meta{
-    font-family:'JetBrains Mono',monospace;
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;
     font-size:0.78rem;
     color:var(--ink-soft);
     text-transform:uppercase;
@@ -237,7 +246,7 @@
     font-weight:600;
     font-size:1.05rem;
     margin:28px 0 10px;
-    font-family:'JetBrains Mono',monospace;
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;
     color:var(--succeeded);
   }
   p{margin-bottom:20px;color:var(--ink);}
@@ -255,7 +264,7 @@
 
   .mermaid-toggle{margin-top:20px;border-top:1px dashed var(--rule);padding-top:14px;}
   .mermaid-toggle summary{
-    font-family:'JetBrains Mono',monospace;
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;
     font-size:0.76rem;color:var(--succeeded);
     cursor:pointer;
   }
@@ -264,7 +273,7 @@
     background:var(--code-bg);
     color:var(--code-ink);
     padding:16px 18px;
-    font-family:'JetBrains Mono',monospace;
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;
     font-size:0.76rem;
     line-height:1.6;
     overflow-x:auto;
@@ -272,7 +281,7 @@
   }
   .copy-btn{
     margin-top:10px;
-    font-family:'JetBrains Mono',monospace;
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;
     font-size:0.75rem;
     background:none;
     border:1px solid var(--ink);
@@ -287,7 +296,7 @@
   }
 
   .verified-note{
-    font-family:'JetBrains Mono',monospace;
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;
     font-size:0.78rem;
     color:var(--succeeded);
     margin-bottom:12px;
@@ -296,7 +305,7 @@
   .back{
     display:inline-block;
     margin-top:48px;
-    font-family:'JetBrains Mono',monospace;
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;
     font-size:0.85rem;
     text-decoration:none;
     color:var(--ink-soft);
@@ -309,7 +318,7 @@
     padding:34px 56px;
     border-top:1px solid var(--rule);
     display:flex;justify-content:space-between;
-    font-family:'JetBrains Mono',monospace;
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;
     font-size:0.75rem;color:var(--ink-soft);
     flex-wrap:wrap;gap:10px;
   }
@@ -327,14 +336,14 @@
 
   figure{margin:8px 0 32px;}
   figure img{display:block;max-width:100%;height:auto;border:1px solid var(--rule);}
-  figcaption{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--ink-soft);margin-top:8px;}
+  figcaption{font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-size:0.75rem;color:var(--ink-soft);margin-top:8px;}
 
   .recreation{background:var(--panel);border:1px solid var(--rule);border-left:4px solid var(--failed);padding:14px 18px;}
   .recreation.ok{border-left-color:var(--ok);}
-  .recreation .label{display:block;font-family:'JetBrains Mono',monospace;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--failed);margin-bottom:6px;}
+  .recreation .label{display:block;font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--failed);margin-bottom:6px;}
   .recreation.ok .label{color:var(--ok);}
   .recreation .msg{overflow-wrap:anywhere;}
-  .recreation dl{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;margin:0;font-family:'JetBrains Mono',monospace;font-size:0.85rem;}
+  .recreation dl{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;margin:0;font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-size:0.85rem;}
   .recreation dt{color:var(--ink-soft);}
   .recreation dd{margin:0;overflow-wrap:anywhere;}
   /* Touch targets: every control is at least 44px tall on any screen */
@@ -351,14 +360,14 @@
 <a href="#main" class="skip-link">Skip to content</a>
 
 <nav>
-  <a href="index.html" class="brand">flow<span class="dot">·</span>narrate</a>
+  <a href="/" class="brand">flow<span class="dot">·</span>narrate</a>
   <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" onclick="toggleNav()">
     <span class="nav-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>Menu
   </button>
   <ul id="nav-links">
     <li><a href="blog.html">Blog</a></li>
     <li><a href="tools.html">Tools</a></li>
-    <li><a href="index.html#about">About</a></li>
+    <li><a href="/#about">About</a></li>
     <li><button type="button" id="theme-toggle" class="theme-toggle" onclick="toggleTheme()">Dark</button></li>
   </ul>
 </nav>
@@ -410,7 +419,7 @@
   <p>The privilege error appeared because incoming mail was set to server-side sync, which needs read rights for the owning user. A send-only mailbox doesn't need incoming mail, so no security role change was needed.</p>
 
   <figure>
-    <img src="images/mailbox/test-email-configuration.png" width="654" height="602" style="max-width:min(100%,520px)" alt="The Test Email Configuration dialog. It explains that a test message will be sent to the mailbox owner and the results shown on the mailbox record, asks for the date to process incoming email from, and has OK and Cancel buttons.">
+    <img loading="lazy" decoding="async" src="images/mailbox/test-email-configuration.webp" width="654" height="602" style="max-width:min(100%,520px)" alt="The Test Email Configuration dialog. It explains that a test message will be sent to the mailbox owner and the results shown on the mailbox record, asks for the date to process incoming email from, and has OK and Cancel buttons.">
     <figcaption>The dialog that opens when you choose Test &amp; Enable Mailbox. With incoming set to None, only outgoing email is tested. Screenshot: <a href="https://learn.microsoft.com/power-platform/admin/connect-exchange-online" target="_blank" rel="noopener">Microsoft Learn</a>, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>.</figcaption>
   </figure>
 
@@ -431,12 +440,12 @@
   </ul>
 
   <figure>
-    <img src="images/mailbox/send-email-as-another-user.png" width="269" height="290" style="max-width:min(100%,320px)" alt="Part of a security role's Miscellaneous Privileges list, with the Send Email as Another User privilege highlighted.">
+    <img loading="lazy" decoding="async" src="images/mailbox/send-email-as-another-user.png" width="269" height="290" style="max-width:min(100%,320px)" alt="Part of a security role's Miscellaneous Privileges list, with the Send Email as Another User privilege highlighted.">
     <figcaption>Send Email as Another User, under Miscellaneous Privileges in a security role. The flow's connection account needs a role with this. Screenshot: <a href="https://learn.microsoft.com/power-platform/admin/send-email-on-behalf" target="_blank" rel="noopener">Microsoft Learn</a>, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>.</figcaption>
   </figure>
 
   <figure>
-    <img src="images/mailbox/allow-others-to-send-on-your-behalf.png" width="572" height="219" style="max-width:min(100%,520px)" alt="The Email tab of Set Personal Options, with the setting Allow other Microsoft Dynamics 365 users to send email on your behalf ticked and highlighted.">
+    <img loading="lazy" decoding="async" src="images/mailbox/allow-others-to-send-on-your-behalf.png" width="572" height="219" style="max-width:min(100%,520px)" alt="The Email tab of Set Personal Options, with the setting Allow other Microsoft Dynamics 365 users to send email on your behalf ticked and highlighted.">
     <figcaption>The setting the From user has to tick for themselves, on the Email tab of their personal options. This is the <span class="mono">issendasallowed</span> flag that nobody can tick for a service account. Screenshot: <a href="https://learn.microsoft.com/power-platform/admin/send-email-on-behalf" target="_blank" rel="noopener">Microsoft Learn</a>, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>.</figcaption>
   </figure>
 
@@ -505,12 +514,12 @@ OData-Version: 4.0
     <li><a href="https://learn.microsoft.com/power-apps/developer/data-platform/reference/entities/usersettings" target="_blank" rel="noopener">User Settings (UserSettings) table/entity reference</a></li>
   </ul>
 
-  <a href="index.html" class="back">&larr; Back to FlowNarrate</a>
+  <a href="/" class="back">&larr; Back to FlowNarrate</a>
 </article>
 </main>
 
 <footer>
-  <div><a href="index.html" style="color:inherit;">flownarrate.com</a> &middot; &copy; <span id="copyright-year"></span></div>
+  <div><a href="/" style="color:inherit;">flownarrate.com</a> &middot; &copy; <span id="copyright-year"></span></div>
   <div><a href="privacy.html" style="color:inherit;">Privacy</a> · <a href="feed.xml" style="color:inherit;">RSS</a> · <a href="https://linkedin.com/in/sptgb" target="_blank" rel="noopener" style="color:inherit;">LinkedIn</a> · AB-100 Certified · Microsoft Certified Trainer</div>
 </footer>
 

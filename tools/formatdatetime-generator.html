@@ -15,19 +15,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light dark">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 fill=%27%23311847%27/%3E%3Ctext x=%2716%27 y=%2723%27 font-family=%27monospace%27 font-size=%2718%27 font-weight=%27700%27 fill=%27%23EC4067%27 text-anchor=%27middle%27%3Efn%3C/text%3E%3C/svg%3E">
-<title>Power Automate formatDateTime expression generator: FlowNarrate</title>
-<meta name="description" content="Generate a Power Automate formatDateTime expression from a date source and a format, with optional time zone conversion. Free, and it runs entirely in your browser.">
+<title>Power Automate formatDateTime generator and format strings: FlowNarrate</title>
+<meta name="description" content="Generate a Power Automate formatDateTime expression, with optional time zone conversion and a table of format strings such as dd/MM/yyyy, MM/dd/yyyy and HH:mm. Free, and it runs entirely in your browser.">
 <link rel="canonical" href="https://www.flownarrate.com/tools/formatdatetime-generator.html">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="FlowNarrate">
-<meta property="og:title" content="Power Automate formatDateTime expression generator">
-<meta property="og:description" content="Generate a Power Automate formatDateTime expression from a date source and a format, with optional time zone conversion. Free, and it runs entirely in your browser.">
+<meta property="og:title" content="Power Automate formatDateTime generator and format strings">
+<meta property="og:description" content="Generate a Power Automate formatDateTime expression, with optional time zone conversion and a table of format strings such as dd/MM/yyyy, MM/dd/yyyy and HH:mm. Free, and it runs entirely in your browser.">
 <meta property="og:url" content="https://www.flownarrate.com/tools/formatdatetime-generator.html">
 <meta property="og:image" content="https://www.flownarrate.com/images/og-card.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Power Automate formatDateTime expression generator">
-<meta name="twitter:description" content="Generate a Power Automate formatDateTime expression from a date source and a format, with optional time zone conversion. Free, and it runs entirely in your browser.">
+<meta name="twitter:title" content="Power Automate formatDateTime generator and format strings">
+<meta name="twitter:description" content="Generate a Power Automate formatDateTime expression, with optional time zone conversion and a table of format strings such as dd/MM/yyyy, MM/dd/yyyy and HH:mm. Free, and it runs entirely in your browser.">
 <meta name="twitter:image" content="https://www.flownarrate.com/images/og-card.png">
 <script type="application/ld+json">
 {
@@ -37,7 +37,7 @@
       "@type": "WebApplication",
       "name": "formatDateTime generator",
       "url": "https://www.flownarrate.com/tools/formatdatetime-generator.html",
-      "description": "Generate a Power Automate formatDateTime expression from a date source and a format, with optional time zone conversion. Free, and it runs entirely in your browser.",
+      "description": "Generate a Power Automate formatDateTime expression, with optional time zone conversion and a table of format strings such as dd/MM/yyyy, MM/dd/yyyy and HH:mm. Free, and it runs entirely in your browser.",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Any (runs in the browser)",
       "isAccessibleForFree": true,
@@ -84,8 +84,17 @@
   ]
 }
 </script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" href="/assets/fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+  @font-face{font-family:'Source Serif 4';font-style:normal;font-weight:400 600;font-display:swap;src:url(/assets/fonts/source-serif-4-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+  @font-face{font-family:'Source Serif 4';font-style:normal;font-weight:400 600;font-display:swap;src:url(/assets/fonts/source-serif-4-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+  @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 600;font-display:swap;src:url(/assets/fonts/jetbrains-mono-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+  @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 600;font-display:swap;src:url(/assets/fonts/jetbrains-mono-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+  /* Fallbacks scaled to the web fonts' metrics, so text barely moves when they swap in */
+  @font-face{font-family:'Source Serif 4 Fallback';src:local('Times New Roman'),local('Liberation Serif');size-adjust:113.4%;ascent-override:91.4%;descent-override:29.5%;line-gap-override:0%;}
+  @font-face{font-family:'JetBrains Mono Fallback';src:local('Courier New'),local('Liberation Mono');size-adjust:100%;ascent-override:102%;descent-override:30%;line-gap-override:0%;}
+</style>
 <link rel="stylesheet" href="../assets/tools.css">
 <link rel="alternate" type="application/rss+xml" title="FlowNarrate" href="https://www.flownarrate.com/feed.xml">
 </head>
@@ -94,14 +103,14 @@
 <a href="#main" class="skip-link">Skip to content</a>
 
 <nav>
-  <a href="../index.html" class="brand">flow<span class="dot">·</span>narrate</a>
+  <a href="/" class="brand">flow<span class="dot">·</span>narrate</a>
   <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" onclick="toggleNav()">
     <span class="nav-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>Menu
   </button>
   <ul id="nav-links">
     <li><a href="../blog.html">Blog</a></li>
     <li><a href="../tools.html">Tools</a></li>
-    <li><a href="../index.html#about">About</a></li>
+    <li><a href="/#about">About</a></li>
     <li><button type="button" id="theme-toggle" class="theme-toggle" onclick="toggleTheme()">Dark</button></li>
   </ul>
 </nav>
@@ -180,6 +189,41 @@
       <li>Copy the expression into the Expression tab of the dynamic content panel.</li>
     </ol>
     <p>Nothing you type here is sent anywhere. The tool runs entirely in your browser.</p>
+  </div>
+</section>
+
+<section id="date-formats">
+  <div class="tool-guide">
+    <h2>Format strings, with examples</h2>
+    <p>Power Automate uses .NET date format strings. Each output below is for Friday 14 August 2026 at 13:05 UTC.</p>
+    <table class="ref-table">
+      <thead><tr><th scope="col">Format string</th><th scope="col">Output</th></tr></thead>
+      <tbody>
+        <tr><td><code>dd/MM/yyyy</code></td><td>14/08/2026</td></tr>
+        <tr><td><code>MM/dd/yyyy</code></td><td>08/14/2026</td></tr>
+        <tr><td><code>yyyy-MM-dd</code></td><td>2026-08-14</td></tr>
+        <tr><td><code>d MMMM yyyy</code></td><td>14 August 2026</td></tr>
+        <tr><td><code>dddd, d MMMM yyyy</code></td><td>Friday, 14 August 2026</td></tr>
+        <tr><td><code>ddd d MMM</code></td><td>Fri 14 Aug</td></tr>
+        <tr><td><code>MMMM yyyy</code></td><td>August 2026</td></tr>
+        <tr><td><code>HH:mm</code></td><td>13:05</td></tr>
+        <tr><td><code>hh:mm tt</code></td><td>01:05 PM</td></tr>
+        <tr><td><code>h:mm tt</code></td><td>1:05 PM</td></tr>
+        <tr><td><code>dd/MM/yyyy HH:mm</code></td><td>14/08/2026 13:05</td></tr>
+      </tbody>
+    </table>
+    <p>Letter case matters. <code>MM</code> is the month and <code>mm</code> is minutes, so <code>dd/mm/yyyy</code> gives 14/05/2026. <code>HH</code> is the 24-hour clock and <code>hh</code> the 12-hour one.</p>
+
+    <h3>Related expressions</h3>
+    <table class="ref-table">
+      <thead><tr><th scope="col">Expression</th><th scope="col">What it does</th></tr></thead>
+      <tbody>
+        <tr><td><code>utcNow('dd/MM/yyyy')</code></td><td>Formats the current time directly, without formatDateTime</td></tr>
+        <tr><td><code>formatDateTime(utcNow(), 'dddd d MMMM', 'fr-FR')</code></td><td>Writes day and month names in another language, here vendredi 14 août</td></tr>
+        <tr><td><code>parseDateTime('14/08/2026', 'en-GB', 'dd/MM/yyyy')</code></td><td>Turns text such as a date typed into a form into a timestamp you can format or compare</td></tr>
+      </tbody>
+    </table>
+    <p>All of these work in UTC. For UK or other local time, set a time zone in the generator above, which wraps the date in <code>convertTimeZone</code>.</p>
   </div>
 </section>
 
@@ -273,7 +317,7 @@
 </main>
 
 <footer>
-  <div><a href="../index.html" style="color:inherit;">flownarrate.com</a> &middot; &copy; <span id="copyright-year"></span></div>
+  <div><a href="/" style="color:inherit;">flownarrate.com</a> &middot; &copy; <span id="copyright-year"></span></div>
   <div><a href="../privacy.html" style="color:inherit;">Privacy</a> · <a href="../feed.xml" style="color:inherit;">RSS</a> · <a href="https://linkedin.com/in/sptgb" target="_blank" rel="noopener" style="color:inherit;">LinkedIn</a> · AB-100 Certified · Microsoft Certified Trainer</div>
 </footer>
 

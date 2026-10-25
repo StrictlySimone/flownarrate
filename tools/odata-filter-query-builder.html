@@ -15,19 +15,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light dark">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 fill=%27%23311847%27/%3E%3Ctext x=%2716%27 y=%2723%27 font-family=%27monospace%27 font-size=%2718%27 font-weight=%27700%27 fill=%27%23EC4067%27 text-anchor=%27middle%27%3Efn%3C/text%3E%3C/svg%3E">
-<title>OData filter query builder for Power Automate: FlowNarrate</title>
-<meta name="description" content="Build OData filter queries for Power Automate's SharePoint Get items and Dataverse List rows: $filter, $select, $orderby and $top from simple rows. Free, and it runs entirely in your browser.">
+<title>OData filter query builder and syntax examples: FlowNarrate</title>
+<meta name="description" content="Build OData filter queries for Power Automate's SharePoint Get items and Dataverse List rows, with syntax examples for eq, ne, and/or, startswith, contains, null and dates. Free, and it runs entirely in your browser.">
 <link rel="canonical" href="https://www.flownarrate.com/tools/odata-filter-query-builder.html">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="FlowNarrate">
-<meta property="og:title" content="OData filter query builder for Power Automate">
-<meta property="og:description" content="Build OData filter queries for Power Automate's SharePoint Get items and Dataverse List rows: $filter, $select, $orderby and $top from simple rows. Free, and it runs entirely in your browser.">
+<meta property="og:title" content="OData filter query builder and syntax examples for Power Automate">
+<meta property="og:description" content="Build OData filter queries for Power Automate's SharePoint Get items and Dataverse List rows, with syntax examples for eq, ne, and/or, startswith, contains, null and dates. Free, and it runs entirely in your browser.">
 <meta property="og:url" content="https://www.flownarrate.com/tools/odata-filter-query-builder.html">
 <meta property="og:image" content="https://www.flownarrate.com/images/og-card.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="OData filter query builder for Power Automate">
-<meta name="twitter:description" content="Build OData filter queries for Power Automate's SharePoint Get items and Dataverse List rows: $filter, $select, $orderby and $top from simple rows. Free, and it runs entirely in your browser.">
+<meta name="twitter:title" content="OData filter query builder and syntax examples for Power Automate">
+<meta name="twitter:description" content="Build OData filter queries for Power Automate's SharePoint Get items and Dataverse List rows, with syntax examples for eq, ne, and/or, startswith, contains, null and dates. Free, and it runs entirely in your browser.">
 <meta name="twitter:image" content="https://www.flownarrate.com/images/og-card.png">
 <script type="application/ld+json">
 {
@@ -37,7 +37,7 @@
       "@type": "WebApplication",
       "name": "OData filter query builder",
       "url": "https://www.flownarrate.com/tools/odata-filter-query-builder.html",
-      "description": "Build OData filter queries for Power Automate's SharePoint Get items and Dataverse List rows: $filter, $select, $orderby and $top from simple rows. Free, and it runs entirely in your browser.",
+      "description": "Build OData filter queries for Power Automate's SharePoint Get items and Dataverse List rows, with syntax examples for eq, ne, and/or, startswith, contains, null and dates. Free, and it runs entirely in your browser.",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Any (runs in the browser)",
       "isAccessibleForFree": true,
@@ -84,8 +84,17 @@
   ]
 }
 </script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" href="/assets/fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+  @font-face{font-family:'Source Serif 4';font-style:normal;font-weight:400 600;font-display:swap;src:url(/assets/fonts/source-serif-4-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+  @font-face{font-family:'Source Serif 4';font-style:normal;font-weight:400 600;font-display:swap;src:url(/assets/fonts/source-serif-4-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+  @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 600;font-display:swap;src:url(/assets/fonts/jetbrains-mono-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+  @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 600;font-display:swap;src:url(/assets/fonts/jetbrains-mono-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+  /* Fallbacks scaled to the web fonts' metrics, so text barely moves when they swap in */
+  @font-face{font-family:'Source Serif 4 Fallback';src:local('Times New Roman'),local('Liberation Serif');size-adjust:113.4%;ascent-override:91.4%;descent-override:29.5%;line-gap-override:0%;}
+  @font-face{font-family:'JetBrains Mono Fallback';src:local('Courier New'),local('Liberation Mono');size-adjust:100%;ascent-override:102%;descent-override:30%;line-gap-override:0%;}
+</style>
 <link rel="stylesheet" href="../assets/tools.css">
 <link rel="alternate" type="application/rss+xml" title="FlowNarrate" href="https://www.flownarrate.com/feed.xml">
 </head>
@@ -94,14 +103,14 @@
 <a href="#main" class="skip-link">Skip to content</a>
 
 <nav>
-  <a href="../index.html" class="brand">flow<span class="dot">·</span>narrate</a>
+  <a href="/" class="brand">flow<span class="dot">·</span>narrate</a>
   <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" onclick="toggleNav()">
     <span class="nav-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>Menu
   </button>
   <ul id="nav-links">
     <li><a href="../blog.html">Blog</a></li>
     <li><a href="../tools.html">Tools</a></li>
-    <li><a href="../index.html#about">About</a></li>
+    <li><a href="/#about">About</a></li>
     <li><button type="button" id="theme-toggle" class="theme-toggle" onclick="toggleTheme()">Dark</button></li>
   </ul>
 </nav>
@@ -175,6 +184,83 @@
       <figcaption>In a Dataverse List rows action, open Add new parameters and choose Filter rows, Select columns and Sort By for the tool's $filter, $select and $orderby. SharePoint's Get items has the same idea, under Filter Query and Order By. Screenshot: <a href="https://learn.microsoft.com/power-automate/dataverse/list-rows" target="_blank" rel="noopener">Microsoft Learn</a>, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>.</figcaption>
     </figure>
     <p>Nothing you type here is sent anywhere. The tool runs entirely in your browser.</p>
+  </div>
+</section>
+
+<section id="odata-syntax">
+  <div class="tool-guide">
+    <h2>OData filter syntax, with examples</h2>
+    <p>Each condition is a column name, an operator and a value: <code>Status eq 'Approved'</code>. Use the column's internal name, not the name you see in the list. In SharePoint a column shown as "Due Date" may be <code>DueDate</code> or <code>Due_x0020_Date</code>: open the column's settings and read the name after <code>Field=</code> at the end of the address. In Dataverse it's the logical name, such as <code>emailaddress1</code>.</p>
+
+    <h3>Comparison operators</h3>
+    <table class="ref-table">
+      <thead><tr><th scope="col">Filter</th><th scope="col">Returns rows where</th></tr></thead>
+      <tbody>
+        <tr><td><code>Status eq 'Approved'</code></td><td>Status equals Approved</td></tr>
+        <tr><td><code>Status ne 'Closed'</code></td><td>Status is anything except Closed</td></tr>
+        <tr><td><code>Amount gt 500</code></td><td>Amount is greater than 500</td></tr>
+        <tr><td><code>Amount ge 500</code></td><td>Amount is 500 or more</td></tr>
+        <tr><td><code>Amount lt 500</code></td><td>Amount is less than 500</td></tr>
+        <tr><td><code>Amount le 500</code></td><td>Amount is 500 or less</td></tr>
+      </tbody>
+    </table>
+    <p>Text goes in single quotes and numbers don't. If the text itself has an apostrophe, write it twice: <code>Surname eq 'O''Brien'</code>.</p>
+
+    <h3>Combining conditions with and, or and brackets</h3>
+    <table class="ref-table">
+      <thead><tr><th scope="col">Filter</th><th scope="col">Returns rows where</th></tr></thead>
+      <tbody>
+        <tr><td><code>Status eq 'Open' and Priority eq 'High'</code></td><td>both conditions are true</td></tr>
+        <tr><td><code>Status eq 'Open' or Status eq 'On hold'</code></td><td>either condition is true</td></tr>
+        <tr><td><code>(Status eq 'Open' or Status eq 'On hold') and Priority eq 'High'</code></td><td>Status is Open or On hold, and Priority is High</td></tr>
+      </tbody>
+    </table>
+    <p>Write <code>and</code> and <code>or</code> in lower case, as shown. Without the brackets in the last example, the <code>and</code> is applied first and you get every Open row plus only the high-priority On hold rows.</p>
+
+    <h3>Text: startswith and contains</h3>
+    <p>SharePoint and Dataverse use different functions here, so a text filter copied from one won't work in the other.</p>
+    <table class="ref-table">
+      <thead><tr><th scope="col">Filter</th><th scope="col">Returns rows where</th></tr></thead>
+      <tbody>
+        <tr><td><code>startswith(Title, 'INV-')</code></td><td>Title begins with INV- (SharePoint and Dataverse)</td></tr>
+        <tr><td><code>substringof('Smith', Title)</code></td><td>Title contains Smith (SharePoint Get items)</td></tr>
+        <tr><td><code>contains(fullname, 'Smith')</code></td><td>fullname contains Smith (Dataverse List rows)</td></tr>
+        <tr><td><code>endswith(emailaddress1, '@contoso.com')</code></td><td>the email address ends with @contoso.com (Dataverse only)</td></tr>
+      </tbody>
+    </table>
+    <p>The builder's "contains" option writes the SharePoint form, <code>substringof</code>, with the value first. For Dataverse, change it to <code>contains</code> with the column first.</p>
+
+    <h3>Empty values: null</h3>
+    <table class="ref-table">
+      <thead><tr><th scope="col">Filter</th><th scope="col">Returns rows where</th></tr></thead>
+      <tbody>
+        <tr><td><code>DueDate eq null</code></td><td>DueDate is empty</td></tr>
+        <tr><td><code>DueDate ne null</code></td><td>DueDate has a value</td></tr>
+      </tbody>
+    </table>
+    <p>Write <code>null</code> without quotes. <code>'null'</code> in quotes looks for the word "null".</p>
+
+    <h3>Yes/No, choice and lookup columns</h3>
+    <table class="ref-table">
+      <thead><tr><th scope="col">Filter</th><th scope="col">Returns rows where</th></tr></thead>
+      <tbody>
+        <tr><td><code>Approved eq 1</code></td><td>a SharePoint Yes/No column is Yes (0 for No)</td></tr>
+        <tr><td><code>donotemail eq true</code></td><td>a Dataverse Yes/No column is Yes</td></tr>
+        <tr><td><code>Department eq 'Finance'</code></td><td>a SharePoint choice column is Finance (filter on the choice text)</td></tr>
+        <tr><td><code>statecode eq 0</code></td><td>a Dataverse choice column has the value 0 (filter on the number, not the label)</td></tr>
+        <tr><td><code>_parentcustomerid_value eq @{triggerOutputs()?['body/accountid']}</code></td><td>a Dataverse lookup points to that record (the lookup name wrapped in <code>_</code> and <code>_value</code>, and the ID without quotes)</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Dates</h3>
+    <table class="ref-table">
+      <thead><tr><th scope="col">Filter</th><th scope="col">Returns rows where</th></tr></thead>
+      <tbody>
+        <tr><td><code>Modified ge '@{addDays(utcNow(), -7)}'</code></td><td>a SharePoint item changed in the last 7 days (date in quotes)</td></tr>
+        <tr><td><code>modifiedon ge @{addDays(utcNow(), -7)}</code></td><td>a Dataverse row changed in the last 7 days (date without quotes)</td></tr>
+      </tbody>
+    </table>
+    <p>The <code>@{...}</code> parts are expressions: type them in the Filter Query box exactly as shown, or add them from the Expression tab. To show a date in a readable format afterwards, use the <a href="formatdatetime-generator.html">formatDateTime generator</a>.</p>
   </div>
 </section>
 
@@ -268,7 +354,7 @@
 </main>
 
 <footer>
-  <div><a href="../index.html" style="color:inherit;">flownarrate.com</a> &middot; &copy; <span id="copyright-year"></span></div>
+  <div><a href="/" style="color:inherit;">flownarrate.com</a> &middot; &copy; <span id="copyright-year"></span></div>
   <div><a href="../privacy.html" style="color:inherit;">Privacy</a> · <a href="../feed.xml" style="color:inherit;">RSS</a> · <a href="https://linkedin.com/in/sptgb" target="_blank" rel="noopener" style="color:inherit;">LinkedIn</a> · AB-100 Certified · Microsoft Certified Trainer</div>
 </footer>
 
