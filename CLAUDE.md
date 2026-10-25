@@ -8,11 +8,11 @@ Static site served by GitHub Pages at **https://www.flownarrate.com** (see `CNAM
 - British spelling ("colour").
 - Colours come from the CSS variables at the top of each page (the "Run status" palette: `--paper`, `--ink`, `--succeeded` for the plum accent, `--ok`, `--warning`). Use the variables, not hex values, so light and dark mode both work. Check text contrast is at least 4.5:1 in both modes.
 - The reasons behind the look (motif, type, labels, diagrams, callouts, layout) are in `DESIGN.md`. Read it before changing how the site looks, and update it when a decision changes.
-- Fonts are self-hosted in `assets/fonts/` (no Google Fonts). Every page's `<head>` has the same two font `preload` links and `@font-face` block, using root paths (`/assets/fonts/...`); copy them from an existing page. Font stacks include the metric-matched fallback, e.g. `'JetBrains Mono','JetBrains Mono Fallback',monospace`.
+- Fonts are self-hosted in `assets/fonts/` (no Google Fonts), trimmed to the 400 to 600 weights the site uses. Every page's `<head>` has the same two font `preload` links and `@font-face` block, using root paths (`/assets/fonts/...`); copy them from an existing page. Font stacks include the metric-matched fallback, e.g. `'JetBrains Mono','JetBrains Mono Fallback',monospace`.
 - Link to the homepage as `/` (its canonical URL), never `index.html`.
 - Every page's `<head>` links the RSS feed (`feed.xml`) and every footer has an RSS link; keep both on new pages.
 - Icons: every post and tool has a line icon, kept as a file in `assets/icons/<slug>.svg` (24×24, stroke `currentColor`, width 1.6, round caps, no fill). Pages inline the SVG with `aria-hidden="true" focusable="false"` and class `card-icon` (cards) or `tool-hero-icon` (tool page heading). A new post or tool gets a new icon in the same style, added to its cards everywhere they appear.
-- Tool pages live in `tools/` and share `assets/tools.css` and `assets/tools.js`. The JS only initialises tools present on the page, through `onPage(id, init)` at the end of each tool's block.
+- Tool pages live in `tools/` and share `assets/tools.css` and `assets/tools.js` (loaded with `defer`, so it never blocks the first paint). The JS only initialises tools present on the page, through `onPage(id, init)` at the end of each tool's block.
 
 ## Publishing a new post: checklist
 
