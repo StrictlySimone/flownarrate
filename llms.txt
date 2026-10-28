@@ -31,4 +31,5 @@ All thirteen tools are free, need no sign-in and run entirely in the browser. [T
 
 - [All posts](https://www.flownarrate.com/blog.html): Index of every FlowNarrate post.
 - [RSS feed](https://www.flownarrate.com/feed.xml): New posts, as RSS.
+- [Meet FlowNarrate (video)](https://www.flownarrate.com/video.html): A short introduction video with audio description, captions and a full text transcript.
 - [Privacy](https://www.flownarrate.com/privacy.html): FlowNarrate does not collect personal data.

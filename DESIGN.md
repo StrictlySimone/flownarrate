@@ -46,3 +46,14 @@ The site speaks the language of a flow's run history: "Run summary", "Succeeded"
 - Motion: hover colour changes and a short theme fade only, switched off under `prefers-reduced-motion`.
 - Every control is at least 44px tall, and keyboard focus is a visible plum outline.
 - On phones the menu button shows the word "Menu" next to the icon, and sections use 48px of vertical padding instead of 72px.
+
+## Video page
+
+- `video.html` uses the browser's own player with no autoplay or loop, a separate English (UK) captions file alongside the captions burned into the picture, and the transcript (audio description marked in text) open by default under the player.
+- It uses the page palette only. No motion beyond the player's own controls.
+
+## Temporary: Halloween 2026
+
+- The home page swaps the plum accent for orange from `halloween.css`, and shows a small ghost with "Haunted by unexplained flows" under the hero text. Contrast was checked: `#A83F00` on the light backgrounds (5.3 to 6.2:1) and `#FF9A3C` on the dark ones (8.1 to 8.7:1).
+- The override is on the home page only. The two hex values are an intentional exception to "use the variables", because they exist only for this event.
+- It is static (no motion) and switches itself off from 2 November 2026. Removal steps are in the Halloween comment in `index.html`.
