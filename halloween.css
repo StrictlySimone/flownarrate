@@ -1,0 +1,13 @@
+/* Halloween 2026, home page only. Remove on 2 November: delete the two Halloween lines in index.html's <head>, then delete halloween.css and halloween.js. */
+html.halloween{--succeeded:#A83F00;}
+html.halloween[data-theme="dark"]{--succeeded:#FF9A3C;}
+@media (prefers-color-scheme: dark){
+  html.halloween:not([data-theme="light"]){--succeeded:#FF9A3C;}
+}
+.halloween-line{
+  display:flex;align-items:center;gap:10px;
+  margin:16px 0 24px;
+  font-size:1.1rem;font-weight:500;font-style:italic;
+  color:var(--succeeded);
+}
+.halloween-ghost{flex-shrink:0;width:28px;height:28px;}
