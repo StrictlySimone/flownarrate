@@ -1,6 +1,6 @@
 # FlowNarrate
 
-> Automation, AI agents and business systems explained in plain English by Simone Palmer-Thompson, a solutions architect, AB-100 certified Agentic AI Architect and Microsoft Certified Trainer. Most posts currently cover Power Automate, Dynamics 365 and the Power Platform. FlowNarrate also offers thirteen free browser-based tools; no sign-in, and nothing leaves the browser.
+> Automation, AI agents and business systems explained in plain English by Simone Palmer-Thompson, a CRM Specialist, Microsoft Certified Trainer and holder of the AB-100 Agentic AI Business Solutions Architect Expert certification. Most posts currently cover Power Automate, Dynamics 365 and the Power Platform. FlowNarrate also offers thirteen free browser-based tools; no sign-in, and nothing leaves the browser.
 
 ## Posts
 
