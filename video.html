@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+  (function(){
+    try {
+      var saved = localStorage.getItem('flownarrate-theme');
+      if (saved === 'dark' || saved === 'light') {
+        document.documentElement.setAttribute('data-theme', saved);
+      }
+    } catch(e) { /* localStorage unavailable, fall back to OS preference via CSS */ }
+  })();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 fill=%27%23311847%27/%3E%3Ctext x=%2716%27 y=%2723%27 font-family=%27monospace%27 font-size=%2718%27 font-weight=%27700%27 fill=%27%23EC4067%27 text-anchor=%27middle%27%3Efn%3C/text%3E%3C/svg%3E">
+<title>Meet FlowNarrate (audio described video)</title>
+<meta name="description" content="A short introduction to FlowNarrate, with audio description, captions and a full text transcript.">
+<link rel="canonical" href="https://www.flownarrate.com/video.html">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="video.other">
+<meta property="og:site_name" content="FlowNarrate">
+<meta property="og:title" content="Meet FlowNarrate (audio described video)">
+<meta property="og:description" content="A short introduction to FlowNarrate, with audio description, captions and a full text transcript.">
+<meta property="og:url" content="https://www.flownarrate.com/video.html">
+<meta property="og:image" content="https://www.flownarrate.com/assets/video/flownarrate-audio-described-poster.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Meet FlowNarrate (audio described video)">
+<meta name="twitter:description" content="A short introduction to FlowNarrate, with audio description, captions and a full text transcript.">
+<meta name="twitter:image" content="https://www.flownarrate.com/assets/video/flownarrate-audio-described-poster.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  "name": "Meet FlowNarrate (audio described video)",
+  "description": "A short introduction to FlowNarrate, with audio description, captions and a full text transcript.",
+  "thumbnailUrl": "https://www.flownarrate.com/assets/video/flownarrate-audio-described-poster.jpg",
+  "contentUrl": "https://www.flownarrate.com/assets/video/flownarrate-audio-described.mp4",
+  "embedUrl": "https://www.flownarrate.com/video.html",
+  "uploadDate": "2026-10-28",
+  "duration": "PT1M19S",
+  "inLanguage": "en-GB",
+  "accessibilityFeature": ["captions", "audioDescription", "transcript"],
+  "author": {"@type": "Person", "name": "Simone Palmer-Thompson"}
+}
+</script>
+<link rel="preload" href="/assets/fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+  @font-face{font-family:'Source Serif 4';font-style:normal;font-weight:400 600;font-display:swap;src:url(/assets/fonts/source-serif-4-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+  @font-face{font-family:'Source Serif 4';font-style:normal;font-weight:400 600;font-display:swap;src:url(/assets/fonts/source-serif-4-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+  @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 600;font-display:swap;src:url(/assets/fonts/jetbrains-mono-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+  @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 600;font-display:swap;src:url(/assets/fonts/jetbrains-mono-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+  /* Fallbacks scaled to the web fonts' metrics, so text barely moves when they swap in */
+  @font-face{font-family:'Source Serif 4 Fallback';src:local('Times New Roman'),local('Liberation Serif');size-adjust:113.4%;ascent-override:91.4%;descent-override:29.5%;line-gap-override:0%;}
+  @font-face{font-family:'JetBrains Mono Fallback';src:local('Courier New'),local('Liberation Mono');size-adjust:100%;ascent-override:102%;descent-override:30%;line-gap-override:0%;}
+</style>
+<style>
+  :root{
+    --paper: #F6F5F1;
+    --band: #EFEDE6;
+    --ok: #1F7A4D;
+    --panel: #FFFFFF;
+    --ink: #16161D;
+    --ink-soft: #4A4A55;
+    --rule: #D9D6CC;
+    --succeeded: #A01A7D;
+  }
+  [data-theme="dark"]{
+    --paper: #141418;
+    --band: #1B1B21;
+    --ok: #6CC495;
+    --panel: #1B1B21;
+    --ink: #EEEDE8;
+    --ink-soft: #B4B2BD;
+    --rule: #34343E;
+    --succeeded: #E58AC8;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper: #141418;
+    --band: #1B1B21;
+    --ok: #6CC495;
+      --panel: #1B1B21;
+      --ink: #EEEDE8;
+      --ink-soft: #B4B2BD;
+      --rule: #34343E;
+      --succeeded: #E58AC8;
+    }
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Source Serif 4','Source Serif 4 Fallback',serif;
+    font-size:18px;
+    line-height:1.7;
+    overflow-x:hidden;
+    width:100%;
+  }
+  a{color:var(--succeeded);}
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--succeeded);
+    outline-offset:2px;
+  }
+  .skip-link{
+    position:absolute;left:-9999px;top:0;
+    background:var(--ink);color:var(--paper);
+    padding:12px 20px;z-index:100;
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-size:0.85rem;
+    text-decoration:none;
+  }
+  .skip-link:focus{left:12px;top:12px;}
+
+  nav{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:26px 56px;
+    border-bottom:1px solid var(--rule);
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  .brand{
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;
+    font-size:1rem;font-weight:600;
+    letter-spacing:0.02em;
+    white-space:nowrap;
+    text-decoration:none;
+    color:var(--ink);
+  }
+  .brand .dot{color:var(--succeeded);}
+  nav ul{display:flex;gap:34px;list-style:none;}
+  nav ul li a{
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;
+    font-size:0.8rem;text-decoration:none;color:var(--ink-soft);
+    text-transform:uppercase;letter-spacing:0.06em;
+  }
+  nav ul li a:hover{color:var(--ink);}
+  .nav-toggle{
+    display:none;
+    align-items:center;
+    gap:10px;
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-size:0.8rem;color:var(--ink);
+    text-transform:uppercase;letter-spacing:0.06em;
+    background:none;
+    border:none;
+    cursor:pointer;
+    padding:8px;
+  }
+  .nav-toggle-bars{display:flex;flex-direction:column;gap:5px;}
+  .nav-toggle-bars span{
+    display:block;
+    width:22px;
+    height:2px;
+    background:var(--ink);
+  }
+  @media(max-width:680px){
+    .nav-toggle{display:flex;}
+    nav{flex-wrap:nowrap;}
+    #nav-links{
+      display:none;
+      flex-direction:column;
+      align-items:flex-start;
+      gap:16px;
+      width:100%;
+      position:absolute;
+      top:100%;
+      left:0;
+      background:var(--paper);
+      border-bottom:1px solid var(--rule);
+      padding:20px 22px;
+      z-index:50;
+    }
+    #nav-links.open{display:flex;}
+    nav{position:relative;}
+  }
+  .theme-toggle{
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;
+    font-size:0.8rem;
+    color:var(--ink-soft);
+    background:none;
+    border:1px solid var(--rule);
+    padding:6px 12px;
+    cursor:pointer;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+  }
+  .theme-toggle:hover{color:var(--ink);border-color:var(--ink-soft);}
+  body{transition:background-color .15s ease, color .15s ease;}
+  @media (prefers-reduced-motion: reduce){ body{transition:none;} }
+
+  article{
+    max-width:680px;
+    margin:0 auto;
+    padding:64px 24px 100px;
+  }
+  .meta{
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    margin-bottom:18px;
+  }
+  h1{
+    font-weight:500;
+    font-size:clamp(1.9rem, 4vw, 2.6rem);
+    line-height:1.2;
+    letter-spacing:-0.01em;
+    margin-bottom:36px;
+  }
+  p{margin-bottom:20px;color:var(--ink);}
+
+  .back{
+    display:inline-block;
+    margin-top:48px;
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;
+    font-size:0.85rem;
+    text-decoration:none;
+    color:var(--ink-soft);
+    border-top:1px solid var(--rule);
+    padding-top:20px;
+  }
+  .back:hover{color:var(--ink);}
+
+  footer{
+    padding:34px 56px;
+    border-top:1px solid var(--rule);
+    display:flex;justify-content:space-between;
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;
+    font-size:0.75rem;color:var(--ink-soft);
+    flex-wrap:wrap;gap:10px;
+  }
+
+  @media(max-width:768px){
+    article{padding:52px 22px 80px;}
+    body{font-size:17px;}
+  }
+  @media(max-width:640px){
+    nav, footer{padding-left:22px;padding-right:22px;}
+    article{padding-top:40px;padding-left:20px;padding-right:20px;}
+    nav ul{gap:18px;}
+    h1{font-size:1.7rem;}
+  }
+  /* Touch targets: every control is at least 44px tall on any screen */
+  .brand, nav ul li a, footer a{display:inline-flex;align-items:center;min-height:44px;}
+  footer a{min-width:24px;justify-content:center;}
+  .nav-toggle{min-width:44px;min-height:44px;align-items:center;}
+  .theme-toggle{min-height:44px;}
+  /* Video page */
+  .video-frame{margin:0 0 20px;}
+  .video-frame video{display:block;width:100%;height:auto;aspect-ratio:16/9;border:1px solid var(--rule);}
+  .video-note{font-size:0.95rem;color:var(--ink-soft);}
+  .transcript-line{margin-bottom:14px;}
+  .transcript-line.ad{font-style:italic;}
+  .transcript-label{
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;
+    font-style:normal;font-size:0.78rem;
+    text-transform:uppercase;letter-spacing:0.06em;
+    color:var(--ink-soft);
+  }
+  details.transcript > summary{
+    cursor:pointer;
+    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;
+    font-size:0.9rem;min-height:44px;
+    display:flex;align-items:center;
+    border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  }
+  details.transcript > summary:focus-visible{outline:2px solid var(--succeeded);outline-offset:2px;}
+  details.transcript[open] > summary{margin-bottom:20px;}
+</style>
+<link rel="alternate" type="application/rss+xml" title="FlowNarrate" href="https://www.flownarrate.com/feed.xml">
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav>
+  <a href="/" class="brand">flow<span class="dot">&middot;</span>narrate</a>
+  <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" onclick="toggleNav()">
+    <span class="nav-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>Menu
+  </button>
+  <ul id="nav-links">
+    <li><a href="blog.html">Blog</a></li>
+    <li><a href="tools.html">Tools</a></li>
+    <li><a href="video.html">Video</a></li>
+    <li><a href="/#about">About</a></li>
+    <li><button type="button" id="theme-toggle" class="theme-toggle" onclick="toggleTheme()">Dark</button></li>
+  </ul>
+</nav>
+
+<main id="main">
+<article>
+  <div class="meta">Video &middot; 1 min 19 s</div>
+  <h1>Meet FlowNarrate</h1>
+
+  <p>I made this short video to introduce FlowNarrate. It has audio description, captions and a full transcript below, so you can take it in whichever way works best for you.</p>
+
+  <figure class="video-frame">
+    <video controls preload="metadata" playsinline poster="/assets/video/flownarrate-audio-described-poster.jpg" aria-describedby="video-note">
+      <source src="/assets/video/flownarrate-audio-described.mp4" type="video/mp4">
+      <track kind="captions" srclang="en-GB" label="English (UK) captions" src="/assets/video/flownarrate-audio-described.en-GB.vtt">
+      <p>Your browser cannot play this video. <a href="/assets/video/flownarrate-audio-described.mp4">Download the video</a> or read the <a href="#transcript">transcript</a>.</p>
+    </video>
+  </figure>
+  <p class="video-note" id="video-note">The video does not play by itself. Captions are also built into the picture. A separate captions file is available from the player's captions button. <a href="#transcript">Skip to the transcript</a>.</p>
+
+  <details class="transcript" id="transcript" open>
+    <summary>Transcript with audio description</summary>
+    <p class="transcript-line ad"><span class="transcript-label">Audio description:</span> A round photo of Simone on a cream screen.</p>
+    <p class="transcript-line">Hey, I'm Simone, and I explain how things work.</p>
+    <p class="transcript-line ad"><span class="transcript-label">Audio description:</span> A card titled Run summary, with three rows: Built the flow, Runs without errors, and Anyone knows why it works.</p>
+    <p class="transcript-line">Here is a run summary for your last flow.</p>
+    <p class="transcript-line">It was built, and it succeeded.</p>
+    <p class="transcript-line">It runs without errors, and that succeeded too.</p>
+    <p class="transcript-line">But does anyone know why it works?</p>
+    <p class="transcript-line">That one is waiting on you.</p>
+    <p class="transcript-line">Most flows get built.</p>
+    <p class="transcript-line">Fewer get explained.</p>
+    <p class="transcript-line">FlowNarrate writes down the reasoning behind each step.</p>
+    <p class="transcript-line">Written by Simone Palmer-Thompson, a CRM Specialist and a Microsoft Certified Trainer.</p>
+    <p class="transcript-line ad"><span class="transcript-label">Audio description:</span> A round Microsoft Certified Trainer badge appears beside the job titles.</p>
+    <p class="transcript-line ad"><span class="transcript-label">Audio description:</span> Large pink letters: AB-100. A blue shield badge says Expert, with three stars.</p>
+    <p class="transcript-line ad"><span class="transcript-label">Audio description:</span> Below, three product names with small icons: Dynamics 365, Power Platform and Copilot Studio.</p>
+    <p class="transcript-line">Certified in AB-100, designing AI agent solutions for businesses, across Dynamics 365, Power Platform and Copilot Studio.</p>
+    <p class="transcript-line ad"><span class="transcript-label">Audio description:</span> The FlowNarrate logo in white, with a pink dot, and the web address flownarrate.com.</p>
+    <p class="transcript-line">Read a narration, or try free tools, at flownarrate dot com.</p>
+  </details>
+
+  <a href="/" class="back">&larr; Back to FlowNarrate</a>
+</article>
+</main>
+
+<footer>
+  <div><a href="/" style="color:inherit;">flownarrate.com</a> &middot; &copy; <span id="copyright-year"></span></div>
+  <div><a href="privacy.html" style="color:inherit;">Privacy</a> &middot; <a href="feed.xml" style="color:inherit;">RSS</a> &middot; <a href="https://linkedin.com/in/sptgb" target="_blank" rel="noopener" style="color:inherit;">LinkedIn</a> &middot; AB-100 Certified &middot; Microsoft Certified Trainer</div>
+</footer>
+
+<script>
+  function currentTheme(){
+    var attr = document.documentElement.getAttribute("data-theme");
+    if (attr) return attr;
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+  function syncThemeButton(){
+    var btn = document.getElementById("theme-toggle");
+    if (!btn) return;
+    var theme = currentTheme();
+    btn.textContent = theme === "dark" ? "Light" : "Dark";
+  }
+  function toggleTheme(){
+    var next = currentTheme() === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    try { localStorage.setItem("flownarrate-theme", next); } catch(e) {}
+    syncThemeButton();
+  }
+  function toggleNav(){
+    var links = document.getElementById('nav-links');
+    var btn = document.getElementById('nav-toggle');
+    var isOpen = links.classList.toggle('open');
+    btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  }
+  document.querySelectorAll('#nav-links a').forEach(function(link){
+    link.addEventListener('click', function(){
+      document.getElementById('nav-links').classList.remove('open');
+      document.getElementById('nav-toggle').setAttribute('aria-expanded', 'false');
+    });
+  });
+  var yearEl = document.getElementById('copyright-year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+  syncThemeButton();
+</script>
+</body>
+</html>
