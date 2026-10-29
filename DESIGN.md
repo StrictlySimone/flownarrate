@@ -49,7 +49,7 @@ The site speaks the language of a flow's run history: "Run summary", "Succeeded"
 
 ## Video page
 
-- `video.html` uses the browser's own player with no autoplay or loop, a separate English (UK) captions file alongside the captions burned into the picture, and the transcript (audio description marked in text) open by default under the player.
+- `video.html` uses the browser's own player with no autoplay or loop, the captions burned into the picture (no separate captions file, so nobody sees them twice), and the transcript (audio description marked in text) open by default under the player.
 - It uses the page palette only. No motion beyond the player's own controls.
 
 ## Temporary: Halloween 2026
