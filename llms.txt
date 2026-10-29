@@ -1,6 +1,6 @@
 # FlowNarrate
 
-> Automation, AI agents and business systems explained in plain English by Simone Palmer-Thompson, a CRM Specialist, Microsoft Certified Trainer and holder of the AB-100 Agentic AI Business Solutions Architect Expert certification. Most posts currently cover Power Automate, Dynamics 365 and the Power Platform. FlowNarrate also offers thirteen free browser-based tools; no sign-in, and nothing leaves the browser.
+> Automation, AI agents and business systems explained in plain English by Simone Palmer-Thompson, a CRM Specialist, Microsoft Certified Trainer and holder of the AB-100 Agentic AI Business Solutions Architect Expert certification. Most posts currently cover Power Automate, Dynamics 365 and the Power Platform. FlowNarrate also offers free browser-based tools; no sign-in, and nothing leaves the browser.
 
 ## Posts
 
@@ -11,7 +11,7 @@
 
 ## Tools
 
-All thirteen tools are free, need no sign-in and run entirely in the browser. [Tools index](https://www.flownarrate.com/tools.html)
+All the tools are free, need no sign-in and run entirely in the browser. [Tools index](https://www.flownarrate.com/tools.html)
 
 - [Adaptive Card builder](https://www.flownarrate.com/tools/adaptive-card-builder.html): Build Adaptive Card JSON with a title, body text and optional Approve and Reject buttons, for Microsoft Teams or Power Automate approvals.
 - [FetchXML builder](https://www.flownarrate.com/tools/fetchxml-builder.html): Build FetchXML queries for Dataverse and Dynamics 365: columns, filter conditions, sort order and row limit.

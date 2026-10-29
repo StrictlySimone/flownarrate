@@ -29,7 +29,7 @@ Do all of these in the same commit as the post itself.
 
 1. Create `tools/<slug>.html` from an existing tool page. Update the title, description, canonical, `og:*`, `twitter:*`, the `WebApplication` and `BreadcrumbList` JSON-LD, the intro and the "How to use it" steps.
 2. Put the tool's JS in `assets/tools.js` and initialise it with `onPage('<an element id from the tool>', ...)`.
-3. Add a card to `tools.html`, add it to the `ItemList` JSON-LD there, update the tool count in the intro text, and add it to the "More free tools" grid on every other tool page.
+3. Add a card to `tools.html`, add it to the `ItemList` JSON-LD there, and add it to the "More free tools" grid on every other tool page.
 4. **`sitemap.xml`**: add a `<url>` entry, and update `<lastmod>` for `tools.html`.
 5. **`llms.txt`**: add it to the `## Tools` list.
 
