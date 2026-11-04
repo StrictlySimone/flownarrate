@@ -117,13 +117,14 @@
     }
   }
   *{margin:0;padding:0;box-sizing:border-box;}
+  html{overflow-x:clip;}
   body{
     background:var(--paper);
     color:var(--ink);
     font-family:'Source Serif 4','Source Serif 4 Fallback',serif;
     font-size:18px;
     line-height:1.7;
-    overflow-x:hidden;
+    overflow-x:clip;
     width:100%;
   }
   .mono{font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;overflow-wrap:anywhere;}
@@ -314,6 +315,10 @@
   }
   .back:hover{color:var(--ink);}
 
+  .footer-links{display:flex;flex-wrap:wrap;align-items:center;gap:0 20px;}
+  button:active{transform:translateY(1px);}
+  button:disabled{color:var(--ink-soft);cursor:not-allowed;}
+  h1,h2,h3{text-wrap:balance;}
   footer{
     padding:34px 56px;
     border-top:1px solid var(--rule);
@@ -378,16 +383,16 @@
   <div class="meta">System Explainer · <time datetime="2026-10-02">2 Oct 2026</time></div>
   <h1>Sending email from a mailbox nobody can sign in to</h1>
 
-  <p>A common setup is a shared mailbox that a Power Automate flow uses as the sender: a do-not-reply address, or just as often a <span class="mono">notifications@</span> or <span class="mono">accounts@</span> that exists for sending, not receiving, and that nobody actually signs into. Do-not-reply is just the example here; the actual condition that matters is that there's no interactive login for the account. In Dataverse this looks simple, but you can hit two errors. The second one can't be fixed by an admin in the normal UI. Here's how I got it working without raising a ticket.</p>
+  <p>A common setup is a shared mailbox that a Power Automate flow uses as the sender: a do-not-reply address, or just as often a <span class="mono">notifications@</span> or <span class="mono">accounts@</span> that exists for sending, not receiving, and that nobody actually signs into. Do-not-reply is just the example here; the actual condition that matters is that there’s no interactive login for the account. In Dataverse this looks simple, but you can hit two errors. The second one can’t be fixed by an admin in the normal UI. Here’s how I got it working without raising a ticket.</p>
 
   <h2>The setup</h2>
   <ul>
-    <li>A queue is the "From" in the flow's Send Email action.</li>
-    <li>Behind the queue are a mailbox record and a system user record. The mailbox holds the real delivery settings, even though the queue itself shows "None".</li>
+    <li>A queue is the “From” in the flow’s Send Email action.</li>
+    <li>Behind the queue are a mailbox record and a system user record. The mailbox holds the real delivery settings, even though the queue itself shows “None”.</li>
     <li>The flow runs as the account that owns its connection, and that account is not the do-not-reply user.</li>
   </ul>
 
-  <h2>Problem 1: the mailbox won't enable</h2>
+  <h2>Problem 1: the mailbox won’t enable</h2>
   <p>The mailbox showed Pending Approval, and Test &amp; Enable then failed with a message about a missing <span class="mono">prvReadActivity</span> privilege.</p>
 
   <figure>
@@ -404,7 +409,7 @@
   <ol>
     <li>An admin approves the mailbox. In the Power Platform admin centre this is under Settings &gt; Email &gt; Mailboxes &gt; Approve Email.</li>
     <li>Set Incoming = None and Outgoing = Server-Side Synchronization.</li>
-    <li>Run Test &amp; Enable again. Outgoing should show Success. Incoming can stay "Not Run".</li>
+    <li>Run Test &amp; Enable again. Outgoing should show Success. Incoming can stay “Not Run”.</li>
   </ol>
 
   <figure>
@@ -417,14 +422,14 @@
     </div>
     <figcaption>A text recreation of the mailbox once it worked, not a screenshot.</figcaption>
   </figure>
-  <p>The privilege error appeared because incoming mail was set to server-side sync, which needs read rights for the owning user. A send-only mailbox doesn't need incoming mail, so no security role change was needed.</p>
+  <p>The privilege error appeared because incoming mail was set to server-side sync, which needs read rights for the owning user. A send-only mailbox doesn’t need incoming mail, so no security role change was needed.</p>
 
   <figure>
     <img loading="lazy" decoding="async" src="images/mailbox/test-email-configuration.webp" width="654" height="602" style="max-width:min(100%,520px)" alt="The Test Email Configuration dialog. It explains that a test message will be sent to the mailbox owner and the results shown on the mailbox record, asks for the date to process incoming email from, and has OK and Cancel buttons.">
     <figcaption>The dialog that opens when you choose Test &amp; Enable Mailbox. With incoming set to None, only outgoing email is tested. Screenshot: <a href="https://learn.microsoft.com/power-platform/admin/connect-exchange-online" target="_blank" rel="noopener">Microsoft Learn</a>, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>.</figcaption>
   </figure>
 
-  <h2>Problem 2: "The user selected in the From field does not have the option enabled to allow other users to send the email on their behalf"</h2>
+  <h2>Problem 2: “The user selected in the From field does not have the option enabled to allow other users to send the email on their behalf”</h2>
   <figure>
     <div class="recreation">
       <span class="label">Error</span>
@@ -434,15 +439,15 @@
   </figure>
   <p>This is the harder one.</p>
   <ul>
-    <li>Sending as another user needs two things: the sender has a role with Send Email as Another User (<span class="mono">prvSendAsUser</span>; for a flow, that's the flow owner or connection account), and the From user has switched on the "allow other users to send email on my behalf" option.</li>
-    <li>The second option isn't on the user or mailbox record. It lives in that user's own Personalization Settings, on the Email tab.</li>
-    <li>Admins can't set it for someone else in the UI, and a no-login service account is exactly the account nobody can sign into to tick it themselves.</li>
-    <li>Under the hood it's the <span class="mono">issendasallowed</span> column on the user's settings record.</li>
+    <li>Sending as another user needs two things: the sender has a role with Send Email as Another User (<span class="mono">prvSendAsUser</span>; for a flow, that’s the flow owner or connection account), and the From user has switched on the “allow other users to send email on my behalf” option.</li>
+    <li>The second option isn’t on the user or mailbox record. It lives in that user’s own Personalization Settings, on the Email tab.</li>
+    <li>Admins can’t set it for someone else in the UI, and a no-login service account is exactly the account nobody can sign into to tick it themselves.</li>
+    <li>Under the hood it’s the <span class="mono">issendasallowed</span> column on the user’s settings record.</li>
   </ul>
 
   <figure>
     <img loading="lazy" decoding="async" src="images/mailbox/send-email-as-another-user.png" width="269" height="290" style="max-width:min(100%,320px)" alt="Part of a security role's Miscellaneous Privileges list, with the Send Email as Another User privilege highlighted.">
-    <figcaption>Send Email as Another User, under Miscellaneous Privileges in a security role. The flow's connection account needs a role with this. Screenshot: <a href="https://learn.microsoft.com/power-platform/admin/send-email-on-behalf" target="_blank" rel="noopener">Microsoft Learn</a>, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>.</figcaption>
+    <figcaption>Send Email as Another User, under Miscellaneous Privileges in a security role. The flow’s connection account needs a role with this. Screenshot: <a href="https://learn.microsoft.com/power-platform/admin/send-email-on-behalf" target="_blank" rel="noopener">Microsoft Learn</a>, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>.</figcaption>
   </figure>
 
   <figure>
@@ -451,7 +456,7 @@
   </figure>
 
   <h3>Fix: set it by impersonation</h3>
-  <p>The service account had no security roles, so impersonating it failed with "has not been assigned any roles&hellip; need prvReadUserSettings". Impersonation only carries the privileges of the user being impersonated, so an account with nothing assigned can't be impersonated at all yet.</p>
+  <p>The service account had no security roles, so impersonating it failed with “has not been assigned any roles&hellip; need prvReadUserSettings”. Impersonation only carries the privileges of the user being impersonated, so an account with nothing assigned can’t be impersonated at all yet.</p>
   <ol>
     <li>Temporarily give the service account a role.</li>
     <li>As someone with <span class="mono">prvActOnBehalfOfAnotherUser</span> (System Administrator has it), impersonate that user and set <span class="mono">issendasallowed = true</span> on their user settings.</li>
@@ -460,7 +465,7 @@
   </ol>
   <p>The service account ends up with no roles, as before, and only the one flag changed.</p>
 
-  <p>I did step 2 with the Level Up extension (the XrmToolBox-style impersonation tool), which is the quickest no-code route if you have it. The same thing is reachable directly through the Dataverse Web API, which is worth knowing if you need to script this across environments or don't have Level Up available.</p>
+  <p>I did step 2 with the Level Up extension (the XrmToolBox-style impersonation tool), which is the quickest no-code route if you have it. The same thing is reachable directly through the Dataverse Web API, which is worth knowing if you need to script this across environments or don’t have Level Up available.</p>
 
   <div class="verified-note">&check; Verified against the Microsoft Learn UserSettings table reference and Web API impersonation docs</div>
   <details class="mermaid-toggle" open>
@@ -481,11 +486,11 @@ OData-Version: 4.0
   </details>
   <p>Three things worth being precise about:</p>
   <ul>
-    <li>The bearer token is the admin's, not the service account's: you authenticate as yourself. <span class="mono">CallerObjectId</span> is what makes Dataverse treat the call as if the service account did it themselves, which is what satisfies this being a self-service setting.</li>
-    <li><span class="mono">CallerObjectId</span> must be the service account's Entra object ID, found on their <span class="mono">SystemUser.azureactivedirectoryobjectid</span> column, not the admin's.</li>
-    <li>The <span class="mono">UserSettings</span> table's primary key is the same GUID as the user's <span class="mono">systemuserid</span>. There's no separate "user settings ID" to look up; you address the record by the user's own ID.</li>
+    <li>The bearer token is the admin’s, not the service account’s: you authenticate as yourself. <span class="mono">CallerObjectId</span> is what makes Dataverse treat the call as if the service account did it themselves, which is what satisfies this being a self-service setting.</li>
+    <li><span class="mono">CallerObjectId</span> must be the service account’s Entra object ID, found on their <span class="mono">SystemUser.azureactivedirectoryobjectid</span> column, not the admin’s.</li>
+    <li>The <span class="mono">UserSettings</span> table’s primary key is the same GUID as the user’s <span class="mono">systemuserid</span>. There’s no separate “user settings ID” to look up; you address the record by the user’s own ID.</li>
   </ul>
-  <p>The temporary-role step (1 and 3 above) still applies either way: the impersonated account needs enough privilege during the call to write its own <span class="mono">UserSettings</span> row, whether you're doing that call through Level Up or through this request directly.</p>
+  <p>The temporary-role step (1 and 3 above) still applies either way: the impersonated account needs enough privilege during the call to write its own <span class="mono">UserSettings</span> row, whether you’re doing that call through Level Up or through this request directly.</p>
 
   <h2>Checklist for each environment</h2>
   <ol>
@@ -500,15 +505,15 @@ OData-Version: 4.0
   <ul>
     <li>The flag is per user and per environment, so repeat the steps everywhere.</li>
     <li>Treat production as its own change with its own approval.</li>
-    <li>If you can't impersonate, the alternative is to ask your service desk to sign in once as that account and tick the box.</li>
-    <li>If outgoing Test &amp; Enable fails with an Exchange error, that's an Exchange admin issue, not Dataverse.</li>
+    <li>If you can’t impersonate, the alternative is to ask your service desk to sign in once as that account and tick the box.</li>
+    <li>If outgoing Test &amp; Enable fails with an Exchange error, that’s an Exchange admin issue, not Dataverse.</li>
     <li>If Exchange mailbox delegation is enabled, the sending account may also need Full Access or Send As on the Exchange mailbox.</li>
   </ul>
 
   <h2>Useful Microsoft Learn pages</h2>
   <ul>
     <li><a href="https://learn.microsoft.com/power-platform/admin/send-email-on-behalf" target="_blank" rel="noopener">Send email on behalf of another user</a></li>
-    <li><a href="https://learn.microsoft.com/troubleshoot/power-platform/dataverse/email-exchange-synchronization/cannot-send-email-as-another-user#resolution" target="_blank" rel="noopener">Fixing "You cannot send email as the selected user"</a></li>
+    <li><a href="https://learn.microsoft.com/troubleshoot/power-platform/dataverse/email-exchange-synchronization/cannot-send-email-as-another-user#resolution" target="_blank" rel="noopener">Fixing “You cannot send email as the selected user”</a></li>
     <li><a href="https://learn.microsoft.com/power-apps/user/set-personal-options" target="_blank" rel="noopener">Set personal options (Email tab)</a></li>
     <li><a href="https://learn.microsoft.com/power-platform/admin/connect-exchange-online#approve-email" target="_blank" rel="noopener">Approve mailboxes and Test &amp; Enable</a></li>
     <li><a href="https://learn.microsoft.com/power-apps/developer/data-platform/webapi/impersonate-another-user-web-api" target="_blank" rel="noopener">Impersonate another user using the Web API</a></li>
@@ -521,7 +526,7 @@ OData-Version: 4.0
 
 <footer>
   <div><a href="/" style="color:inherit;">flownarrate.com</a> &middot; &copy; <span id="copyright-year"></span></div>
-  <div><a href="privacy.html" style="color:inherit;">Privacy</a> · <a href="feed.xml" style="color:inherit;">RSS</a> · <a href="https://linkedin.com/in/sptgb" target="_blank" rel="noopener" style="color:inherit;">LinkedIn</a> · AB-100 Certified · Microsoft Certified Trainer</div>
+  <div class="footer-links"><a href="privacy.html" style="color:inherit;">Privacy</a> <a href="feed.xml" style="color:inherit;">RSS</a> <a href="https://linkedin.com/in/sptgb" target="_blank" rel="noopener" style="color:inherit;">LinkedIn</a> <span>AB-100 Certified</span> <span>Microsoft Certified Trainer</span></div>
 </footer>
 
 <script>

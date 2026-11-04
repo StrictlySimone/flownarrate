@@ -117,13 +117,14 @@
     }
   }
   *{margin:0;padding:0;box-sizing:border-box;}
+  html{overflow-x:clip;}
   body{
     background:var(--paper);
     color:var(--ink);
     font-family:'Source Serif 4','Source Serif 4 Fallback',serif;
     font-size:18px;
     line-height:1.7;
-    overflow-x:hidden;
+    overflow-x:clip;
     width:100%;
   }
   .mono{font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;}
@@ -314,6 +315,10 @@
   }
   .back:hover{color:var(--ink);}
 
+  .footer-links{display:flex;flex-wrap:wrap;align-items:center;gap:0 20px;}
+  button:active{transform:translateY(1px);}
+  button:disabled{color:var(--ink-soft);cursor:not-allowed;}
+  h1,h2,h3{text-wrap:balance;}
   footer{
     padding:34px 56px;
     border-top:1px solid var(--rule);
@@ -338,6 +343,7 @@
   figure img{display:block;max-width:100%;height:auto;border:1px solid var(--rule);}
   figcaption{font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-size:0.75rem;color:var(--ink-soft);margin-top:8px;}
   .table-wrap{overflow-x:auto;margin:0 0 28px;}
+  .table-wrap:focus-visible{outline:2px solid var(--succeeded);outline-offset:2px;}
   table{border-collapse:collapse;width:100%;font-size:0.92rem;}
   th, td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--rule);vertical-align:top;}
   th{font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--ink-soft);font-weight:500;}
@@ -379,21 +385,21 @@
   <div class="meta">System Explainer · <time datetime="2026-10-18">18 Oct 2026</time></div>
   <h1>Filling in a whole Microsoft Form at once, with a pre-filled link</h1>
 
-  <p>For someone who uses a screen reader, a long Microsoft Form is slow going. A common way to cope is to draft the answers with Copilot, then paste them into the form one question at a time: move to Copilot, copy an answer, move back, find the right box, paste, check it landed. It takes a long time, and it's easy to put an answer in the wrong place. I wanted a way to load every answer at once, so the only job left is to check them and press Submit.</p>
+  <p>For someone who uses a screen reader, a long Microsoft Form is slow going. A common way to cope is to draft the answers with Copilot, then paste them into the form one question at a time: move to Copilot, copy an answer, move back, find the right box, paste, check it landed. It takes a long time, and it’s easy to put an answer in the wrong place. I wanted a way to load every answer at once, so the only job left is to check them and press Submit.</p>
 
   <h2>Why not an API?</h2>
-  <p>Microsoft Forms has no official API for submitting responses. Microsoft Graph doesn't cover it, and the Power Automate Forms connector only reads responses. The form page itself talks to internal endpoints, but they're undocumented and can change without warning. Submitting on someone's behalf would also skip the step that matters most: them checking the answers.</p>
+  <p>Microsoft Forms has no official API for submitting responses. Microsoft Graph doesn’t cover it, and the Power Automate Forms connector only reads responses. The form page itself talks to internal endpoints, but they’re undocumented and can change without warning. Submitting on someone’s behalf would also skip the step that matters most: them checking the answers.</p>
 
   <h2>Pre-filled links</h2>
-  <p>Forms has a built-in feature for this. The form's owner opens the "..." menu, chooses <strong>Get Pre-filled URL</strong>, switches on <strong>Enable pre-filled answers</strong>, fills in some answers and copies the link. Anyone who opens that link sees the form with those answers already in place. The form never submits itself.</p>
+  <p>Forms has a built-in feature for this. The form’s owner opens the “...” menu, chooses <strong>Get Pre-filled URL</strong>, switches on <strong>Enable pre-filled answers</strong>, fills in some answers and copies the link. Anyone who opens that link sees the form with those answers already in place. The form never submits itself.</p>
 
   <figure>
     <img loading="lazy" decoding="async" src="images/forms-prefill/get-prefilled-url.webp" width="900" height="1613" style="max-width:min(100%,520px)" alt="The Get Pre-filled URL panel in Microsoft Forms. Enable pre-filled answers is switched on at the top, and a dialog titled Copy Prefilled Link to Share shows the generated link with a Copy link button.">
     <figcaption>The owner switches on pre-filled answers, then copies the link.</figcaption>
   </figure>
 
-  <h2>What's in the link</h2>
-  <p>The link is the normal form address with one extra part per question: the question's ID, an equals sign, and the answer. Question IDs are a letter <code>r</code> followed by 32 characters. One sample link gives you every ID, and after that you can write a link with any answers you like.</p>
+  <h2>What’s in the link</h2>
+  <p>The link is the normal form address with one extra part per question: the question’s ID, an equals sign, and the answer. Question IDs are a letter <code>r</code> followed by 32 characters. One sample link gives you every ID, and after that you can write a link with any answers you like.</p>
 
   <pre class="code-block" tabindex="0">https://forms.cloud.microsoft/Pages/ResponsePage.aspx
   ?id=<span class="ok">FORM-ID</span>
@@ -402,7 +408,7 @@
 
   <p>Each question type writes its answer differently. I made a test form with one of each common type and decoded its link:</p>
 
-  <div class="table-wrap">
+  <div class="table-wrap" tabindex="0" role="region" aria-label="Each question type, its answer and how it appears in the link">
     <table>
       <thead><tr><th>Question type</th><th>Answer</th><th>In the link</th></tr></thead>
       <tbody>
@@ -410,11 +416,11 @@
         <tr><td>Number</td><td>3</td><td><code>3</code></td></tr>
         <tr><td>Choice, pick one (and drop-down)</td><td>No</td><td><code>"No"</code></td></tr>
         <tr><td>Choice, pick several</td><td>Radio, Flyer</td><td><code>"[\"Radio\",\"Flyer\"]"</code></td></tr>
-        <tr><td>"Other" with typed text</td><td>Local newspaper</td><td>Added to the same list</td></tr>
+        <tr><td>“Other” with typed text</td><td>Local newspaper</td><td>Added to the same list</td></tr>
         <tr><td>Date</td><td>17/10/2026</td><td><code>"2026-10-17"</code></td></tr>
         <tr><td>Rating (stars)</td><td>5</td><td><code>5</code></td></tr>
         <tr><td>Net Promoter Score</td><td>9</td><td><code>9</code></td></tr>
-        <tr><td>Likert grid</td><td>A column per row</td><td>Each row's ID with the column's number and hidden ID</td></tr>
+        <tr><td>Likert grid</td><td>A column per row</td><td>Each row’s ID with the column’s number and hidden ID</td></tr>
       </tbody>
     </table>
   </div>
@@ -427,10 +433,10 @@
     <figcaption>Thirteen of fourteen answers filled in. Question 6 stayed blank.</figcaption>
   </figure>
 
-  <h2>The space you can't see</h2>
-  <p>Question 6 stayed blank. While making the test form I'd left a space at the start of one option and at the end of another. On screen, all three options look normal. In the link from Get Pre-filled URL, they don't:</p>
+  <h2>The space you can’t see</h2>
+  <p>Question 6 stayed blank. While making the test form I’d left a space at the start of one option and at the end of another. On screen, all three options look normal. In the link from Get Pre-filled URL, they don’t:</p>
 
-  <div class="table-wrap">
+  <div class="table-wrap" tabindex="0" role="region" aria-label="Each option on screen and how Forms stored it">
     <table>
       <thead><tr><th>Option on screen</th><th>How Forms stored it</th></tr></thead>
       <tbody>
@@ -441,7 +447,7 @@
     </table>
   </div>
 
-  <p>Forms saved each stray space as a non-breaking space, a different character that looks exactly like a normal one. A pre-filled answer has to match the option exactly, so my link's plain "Just right" matched nothing. I tested "Too long" three ways:</p>
+  <p>Forms saved each stray space as a non-breaking space, a different character that looks exactly like a normal one. A pre-filled answer has to match the option exactly, so my link’s plain “Just right” matched nothing. I tested “Too long” three ways:</p>
   <ul>
     <li><span class="bad">✗</span> <code>"Too long"</code>, no space: blank</li>
     <li><span class="bad">✗</span> <code>"Too long "</code>, normal space: blank</li>
@@ -450,23 +456,23 @@
 
   <figure>
     <img loading="lazy" decoding="async" src="images/forms-prefill/question-6-blank.webp" width="900" height="258" alt="Question 6, How would you describe the length of the event, with the options Too short, Just right and Too long. None is selected.">
-    <figcaption>Question 6 from the link that sent a plain "Just right". Nothing is selected.</figcaption>
+    <figcaption>Question 6 from the link that sent a plain “Just right”. Nothing is selected.</figcaption>
   </figure>
 
   <figure>
     <img loading="lazy" decoding="async" src="images/forms-prefill/question-6-too-long.webp" width="900" height="229" alt="Question 6 with Too long selected. Just right sits very slightly further right than the other two options.">
-    <figcaption>The link with the non-breaking space fills in "Too long". Look closely and "Just right" sits a fraction to the right: that's its hidden leading space.</figcaption>
+    <figcaption>The link with the non-breaking space fills in “Too long”. Look closely and “Just right” sits a fraction to the right: that’s its hidden leading space.</figcaption>
   </figure>
 
-  <div class="callout"><strong>Why it matters:</strong> when an answer doesn't match, Forms doesn't show an error. The question is just left blank. With a screen reader, a blank question is easy to miss, so whoever submits should check every answer, every time.</div>
+  <div class="callout"><strong>Why it matters:</strong> when an answer doesn’t match, Forms doesn’t show an error. The question is just left blank. With a screen reader, a blank question is easy to miss, so whoever submits should check every answer, every time.</div>
 
   <h2>Things to know before you use it</h2>
   <ul>
-    <li><strong>The owner has to switch it on.</strong> With Enable pre-filled answers switched off, the same link opens an empty form. One sample link with dummy answers is enough, and it keeps working: switching pre-filling off and on again doesn't change the form or question IDs.</li>
-    <li><strong>A choice answer has to match the option exactly</strong>, including capitals and any hidden spaces. A "pick several" question in the sample can have every option ticked, which captures all of them exactly.</li>
-    <li><strong>Answers sit in the link</strong>, so they're saved in browser history and visible to anyone the link is sent to. Use a private window and send each person their own link.</li>
+    <li><strong>The owner has to switch it on.</strong> With Enable pre-filled answers switched off, the same link opens an empty form. One sample link with dummy answers is enough, and it keeps working: switching pre-filling off and on again doesn’t change the form or question IDs.</li>
+    <li><strong>A choice answer has to match the option exactly</strong>, including capitals and any hidden spaces. A “pick several” question in the sample can have every option ticked, which captures all of them exactly.</li>
+    <li><strong>Answers sit in the link</strong>, so they’re saved in browser history and visible to anyone the link is sent to. Use a private window and send each person their own link.</li>
     <li><strong>Long answers make long links.</strong> Every space and comma becomes three characters in the link. A 3,917-character answer, close to the 4,000-character limit of a long-answer box, made a 5,739-character link, and it arrived in full.</li>
-    <li><strong>Forms limited to an organisation</strong> ask you to sign in, and may show answers from an earlier visit instead of the link's.</li>
+    <li><strong>Forms limited to an organisation</strong> ask you to sign in, and may show answers from an earlier visit instead of the link’s.</li>
     <li><strong>It works for anyone</strong>, not only screen reader users. A link with a few defaults filled in, such as a team name, can go to everyone.</li>
   </ul>
 
@@ -476,7 +482,7 @@
   </figure>
 
   <h2>A helper for writing the links</h2>
-  <p>Writing these links by hand isn't practical, so I made a small tool with two modes. In basic mode, you paste the sample link and your notes, and the tool gives you a prompt for Copilot or another AI. The AI writes the answers and the link. You paste its reply back, and the tool checks every answer against the form, fixes hidden-space mistakes, and reads the answers back to you question by question. Advanced mode is for typing answers yourself or loading them from a file. It opens on one of four made-up example forms, so you can see how it works without touching a real one.</p>
+  <p>Writing these links by hand isn’t practical, so I made a small tool with two modes. In basic mode, you paste the sample link and your notes, and the tool gives you a prompt for Copilot or another AI. The AI writes the answers and the link. You paste its reply back, and the tool checks every answer against the form, fixes hidden-space mistakes, and reads the answers back to you question by question. Advanced mode is for typing answers yourself or loading them from a file. It opens on one of four made-up example forms, so you can see how it works without touching a real one.</p>
 
   <p><a href="tools/microsoft-forms-prefill-link-builder.html">Try the Microsoft Forms pre-filled link builder.</a> It opens on an example form, so you can try every step before using your own.</p>
 
@@ -494,7 +500,7 @@
 
 <footer>
   <div><a href="/" style="color:inherit;">flownarrate.com</a> &middot; &copy; <span id="copyright-year"></span></div>
-  <div><a href="privacy.html" style="color:inherit;">Privacy</a> · <a href="feed.xml" style="color:inherit;">RSS</a> · <a href="https://linkedin.com/in/sptgb" target="_blank" rel="noopener" style="color:inherit;">LinkedIn</a> · AB-100 Certified · Microsoft Certified Trainer</div>
+  <div class="footer-links"><a href="privacy.html" style="color:inherit;">Privacy</a> <a href="feed.xml" style="color:inherit;">RSS</a> <a href="https://linkedin.com/in/sptgb" target="_blank" rel="noopener" style="color:inherit;">LinkedIn</a> <span>AB-100 Certified</span> <span>Microsoft Certified Trainer</span></div>
 </footer>
 
 <script>

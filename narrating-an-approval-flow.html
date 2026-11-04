@@ -117,13 +117,14 @@
     }
   }
   *{margin:0;padding:0;box-sizing:border-box;}
+  html{overflow-x:clip;}
   body{
     background:var(--paper);
     color:var(--ink);
     font-family:'Source Serif 4','Source Serif 4 Fallback',serif;
     font-size:18px;
     line-height:1.7;
-    overflow-x:hidden;
+    overflow-x:clip;
     width:100%;
   }
   .mono{font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;}
@@ -333,6 +334,10 @@
   }
   .back:hover{color:var(--ink);}
 
+  .footer-links{display:flex;flex-wrap:wrap;align-items:center;gap:0 20px;}
+  button:active{transform:translateY(1px);}
+  button:disabled{color:var(--ink-soft);cursor:not-allowed;}
+  h1,h2,h3{text-wrap:balance;}
   footer{
     padding:34px 56px;
     border-top:1px solid var(--rule);
@@ -388,14 +393,14 @@
   <div class="meta">Flow Narration · <time datetime="2026-08-30">30 Aug 2026</time></div>
   <h1>An approval flow, narrated: why each step exists, and where it breaks</h1>
 
-  <p>Almost every environment I've worked in has some version of this flow. An expense claim, a leave request, a purchase order: someone submits something, an amount or a role decides who has to approve it, and if that person goes quiet, nothing happens until someone notices. It's the flow every organisation eventually builds, and it's rarely documented past the day it shipped.</p>
+  <p>Almost every environment I’ve worked in has some version of this flow. An expense claim, a leave request, a purchase order: someone submits something, an amount or a role decides who has to approve it, and if that person goes quiet, nothing happens until someone notices. It’s the flow every organisation eventually builds, and it’s rarely documented past the day it shipped.</p>
 
   <div class="callout">
-    This isn't one client's actual flow. It's a composite, built from the expense-approval shape I keep rebuilding in different environments: a threshold branch, a manager approval, an escalation nobody remembers is there. If your flow does something differently, that difference is usually worth writing down too.
+    This isn’t one client’s actual flow. It’s a composite, built from the expense-approval shape I keep rebuilding in different environments: a threshold branch, a manager approval, an escalation nobody remembers is there. If your flow does something differently, that difference is usually worth writing down too.
   </div>
 
   <h2>The flow, end to end</h2>
-  <p>An expense claim comes in. If it's under a set amount, it goes straight to the submitter's manager. Over that amount, it goes to the finance director instead. Whoever approves it triggers an update and a notification. Whoever doesn't respond within 48 hours triggers a reminder, not a decision, because auto-approving a stale request is a worse failure mode than a slow one.</p>
+  <p>An expense claim comes in. If it’s under a set amount, it goes straight to the submitter’s manager. Over that amount, it goes to the finance director instead. Whoever approves it triggers an update and a notification. Whoever doesn’t respond within 48 hours triggers a reminder, not a decision, because auto-approving a stale request is a worse failure mode than a slow one.</p>
 
   <div class="flowchart">
     <div class="fc-label">Expense claim approval, simplified</div>
@@ -442,15 +447,15 @@
     <span id="mermaid-status" class="sr-only" aria-live="polite"></span>
   </details>
 
-  <p>Power Automate ships with a gallery of ready-made approval templates, and Microsoft's own <a href="https://learn.microsoft.com/power-automate/get-started-approvals#get-started" target="_blank" rel="noopener">guidance on getting started with approvals</a> lists using one of these as the first option, before building from scratch. They get you a working approval fast. What they don't typically include is a threshold branch, an escalation running alongside the approval, or a check for whether the approver's actually around, and that gap is what this post is actually about.</p>
+  <p>Power Automate ships with a gallery of ready-made approval templates, and Microsoft’s own <a href="https://learn.microsoft.com/power-automate/get-started-approvals#get-started" target="_blank" rel="noopener">guidance on getting started with approvals</a> lists using one of these as the first option, before building from scratch. They get you a working approval fast. What they don’t typically include is a threshold branch, an escalation running alongside the approval, or a check for whether the approver’s actually around, and that gap is what this post is actually about.</p>
 
   <h2>Step by step: what each part does and why</h2>
 
   <h3>1. The trigger</h3>
-  <p>The trigger is Dataverse's <span class="mono">When a row is added, modified, or deleted</span> trigger, configured for Added only, on the Expense Claims table. This matters more than it looks: triggering off the record rather than a form submission means anything that creates a valid claim (a mobile app, a bulk import, a future integration) starts the same approval, instead of the logic living inside one form.</p>
+  <p>The trigger is Dataverse’s <span class="mono">When a row is added, modified, or deleted</span> trigger, configured for Added only, on the Expense Claims table. This matters more than it looks: triggering off the record rather than a form submission means anything that creates a valid claim (a mobile app, a bulk import, a future integration) starts the same approval, instead of the logic living inside one form.</p>
 
   <h3>2. The threshold condition</h3>
-  <p>One condition checks the claim amount against a fixed value. The value itself isn't the interesting part; the reason it exists is: below it, a manager has enough context and authority to decide alone. Above it, the org wants a second, more senior set of eyes. Whenever you see a threshold like this in a flow, ask what decision it's actually encoding. It's rarely just "money."</p>
+  <p>One condition checks the claim amount against a fixed value. The value itself isn’t the interesting part; the reason it exists is: below it, a manager has enough context and authority to decide alone. Above it, the org wants a second, more senior set of eyes. Whenever you see a threshold like this in a flow, ask what decision it’s actually encoding. It’s rarely just “money.”</p>
 
   <h3>3. The approval action, assigned conditionally</h3>
   <p>Both branches use the same Approvals action, just with a different assignee. Keeping the approval step identical across branches (instead of duplicating separate approval logic per branch) is deliberate. When both branches later need a third field on the approval card, you change it once.</p>
@@ -462,16 +467,16 @@
 
 
   <h3>4. Checking before you assign, not after</h3>
-  <p>The approval and escalation steps as built so far are honest but passive: assign the approval, start a clock, react if nobody answers. A version that's had a few more iterations checks something first, before the approval task even gets created: is the person about to be assigned actually around.</p>
-  <p>Two Office 365 actions do the actual work. <span class="mono">Office 365 Outlook &rarr; Get mail tips for a mailbox (V2)</span> returns the intended approver's automatic reply message, if one's currently set. <span class="mono">Office 365 Users &rarr; Get manager (V2)</span> resolves that person's manager dynamically, instead of a second hardcoded name sitting next to the first one.</p>
-  <p>The logic sits between step 3 and the approval task itself: work out who the approver should be (finance director or manager, from the threshold branch), pull their mail tips, and if an automatic reply message comes back, assign the approval to their manager instead, with a note on the approval card explaining why it was rerouted so nobody's confused when the wrong name shows up.</p>
-  <p>It's worth being as honest about the limits of this as the rest of the flow. It only catches people who've actually turned an auto-reply on, which is far from everyone. It doesn't help if the manager is also out. And it's an extra connector call on every single approval: a fine trade for something this frequent, but worth knowing you're paying it. A stored "backup approver" field that someone maintains deliberately is more reliable than inferring availability from a mailbox setting, slower to build, but it doesn't depend on people remembering to turn something on before they leave.</p>
+  <p>The approval and escalation steps as built so far are honest but passive: assign the approval, start a clock, react if nobody answers. A version that’s had a few more iterations checks something first, before the approval task even gets created: is the person about to be assigned actually around.</p>
+  <p>Two Office 365 actions do the actual work. <span class="mono">Office 365 Outlook &rarr; Get mail tips for a mailbox (V2)</span> returns the intended approver’s automatic reply message, if one’s currently set. <span class="mono">Office 365 Users &rarr; Get manager (V2)</span> resolves that person’s manager dynamically, instead of a second hardcoded name sitting next to the first one.</p>
+  <p>The logic sits between step 3 and the approval task itself: work out who the approver should be (finance director or manager, from the threshold branch), pull their mail tips, and if an automatic reply message comes back, assign the approval to their manager instead, with a note on the approval card explaining why it was rerouted so nobody’s confused when the wrong name shows up.</p>
+  <p>It’s worth being as honest about the limits of this as the rest of the flow. It only catches people who’ve actually turned an auto-reply on, which is far from everyone. It doesn’t help if the manager is also out. And it’s an extra connector call on every single approval: a fine trade for something this frequent, but worth knowing you’re paying it. A stored “backup approver” field that someone maintains deliberately is more reliable than inferring availability from a mailbox setting, slower to build, but it doesn’t depend on people remembering to turn something on before they leave.</p>
 
   <div class="flowchart">
     <div class="fc-label">Checking before you assign, step 4</div>
     <svg width="100%" height="150" viewBox="0 0 520 150" preserveAspectRatio="xMinYMin meet" role="img" aria-labelledby="fc4-title fc4-desc" style="max-width:480px;margin:0 auto;">
       <title id="fc4-title">Flowchart: checking automatic replies before assigning the approval</title>
-      <desc id="fc4-desc">Once the approver is identified, the flow checks their mail tips for an automatic reply message. If one's set, the approval is assigned to their manager instead, with a note. Otherwise it's assigned as planned.</desc>
+      <desc id="fc4-desc">Once the approver is identified, the flow checks their mail tips for an automatic reply message. If one’s set, the approval is assigned to their manager instead, with a note. Otherwise it’s assigned as planned.</desc>
       <rect x="0" y="35" width="190" height="40" class="fc-node"/>
       <text x="95" y="59" text-anchor="middle" class="fc-node-text">Approver identified</text>
       <path d="M190,55 L230,55" class="fc-connector"/>
@@ -505,7 +510,7 @@
 
   <h3>5. The escalation, running in parallel</h3>
   <p>This is the part people build second, if they build it at all. A delay runs alongside the approval wait. If the delay finishes first, the flow sends a reminder rather than a decision, and restarts the wait. This is a race-condition pattern, not a branch off the approval: the approval task and the delay run at the same time, and whichever finishes first decides what happens next.</p>
-  <p>Auto-approving after a timeout is tempting because it "unblocks" things, but it quietly moves the approval authority from a person to a clock. A reminder keeps the decision where it belongs and just makes silence louder.</p>
+  <p>Auto-approving after a timeout is tempting because it “unblocks” things, but it quietly moves the approval authority from a person to a clock. A reminder keeps the decision where it belongs and just makes silence louder.</p>
 
   <div class="flowchart">
     <div class="fc-label">The escalation, step 5: a race, not a branch</div>
@@ -549,21 +554,21 @@
   </details>
 
   <h3>6. Outcome handling</h3>
-  <p>Approved and rejected both do the same two things: update the Dataverse row's status field, and notify the submitter. The only difference is the message and whether a rejection reason gets attached. Two near-identical branches doing almost the same thing is a normal, honest shape for a flow. Don't over-engineer it into one clever branch just to avoid repetition.</p>
+  <p>Approved and rejected both do the same two things: update the Dataverse row’s status field, and notify the submitter. The only difference is the message and whether a rejection reason gets attached. Two near-identical branches doing almost the same thing is a normal, honest shape for a flow. Don’t over-engineer it into one clever branch just to avoid repetition.</p>
 
   <h2>Where flows like this quietly break</h2>
   <ul>
-    <li><strong>The approver is out, and nobody turned on automatic replies.</strong> The out-of-office check only catches people who've actually set an auto-reply. If they haven't, the escalation still reminds the same absent person, forever.</li>
+    <li><strong>The approver is out, and nobody turned on automatic replies.</strong> The out-of-office check only catches people who’ve actually set an auto-reply. If they haven’t, the escalation still reminds the same absent person, forever.</li>
     <li><strong>The threshold is hardcoded.</strong> Finance changes the policy from $500 to $750 and now someone has to open the flow (not a settings table) to update it.</li>
     <li><strong>Escalation reminds, but never re-routes.</strong> After the third reminder with no response, nothing hands the decision to someone else. A one-way escalation eventually becomes a stuck flow.</li>
-    <li><strong>The rejection path is thinner than the approval path.</strong> It's common to see a rejection notification with no reason field required, which means the submitter gets a "no" with nothing to act on.</li>
-    <li><strong>No audit trail beyond the approval history.</strong> If the Dataverse row's status changes outside the flow (a direct edit, a data fix), the flow's approval record and the record's actual status can silently disagree.</li>
+    <li><strong>The rejection path is thinner than the approval path.</strong> It’s common to see a rejection notification with no reason field required, which means the submitter gets a “no” with nothing to act on.</li>
+    <li><strong>No audit trail beyond the approval history.</strong> If the Dataverse row’s status changes outside the flow (a direct edit, a data fix), the flow’s approval record and the record’s actual status can silently disagree.</li>
   </ul>
-  <p>None of these are exotic failures. They're the ordinary ways an approval flow drifts from what it was supposed to guarantee, and they're exactly the kind of thing that's obvious in five minutes to whoever built the flow and invisible to whoever inherits it.</p>
+  <p>None of these are exotic failures. They’re the ordinary ways an approval flow drifts from what it was supposed to guarantee, and they’re exactly the kind of thing that’s obvious in five minutes to whoever built the flow and invisible to whoever inherits it.</p>
 
   <h2>If you inherited this flow</h2>
-  <p class="callout" style="border-left-color:var(--warning);">Before you read the list below, it's worth answering it yourself first: if you inherited this flow tomorrow, what's the first thing you'd check? Hold that answer, then see how it compares.</p>
-  <p>Five things worth checking in the first sitting, before you change anything: who's hardcoded as an approver and whether they still hold that role, whether the threshold value lives in the flow or somewhere it can be changed without editing logic, what happens after the second and third reminder (not just the first), whether rejection actually captures a reason, and whether the record's status can drift from the approval history. Every one of those is a five-minute check that saves someone a bad afternoon later.</p>
+  <p class="callout" style="border-left-color:var(--warning);">Before you read the list below, it’s worth answering it yourself first: if you inherited this flow tomorrow, what’s the first thing you’d check? Hold that answer, then see how it compares.</p>
+  <p>Five things worth checking in the first sitting, before you change anything: who’s hardcoded as an approver and whether they still hold that role, whether the threshold value lives in the flow or somewhere it can be changed without editing logic, what happens after the second and third reminder (not just the first), whether rejection actually captures a reason, and whether the record’s status can drift from the approval history. Every one of those is a five-minute check that saves someone a bad afternoon later.</p>
 
   <a href="/" class="back">&larr; Back to FlowNarrate</a>
 </article>
@@ -571,7 +576,7 @@
 
 <footer>
   <div><a href="/" style="color:inherit;">flownarrate.com</a> &middot; &copy; <span id="copyright-year"></span></div>
-  <div><a href="privacy.html" style="color:inherit;">Privacy</a> · <a href="feed.xml" style="color:inherit;">RSS</a> · <a href="https://linkedin.com/in/sptgb" target="_blank" rel="noopener" style="color:inherit;">LinkedIn</a> · AB-100 Certified · Microsoft Certified Trainer</div>
+  <div class="footer-links"><a href="privacy.html" style="color:inherit;">Privacy</a> <a href="feed.xml" style="color:inherit;">RSS</a> <a href="https://linkedin.com/in/sptgb" target="_blank" rel="noopener" style="color:inherit;">LinkedIn</a> <span>AB-100 Certified</span> <span>Microsoft Certified Trainer</span></div>
 </footer>
 
 <script>

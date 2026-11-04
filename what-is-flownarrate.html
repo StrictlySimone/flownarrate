@@ -108,13 +108,14 @@
     }
   }
   *{margin:0;padding:0;box-sizing:border-box;}
+  html{overflow-x:clip;}
   body{
     background:var(--paper);
     color:var(--ink);
     font-family:'Source Serif 4','Source Serif 4 Fallback',serif;
     font-size:18px;
     line-height:1.7;
-    overflow-x:hidden;
+    overflow-x:clip;
     width:100%;
   }
   .mono{font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;}
@@ -247,6 +248,10 @@
   }
   .back:hover{color:var(--ink);}
 
+  .footer-links{display:flex;flex-wrap:wrap;align-items:center;gap:0 20px;}
+  button:active{transform:translateY(1px);}
+  button:disabled{color:var(--ink-soft);cursor:not-allowed;}
+  h1,h2,h3{text-wrap:balance;}
   footer{
     padding:34px 56px;
     border-top:1px solid var(--rule);
@@ -298,19 +303,19 @@
   <div class="meta">Origin · <time datetime="2026-08-15">15 Aug 2026</time></div>
   <h1>What is FlowNarrate?</h1>
 
-  <p>If you've ever opened a Power Automate flow someone else built (no comments, no scope names, just twelve conditions deep and a "Compose 3" that does something nobody can explain) you already know why this blog exists.</p>
+  <p>If you’ve ever opened a Power Automate flow someone else built (no comments, no scope names, just twelve conditions deep and a “Compose 3” that does something nobody can explain) you already know why this blog exists.</p>
 
   <h2>The gap nobody documents</h2>
   <p>Power Platform and Dynamics 365 make complex business logic accessible, but documentation of that logic rarely gets the same treatment. Flows get built under deadline pressure. Business rules get configured and forgotten. Six months later, someone new inherits the environment and has to reverse-engineer intent from a canvas full of unlabelled steps.</p>
   <p>I see this gap constantly, both as an AB-100 certified Power Platform consultant and as a Microsoft Certified Trainer teaching people how these tools actually work. Building a flow and explaining a flow clearly are different skills. Most people are only taught the first one.</p>
 
   <h2>What FlowNarrate is for</h2>
-  <p>This blog takes real, anonymised Power Automate flows, D365 configurations, and Power Platform patterns and narrates them: what each step does, why it's there, what problem it solves, and where it tends to break.</p>
-  <p>You'll find flow narrations (plain-English walkthroughs of real automation logic, step by step), D365 explainers written for the people who use these systems rather than the people who built them, an AB-100 certification corner with study notes and exam guidance, and case studies of real problems and how they were solved.</p>
+  <p>This blog takes real, anonymised Power Automate flows, D365 configurations, and Power Platform patterns and narrates them: what each step does, why it’s there, what problem it solves, and where it tends to break.</p>
+  <p>You’ll find flow narrations (plain-English walkthroughs of real automation logic, step by step), D365 explainers written for the people who use these systems rather than the people who built them, an AB-100 certification corner with study notes and exam guidance, and case studies of real problems and how they were solved.</p>
 
-  <h2>Why "Narrate"</h2>
+  <h2>Why “Narrate”</h2>
   <p>A flow is a sequence of decisions someone made under specific constraints. Reading the raw JSON or the unlabelled canvas tells you what happened. Narrating it tells you why, which is the part that actually transfers to the next person who has to maintain it.</p>
-  <p>That's the premise here: automation logic deserves to be told as clearly as it was built.</p>
+  <p>That’s the premise here: automation logic deserves to be told as clearly as it was built.</p>
   <p>More soon.</p>
 
   <a href="/" class="back">&larr; Back to FlowNarrate</a>
@@ -319,7 +324,7 @@
 
 <footer>
   <div><a href="/" style="color:inherit;">flownarrate.com</a> &middot; &copy; <span id="copyright-year"></span></div>
-  <div><a href="privacy.html" style="color:inherit;">Privacy</a> · <a href="feed.xml" style="color:inherit;">RSS</a> · <a href="https://linkedin.com/in/sptgb" target="_blank" rel="noopener" style="color:inherit;">LinkedIn</a> · AB-100 Certified · Microsoft Certified Trainer</div>
+  <div class="footer-links"><a href="privacy.html" style="color:inherit;">Privacy</a> <a href="feed.xml" style="color:inherit;">RSS</a> <a href="https://linkedin.com/in/sptgb" target="_blank" rel="noopener" style="color:inherit;">LinkedIn</a> <span>AB-100 Certified</span> <span>Microsoft Certified Trainer</span></div>
 </footer>
 
 <script>
