@@ -63,13 +63,14 @@
     }
   }
   *{margin:0;padding:0;box-sizing:border-box;}
+  html{overflow-x:clip;}
   body{
     background:var(--paper);
     color:var(--ink);
     font-family:'Source Serif 4','Source Serif 4 Fallback',serif;
     font-size:18px;
     line-height:1.7;
-    overflow-x:hidden;
+    overflow-x:clip;
     width:100%;
   }
   .mono{font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;}
@@ -202,6 +203,10 @@
   }
   .back:hover{color:var(--ink);}
 
+  .footer-links{display:flex;flex-wrap:wrap;align-items:center;gap:0 20px;}
+  button:active{transform:translateY(1px);}
+  button:disabled{color:var(--ink-soft);cursor:not-allowed;}
+  h1,h2,h3{text-wrap:balance;}
   footer{
     padding:34px 56px;
     border-top:1px solid var(--rule);
@@ -251,8 +256,8 @@
 <main id="main">
 <article>
   <div class="meta">Error</div>
-  <h1>404: this page doesn't exist</h1>
-  <p>The link's broken, or the page moved. Either way, it's not here.</p>
+  <h1>404: this page doesn’t exist</h1>
+  <p>The link’s broken, or the page moved. Either way, it’s not here.</p>
   <p>Head back to <a href="/">the homepage</a>, or try the <a href="tools.html">tools page</a> if you were looking for one of the Power Platform utilities.</p>
   <a href="/" class="back">&larr; Back to FlowNarrate</a>
 </article>
@@ -260,7 +265,7 @@
 
 <footer>
   <div><a href="/" style="color:inherit;">flownarrate.com</a> &middot; &copy; <span id="copyright-year"></span></div>
-  <div><a href="privacy.html" style="color:inherit;">Privacy</a> &middot; <a href="feed.xml" style="color:inherit;">RSS</a> &middot; <a href="https://linkedin.com/in/sptgb" target="_blank" rel="noopener" style="color:inherit;">LinkedIn</a> &middot; AB-100 Certified &middot; Microsoft Certified Trainer</div>
+  <div class="footer-links"><a href="privacy.html" style="color:inherit;">Privacy</a> <a href="feed.xml" style="color:inherit;">RSS</a> <a href="https://linkedin.com/in/sptgb" target="_blank" rel="noopener" style="color:inherit;">LinkedIn</a> <span>AB-100 Certified</span> <span>Microsoft Certified Trainer</span></div>
 </footer>
 
 <script>
