@@ -51,9 +51,3 @@ The site speaks the language of a flow's run history: "Run summary", "Succeeded"
 
 - `video.html` uses the browser's own player with no autoplay or loop, the captions burned into the picture (no separate captions file, so nobody sees them twice), and the transcript (audio description marked in text) open by default under the player.
 - It uses the page palette only. No motion beyond the player's own controls.
-
-## Temporary: Halloween 2026
-
-- The home page swaps the plum accent for orange from `halloween.css`, and shows a small ghost with "Haunted by unexplained flows" under the hero text. Contrast was checked: `#A83F00` on the light backgrounds (5.3 to 6.2:1) and `#FF9A3C` on the dark ones (8.1 to 8.7:1).
-- The override is on the home page only. The two hex values are an intentional exception to "use the variables", because they exist only for this event.
-- It is static (no motion) and switches itself off from 2 November 2026. Removal steps are in the Halloween comment in `index.html`.
