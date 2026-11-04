@@ -41,6 +41,15 @@ Do all of these in the same commit as the post itself.
 - **RSS feed:** every post has an `<item>`, newest first. When a post's title or description changes, update its `<item>` to match. When a post is removed, remove its `<item>`. Keep the `guid` unchanged for an existing post, or feed readers will show it again as new.
 - Both files must stay valid XML. After editing, check them with `python3 -c "import xml.dom.minidom as m; m.parse('sitemap.xml'); m.parse('feed.xml')"`.
 
+## Before you publish
+
+Run these on the branch, and fix anything they show, before asking Simone to confirm the merge:
+
+1. Serve the site locally and open every changed page at 320, 375, 768 and 1280px wide, in light and dark mode: no sideways scrolling, no console errors.
+2. Run an accessibility scan (axe-core) on every changed page and fix every violation. Text contrast must be at least 4.5:1.
+3. Check that every internal link and image path still resolves, and that `sitemap.xml` and `feed.xml` parse (the command above) and list the pages you changed.
+4. Show Simone the changes, then wait for her to confirm, naming flownarrate.com, before merging to `main`. Never merge without it.
+
 <!-- antislop:start -->
 ## antislop
 For UI, copy, people, mobile layout, or code comments work, read `.claude/skills/antislop/SKILL.md` (core) and then the skill for the task:

@@ -73,6 +73,8 @@
 </style>
 <style>
   :root{
+    --font-serif: 'Source Serif 4','Source Serif 4 Fallback',serif;
+    --font-mono: 'JetBrains Mono','JetBrains Mono Fallback',monospace;
     --paper: #F6F5F1;
     --band: #EFEDE6;
     --ok: #1F7A4D;
@@ -115,7 +117,7 @@
   body{
     background:var(--paper);
     color:var(--ink);
-    font-family:'Source Serif 4','Source Serif 4 Fallback',serif;
+    font-family:var(--font-serif);
     font-size:17px;
     line-height:1.65;
     overflow-x:clip;
@@ -131,7 +133,7 @@
     position:absolute;left:-9999px;top:0;
     background:var(--ink);color:var(--paper);
     padding:12px 20px;z-index:100;
-    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-size:0.85rem;
+    font-family:var(--font-mono);font-size:0.85rem;
     text-decoration:none;
   }
   .skip-link:focus{left:12px;top:12px;}
@@ -142,21 +144,21 @@
 
   nav{
     display:flex;justify-content:space-between;align-items:center;
-    padding:26px 56px;
+    padding:28px 56px;
     border-bottom:1px solid var(--rule);
     gap:16px;
     flex-wrap:wrap;
   }
   .brand{
-    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;
+    font-family:var(--font-mono);
     font-size:1rem;font-weight:600;
     letter-spacing:0.02em;
     white-space:nowrap;
   }
   .brand .dot{color:var(--succeeded);}
-  nav ul{display:flex;gap:34px;list-style:none;}
+  nav ul{display:flex;gap:36px;list-style:none;}
   nav ul li a{
-    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;
+    font-family:var(--font-mono);
     font-size:0.8rem;text-decoration:none;color:var(--ink-soft);
     text-transform:uppercase;letter-spacing:0.06em;
   }
@@ -164,15 +166,15 @@
   .nav-toggle{
     display:none;
     align-items:center;
-    gap:10px;
-    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-size:0.8rem;color:var(--ink);
+    gap:12px;
+    font-family:var(--font-mono);font-size:0.8rem;color:var(--ink);
     text-transform:uppercase;letter-spacing:0.06em;
     background:none;
     border:none;
     cursor:pointer;
     padding:8px;
   }
-  .nav-toggle-bars{display:flex;flex-direction:column;gap:5px;}
+  .nav-toggle-bars{display:flex;flex-direction:column;gap:4px;}
   .nav-toggle-bars span{
     display:block;
     width:22px;
@@ -193,19 +195,19 @@
       left:0;
       background:var(--paper);
       border-bottom:1px solid var(--rule);
-      padding:20px 22px;
+      padding:20px 24px;
       z-index:50;
     }
     #nav-links.open{display:flex;}
     nav{position:relative;}
   }
   .theme-toggle{
-    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;
+    font-family:var(--font-mono);
     font-size:0.8rem;
     color:var(--ink-soft);
     background:none;
     border:1px solid var(--rule);
-    padding:6px 12px;
+    padding:8px 12px;
     cursor:pointer;
     text-transform:uppercase;
     letter-spacing:0.06em;
@@ -223,7 +225,7 @@
     gap:40px;
     align-items:start;
   }
-  .hero-text{padding-top:14px;}
+  .hero-text{padding-top:16px;}
   h1{
     font-weight:500;
     font-size:clamp(2.1rem, 4.4vw, 3.4rem);
@@ -240,12 +242,12 @@
   }
   .hero-ctas{
     margin-top:36px;
-    display:flex;gap:14px;flex-wrap:wrap;
+    display:flex;gap:16px;flex-wrap:wrap;
   }
   .btn{
-    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;
+    font-family:var(--font-mono);
     font-size:0.82rem;font-weight:500;
-    padding:12px 22px;
+    padding:12px 24px;
     text-decoration:none;
     display:inline-block;
     letter-spacing:0.02em;
@@ -265,30 +267,30 @@
     margin-bottom:40px;flex-wrap:wrap;gap:12px;
   }
   .section-head h2{
-    font-weight:500;font-size:1.7rem;margin-top:6px;
+    font-weight:500;font-size:1.7rem;margin-top:8px;
   }
-  .section-head p{color:var(--ink-soft);font-size:0.92rem;max-width:380px;font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;line-height:1.5;}
+  .section-head p{color:var(--ink-soft);font-size:0.92rem;max-width:380px;font-family:var(--font-mono);line-height:1.5;}
 
   .footer-links{display:flex;flex-wrap:wrap;align-items:center;gap:0 20px;}
   button:active{transform:translateY(1px);}
   button:disabled{color:var(--ink-soft);cursor:not-allowed;}
   h1,h2,h3{text-wrap:balance;}
   footer{
-    padding:34px 56px;
+    padding:36px 56px;
     display:flex;justify-content:space-between;
-    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;
+    font-family:var(--font-mono);
     font-size:0.75rem;color:var(--ink-soft);
-    flex-wrap:wrap;gap:10px;
+    flex-wrap:wrap;gap:12px;
   }
 
   @media(max-width:900px){
     .hero{grid-template-columns:1fr;padding-top:44px;}
   }
   @media(max-width:640px){
-    nav, section, footer{padding-left:22px;padding-right:22px;}
+    nav, section, footer{padding-left:24px;padding-right:24px;}
     section{padding-top:48px;padding-bottom:48px;}
-    .hero{padding-left:22px;padding-right:22px;}
-    nav ul{gap:18px;}
+    .hero{padding-left:24px;padding-right:24px;}
+    nav ul{gap:20px;}
   }
 
   .inner{max-width:1180px;margin:0 auto;}
@@ -297,65 +299,65 @@
   .hero p.sub{max-width:560px;}
   .run-summary{border-top:1px solid var(--ink);margin-top:8px;}
   .rs-head{
-    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;
+    font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;
     color:var(--ink-soft);padding:12px 0;border-bottom:1px solid var(--rule);
   }
   .rs-row{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:16px 0;border-bottom:1px solid var(--rule);font-size:1.02rem;}
-  .rs-status{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap;}
+  .rs-status{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap;}
   .rs-dot{width:7px;height:7px;border-radius:50%;background:currentColor;display:inline-block;}
   .rs-ok{color:var(--ok);}
   .rs-wait{color:var(--warning);}
   .btn{border-radius:4px;display:inline-flex;align-items:center;min-height:48px;}
   .btn-secondary:hover{border-color:var(--succeeded);color:var(--succeeded);}
-  .btn-icon{gap:10px;margin-top:8px;}
+  .btn-icon{gap:12px;margin-top:8px;}
   .band{background:var(--band);border-top:1px solid var(--rule);}
   .section-head{align-items:baseline;margin-bottom:20px;}
   .section-head h2{margin-top:0;}
-  .section-sub{color:var(--ink-soft);margin:-8px 0 22px;}
-  .text-link{font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-size:0.8rem;min-height:44px;display:inline-flex;align-items:center;}
+  .section-sub{color:var(--ink-soft);margin:-8px 0 24px;}
+  .text-link{font-family:var(--font-mono);font-size:0.8rem;min-height:44px;display:inline-flex;align-items:center;}
   .topic-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;}
   .topic-filters[hidden]{display:none;}
   .topic-filters button{
-    min-height:44px;padding:0 14px;border-radius:4px;cursor:pointer;
-    font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-size:0.78rem;
+    min-height:44px;padding:0 16px;border-radius:4px;cursor:pointer;
+    font-family:var(--font-mono);font-size:0.78rem;
     background:transparent;color:var(--ink);border:1px solid var(--ink-soft);
   }
   .topic-filters button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink);}
   .post-list{list-style:none;}
   .post-list a{
-    display:grid;grid-template-columns:24px 190px minmax(0,1fr) auto;gap:6px 22px;align-items:baseline;
-    padding:22px 0;border-bottom:1px solid var(--rule);text-decoration:none;color:inherit;
+    display:grid;grid-template-columns:24px 190px minmax(0,1fr) auto;gap:8px 24px;align-items:baseline;
+    padding:24px 0;border-bottom:1px solid var(--rule);text-decoration:none;color:inherit;
   }
   .post-list a:hover .post-title{color:var(--succeeded);}
   .post-row-icon{width:24px;height:24px;color:var(--succeeded);align-self:center;}
-  .post-format{font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--succeeded);}
+  .post-format{font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--succeeded);}
   .post-title{font-size:1.22rem;line-height:1.35;}
-  .post-list time{font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-size:0.75rem;color:var(--ink-soft);white-space:nowrap;}
-  .post-empty{padding:22px 0;border-bottom:1px solid var(--rule);font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-size:0.85rem;color:var(--ink-soft);}
+  .post-list time{font-family:var(--font-mono);font-size:0.75rem;color:var(--ink-soft);white-space:nowrap;}
+  .post-empty{padding:24px 0;border-bottom:1px solid var(--rule);font-family:var(--font-mono);font-size:0.85rem;color:var(--ink-soft);}
   .formats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:0 40px;border-top:1px solid var(--ink);}
   .formats div{padding:20px 0;border-bottom:1px solid var(--rule);}
-  .formats h3{font-weight:500;font-size:1.12rem;margin-bottom:6px;}
+  .formats h3{font-weight:500;font-size:1.12rem;margin-bottom:8px;}
   .formats p{color:var(--ink-soft);font-size:0.95rem;}
-  .formats p.format-soon{font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-size:0.75rem;margin-top:8px;}
+  .formats p.format-soon{font-family:var(--font-mono);font-size:0.75rem;margin-top:8px;}
   .tool-list{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(250px,100%),1fr));gap:0 40px;border-top:1px solid var(--ink);}
-  .tool-list a{display:flex;align-items:center;gap:14px;min-height:56px;padding:12px 0;border-bottom:1px solid var(--rule);text-decoration:none;color:inherit;}
+  .tool-list a{display:flex;align-items:center;gap:16px;min-height:56px;padding:12px 0;border-bottom:1px solid var(--rule);text-decoration:none;color:inherit;}
   .tool-list a:hover span{color:var(--succeeded);}
   .tool-row-icon{width:22px;height:22px;flex-shrink:0;color:var(--succeeded);}
   .about{display:flex;flex-wrap:wrap;gap:48px;}
   .about-text{flex:1 1 520px;min-width:0;}
-  .about-text h2{font-weight:500;font-size:1.7rem;margin-bottom:18px;}
-  .about-text p{margin-bottom:14px;max-width:640px;}
+  .about-text h2{font-weight:500;font-size:1.7rem;margin-bottom:20px;}
+  .about-text p{margin-bottom:16px;max-width:640px;}
   .about-text p a{color:var(--succeeded);}
-  .kicker{font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--succeeded);margin-bottom:10px !important;}
+  .kicker{font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--succeeded);margin-bottom:12px !important;}
   .cred-list{flex:1 1 320px;min-width:0;border-top:1px solid var(--ink);align-self:flex-start;}
-  .cred-list a{display:flex;align-items:baseline;gap:18px;min-height:52px;padding:14px 0;border-bottom:1px solid var(--rule);text-decoration:none;color:inherit;}
+  .cred-list a{display:flex;align-items:baseline;gap:20px;min-height:52px;padding:16px 0;border-bottom:1px solid var(--rule);text-decoration:none;color:inherit;}
   .cred-list a:hover{color:var(--succeeded);}
-  .cred-code{font-family:'JetBrains Mono','JetBrains Mono Fallback',monospace;font-weight:600;color:var(--succeeded);min-width:76px;}
+  .cred-code{font-family:var(--font-mono);font-weight:600;color:var(--succeeded);min-width:76px;}
   @media(max-width:900px){
     .hero{grid-template-columns:1fr;gap:36px;}
   }
   @media(max-width:640px){
-    .hero{padding:44px 22px 48px;}
+    .hero{padding:44px 24px 48px;}
     .post-list a{grid-template-columns:24px minmax(0,1fr);}
     .post-list .post-format{grid-column:2;}
     .post-list .post-title{grid-column:2;}
@@ -396,7 +398,7 @@
 <section class="hero">
   <div class="hero-text">
     <h1>Most flows get built. Fewer get <span class="accent">explained</span>.</h1>
-    <p class="sub">FlowNarrate takes real automations, AI agents and business systems and writes down what most builders skip: the reasoning behind each step. Right now that’s mostly Power Platform and Dynamics 365. The habit works on anything.</p>
+    <p class="sub">FlowNarrate writes down what most builders skip: the reasoning behind each step. Right now that’s mostly Power Platform and Dynamics 365, but the habit works on anything.</p>
     <div class="hero-ctas">
       <a href="narrating-an-approval-flow.html" class="btn btn-primary">Read a narration</a>
       <a href="what-is-flownarrate.html" class="btn btn-secondary">Why this exists</a>
@@ -439,7 +441,7 @@
       <li data-topics="automation"><a href="narrating-an-approval-flow.html">
         <svg class="post-row-icon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="2.2"/><path d="M7.2 12H11l4-5.5h4.5M11 12l4 5.5h4.5"/><circle cx="20" cy="6.5" r="0.4" fill="currentColor"/><circle cx="20" cy="17.5" r="0.4" fill="currentColor"/></svg>
         <span class="post-format">Flow Narration</span>
-        <span class="post-title">An approval flow, narrated: why each step exists, and where it breaks</span>
+        <span class="post-title">An approval flow, narrated</span>
         <time datetime="2026-08-30">30 Aug 2026</time>
       </a></li>
     </ul>
