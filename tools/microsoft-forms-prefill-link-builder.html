@@ -134,11 +134,11 @@
     <h2>Before you start</h2>
     <p>You need three things:</p>
     <ol>
-      <li><strong>A sample link from the form's owner.</strong> The person who made the form has to switch on pre-filled answers and send you one link. It takes them about two minutes. You can send them the message below.</li>
-      <li><strong>An AI chat</strong>, such as Microsoft Copilot, ChatGPT, Claude or Gemini, to write the answers. If you'd rather type the answers yourself, choose Advanced mode and you won't need one.</li>
-      <li><strong>A web browser.</strong> There's nothing to install and no account to make. If the form is only for people in your organisation, you'll sign in to it as usual when you open it.</li>
+      <li><strong>A sample link from the form’s owner.</strong> The person who made the form has to switch on pre-filled answers and send you one link. It takes them about two minutes. You can send them the message below.</li>
+      <li><strong>An AI chat</strong>, such as Microsoft Copilot, ChatGPT, Claude or Gemini, to write the answers. If you’d rather type the answers yourself, choose Advanced mode and you won’t need one.</li>
+      <li><strong>A web browser.</strong> There’s nothing to install and no account to make. If the form is only for people in your organisation, you’ll sign in to it as usual when you open it.</li>
     </ol>
-    <h3 class="pf-step-heading" id="pf-owner-label">Message for the form's owner</h3>
+    <h3 class="pf-step-heading" id="pf-owner-label">Message for the form’s owner</h3>
     <pre id="pf-owner-message" class="mermaid-code pf-box" tabindex="0" aria-labelledby="pf-owner-label">Hi,
 
 Could you send me a pre-filled link for your Microsoft Form? It lets me load all my answers at once and check them before I submit. It takes about two minutes:
@@ -178,10 +178,10 @@ Thank you!</pre>
     <div class="expr-field">
       <label for="pf-sample">Sample pre-filled link</label>
       <textarea id="pf-sample" rows="4" aria-describedby="pf-sample-hint"></textarea>
-      <p class="pf-hint" id="pf-sample-hint">The form's owner makes this in Microsoft Forms: the "..." menu, Get Pre-filled URL, switch on Enable pre-filled answers, answer every question with anything, then Get Prefilled Link. You only need it once per form.</p>
+      <p class="pf-hint" id="pf-sample-hint">The form’s owner makes this in Microsoft Forms: the “...” menu, Get Pre-filled URL, switch on Enable pre-filled answers, answer every question with anything, then Get Prefilled Link. You only need it once per form.</p>
     </div>
     <div class="expr-field" data-pf-mode="basic">
-      <label for="pf-form-text">The form's questions and options (optional)</label>
+      <label for="pf-form-text">The form’s questions and options (optional)</label>
       <textarea id="pf-form-text" rows="5" aria-describedby="pf-form-text-hint"></textarea>
       <p class="pf-hint" id="pf-form-text-hint">Open the form, select all, copy, and paste here. The AI uses it to see the question wording and every option, so its answers match the form.</p>
     </div>
@@ -189,12 +189,12 @@ Thank you!</pre>
       <div class="expr-field">
         <label for="pf-titles">Question titles, one per line, in form order (optional)</label>
         <textarea id="pf-titles" rows="4" aria-describedby="pf-titles-hint"></textarea>
-        <p class="pf-hint" id="pf-titles-hint">Used as labels, so you hear "Question 2: Did you attend alone?" rather than just "Question 2".</p>
+        <p class="pf-hint" id="pf-titles-hint">Used as labels, so you hear “Question 2: Did you attend alone?” rather than just “Question 2”.</p>
       </div>
       <div class="expr-field">
         <label for="pf-file">Or load a file of answers (.txt or .md)</label>
         <input type="file" id="pf-file" accept=".txt,.md,text/plain,text/markdown" onchange="pfLoadFile(this)" aria-describedby="pf-file-hint">
-        <p class="pf-hint" id="pf-file-hint">One line "Sample link: " followed by the link, then one line per answer: "Question 1: Yes". Loading it reads the questions and fills in the answers.</p>
+        <p class="pf-hint" id="pf-file-hint">One line “Sample link: ” followed by the link, then one line per answer: “Question 1: Yes”. Loading it reads the questions and fills in the answers.</p>
       </div>
     </div>
     <button type="button" class="copy-btn pf-primary" onclick="pfReadSample(true)">Read questions</button>
@@ -217,12 +217,12 @@ Thank you!</pre>
       <p class="pf-hint">Paste the prompt into a new chat in Copilot, ChatGPT, Claude or Gemini. It replies with your answers and a link.</p>
       </div>
 
-      <h2 class="pf-step-heading">Step 3: Paste the AI's reply <span class="pf-done" id="pf-reply-done" hidden>Done</span></h2>
-      <p class="pf-callout" id="pf-reply-before">Do step 2 first: copy the AI prompt and paste it into a new AI chat. Then paste the AI's whole reply here.</p>
+      <h2 class="pf-step-heading">Step 3: Paste the AI’s reply <span class="pf-done" id="pf-reply-done" hidden>Done</span></h2>
+      <p class="pf-callout" id="pf-reply-before">Do step 2 first: copy the AI prompt and paste it into a new AI chat. Then paste the AI’s whole reply here.</p>
       <div class="expr-field">
-        <label for="pf-reply">The AI's whole reply</label>
+        <label for="pf-reply">The AI’s whole reply</label>
         <textarea id="pf-reply" rows="6" aria-describedby="pf-reply-hint"></textarea>
-        <p class="pf-hint" id="pf-reply-hint">The tool reads the link out of the reply, checks every answer against the form, and fixes what it can. If there's no link, it builds one from the answers.</p>
+        <p class="pf-hint" id="pf-reply-hint">The tool reads the link out of the reply, checks every answer against the form, and fixes what it can. If there’s no link, it builds one from the answers.</p>
       </div>
       <button type="button" class="copy-btn pf-primary" onclick="pfCheckReply()">Check the reply</button>
       <p id="pf-reply-status" class="pf-hint" role="status"></p>
@@ -240,7 +240,7 @@ Thank you!</pre>
       <div class="expr-field">
         <label for="pf-paste">Paste all answers at once (optional)</label>
         <textarea id="pf-paste" rows="6" aria-describedby="pf-paste-hint"></textarea>
-        <p class="pf-hint" id="pf-paste-hint">Each answer starts on a new line with "Question", its number and a colon, for example "Question 3: Radio". Copy the prompt to get answers from an AI in this format.</p>
+        <p class="pf-hint" id="pf-paste-hint">Each answer starts on a new line with “Question”, its number and a colon, for example “Question 3: Radio”. Copy the prompt to get answers from an AI in this format.</p>
       </div>
       <button type="button" class="copy-btn" onclick="pfFillFromPaste()">Fill the answer boxes</button>
       <button type="button" class="copy-btn pf-copy" onclick="pfCopyPrompt()">Copy a prompt for an AI</button>
@@ -254,7 +254,7 @@ Thank you!</pre>
       <a id="pf-open" class="pf-open" href="#" target="_blank" rel="noopener noreferrer"><span id="pf-open-text">Open the pre-filled form</span><span class="sr-only"> (opens in a new tab)</span></a>
       <button type="button" class="copy-btn pf-copy" onclick="pfCopyLink()">Copy link</button>
       <p id="pf-link-status" class="pf-hint" role="status"></p>
-      <p class="pf-hint">Check every answer in the form before you press Submit. An answer that doesn't match an option exactly is left blank, without any warning.</p>
+      <p class="pf-hint">Check every answer in the form before you press Submit. An answer that doesn’t match an option exactly is left blank, without any warning.</p>
       <p class="pf-label" id="pf-link-label">The link</p>
       <pre id="pf-link" class="mermaid-code pf-box pf-collapsed" tabindex="0" aria-labelledby="pf-link-label"></pre>
       <button type="button" class="copy-btn" aria-controls="pf-link" aria-expanded="false" data-more="Show the whole link" data-less="Show less" onclick="pfToggleBox(this)">Show the whole link</button>
@@ -271,7 +271,7 @@ Thank you!</pre>
 
     <div id="pf-step4" data-pf-mode="advanced" data-pf-after-read="true" hidden>
       <h2 class="pf-step-heading">Optional: Length test</h2>
-      <p class="pf-hint">Makes test links from about 2,000 to 32,000 characters. Open them shortest first. The longest one where the form opens and the answer ends with "End of test" is your limit. Test links never submit anything; close the tab without submitting.</p>
+      <p class="pf-hint">Makes test links from about 2,000 to 32,000 characters. Open them shortest first. The longest one where the form opens and the answer ends with “End of test” is your limit. Test links never submit anything; close the tab without submitting.</p>
       <div class="expr-field" style="margin-top:14px;">
         <label for="pf-test-question">Make the link longer using</label>
         <select id="pf-test-question"></select>
@@ -288,22 +288,22 @@ Thank you!</pre>
 <section>
   <div class="tool-guide">
     <h2>How to use it</h2>
-    <p>The tool opens on one of four examples, picked at random: a team away day, customer feedback, a course evaluation and an event booking. Each is a made-up form with today's date, and its link opens a stand-in form that shows the answers filled in, so you can try every step without touching a real form. When you're ready, choose <strong>Start with your own form</strong>.</p>
+    <p>The tool opens on one of four examples, picked at random: a team away day, customer feedback, a course evaluation and an event booking. Each is a made-up form with today’s date, and its link opens a stand-in form that shows the answers filled in, so you can try every step without touching a real form. When you’re ready, choose <strong>Start with your own form</strong>.</p>
     <p><strong>Basic mode</strong> lets an AI do the writing:</p>
     <ol>
-      <li>Ask the form's owner for one pre-filled link with every question answered. Dummy answers such as "test" are fine. Paste it into step 1, and paste the form's text too if you can (open the form, select all, copy). Choose Read questions.</li>
+      <li>Ask the form’s owner for one pre-filled link with every question answered. Dummy answers such as “test” are fine. Paste it into step 1, and paste the form’s text too if you can (open the form, select all, copy). Choose Read questions.</li>
       <li>Write your notes in your own words and choose Copy AI prompt. Paste the prompt into Copilot, ChatGPT, Claude or Gemini.</li>
-      <li>Paste the AI's whole reply into step 3 and choose Check the reply. The tool reads the link, lists every answer under its question, and fixes hidden-space mistakes.</li>
+      <li>Paste the AI’s whole reply into step 3 and choose Check the reply. The tool reads the link, lists every answer under its question, and fixes hidden-space mistakes.</li>
       <li>Choose Open the pre-filled form. Check each answer, change anything that is wrong, then submit it yourself.</li>
     </ol>
     <p><strong>Advanced mode</strong> is for typing the answers yourself, pasting them all at once, or loading them from a text or Markdown file. It also has copy buttons for answers too long for the link, and a test to find how long a link the form accepts.</p>
-    <p>Choice answers must match the form's options exactly, and an option the owner typed with a stray space keeps a hidden character that has to match too. When the sample link used an option, the tool copies it exactly. Grid (Likert) questions can only use columns that appear somewhere in the sample link, so when making the sample, use every column at least once. File upload questions cannot be pre-filled.</p>
+    <p>Choice answers must match the form’s options exactly, and an option the owner typed with a stray space keeps a hidden character that has to match too. When the sample link used an option, the tool copies it exactly. Grid (Likert) questions can only use columns that appear somewhere in the sample link, so when making the sample, use every column at least once. File upload questions cannot be pre-filled.</p>
     <p>Pre-filled links are a standard Microsoft Forms feature. The form owner has to switch them on, and the form always waits for you to submit. Nothing you type here is sent anywhere by the tool, which runs entirely in your browser.</p>
     <h2>Microsoft sources</h2>
     <ul>
       <li><a href="https://learn.microsoft.com/en-us/answers/questions/5392181/microsoft-form-pre-fill-responses" target="_blank" rel="noopener">Microsoft Form pre-fill responses (Microsoft Q&amp;A)<span class="sr-only"> (opens in a new tab)</span></a></li>
       <li><a href="https://support.microsoft.com/office/form-question-response-and-character-limits-in-microsoft-forms-ec15323d-92a4-4c33-bf88-3fdb9e5b5fea" target="_blank" rel="noopener">Form, question, response, and character limits in Microsoft Forms<span class="sr-only"> (opens in a new tab)</span></a></li>
-      <li><a href="https://learn.microsoft.com/en-us/connectors/microsoftforms/#known-issues-and-limitations" target="_blank" rel="noopener">Microsoft Forms connector: known issues and limitations<span class="sr-only"> (opens in a new tab)</span></a>, which shows the connector reads responses but can't submit them</li>
+      <li><a href="https://learn.microsoft.com/en-us/connectors/microsoftforms/#known-issues-and-limitations" target="_blank" rel="noopener">Microsoft Forms connector: known issues and limitations<span class="sr-only"> (opens in a new tab)</span></a>, which shows the connector reads responses but can’t submit them</li>
       <li><a href="https://learn.microsoft.com/office365/servicedescriptions/microsoft-forms-service-description" target="_blank" rel="noopener">Microsoft Forms service description<span class="sr-only"> (opens in a new tab)</span></a></li>
     </ul>
   </div>
@@ -386,7 +386,7 @@ Thank you!</pre>
       <svg class="card-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="7" ry="2.8"/><path d="M5 6v12c0 1.6 3.1 2.8 7 2.8s7-1.2 7-2.8V6"/><path d="M5 12c0 1.6 3.1 2.8 7 2.8s7-1.2 7-2.8"/></svg>
       <div class="meta">Dataverse · Dynamics 365</div>
       <h3>FetchXML builder</h3>
-      <p>Dataverse's own query language, for List rows or Advanced Find.</p>
+      <p>Dataverse’s own query language, for List rows or Advanced Find.</p>
     </a>
     <a href="../tools.html" class="post post-live">
       <div class="meta">All tools</div>

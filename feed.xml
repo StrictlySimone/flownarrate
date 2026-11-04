@@ -24,7 +24,7 @@
       <description>A shared Dataverse mailbox (do-not-reply, notifications, accounts) needs to send email, but no one signs into it. Two errors you'll hit setting this up, and the second one needs the Web API, not the UI.</description>
     </item>
     <item>
-      <title>An approval flow, narrated: why each step exists, and where it breaks</title>
+      <title>An approval flow, narrated</title>
       <link>https://www.flownarrate.com/narrating-an-approval-flow.html</link>
       <guid isPermaLink="true">https://www.flownarrate.com/narrating-an-approval-flow.html</guid>
       <pubDate>Sun, 30 Aug 2026 09:00:00 +0000</pubDate>
