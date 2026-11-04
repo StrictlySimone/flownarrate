@@ -62,13 +62,13 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   outline-offset:2px;
 }
 .skip-link{
-  position:absolute;left:-9999px;top:0;
+  position:absolute;left:12px;top:-200px;
   background:var(--ink);color:var(--paper);
   padding:12px 20px;z-index:100;
   font-family:var(--font-mono);font-size:0.85rem;
   text-decoration:none;
 }
-.skip-link:focus{left:12px;top:12px;}
+.skip-link:focus{top:12px;}
 .sr-only{
   position:absolute;width:1px;height:1px;padding:0;margin:-1px;
   overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
@@ -284,7 +284,6 @@ h1{
   max-width:760px;
   letter-spacing:-0.01em;
 }
-h1 .accent{color:var(--succeeded);font-style:italic;}
 .hero p.sub{
   margin-top:24px;
   max-width:440px;
@@ -590,3 +589,8 @@ summary{padding:12px 0;}
 .check-label{min-height:44px;}
 label:not(.check-label):has(> input[type="checkbox"], > input[type="radio"]){display:inline-flex;align-items:center;min-height:44px;}
 .expr-field input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), .expr-field select, .filter-row input, .filter-row select, .expr-row input{min-height:44px;}
+
+/* On very wide screens keep the content block capped and centred, like the home page */
+@media (min-width:1352px){
+  section:not(.hero), .hero[style*="max-width:none"]{padding-left:calc((100% - 1240px) / 2);padding-right:calc((100% - 1240px) / 2);}
+}

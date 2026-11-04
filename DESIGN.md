@@ -13,7 +13,7 @@ The site speaks the language of a flow's run history: "Run summary", "Succeeded"
 ## Colour
 
 - **Palette:** the "Run status" variables at the top of each page (`--paper`, `--ink`, `--ink-soft`, `--rule`, `--succeeded`, `--ok`, `--warning`, `--failed`). Use the variables, never raw hex, so light and dark mode both work.
-- **One accent:** `--succeeded` (plum in light, pink in dark) marks links, labels and the one emphasised word in a heading. `--ok`, `--warning` and `--failed` only appear where they carry a status meaning.
+- **One accent:** `--succeeded` (plum in light, pink in dark) marks links, labels and icons. Headings are plain roman text: no coloured or italic word (a single accent word in a heading is a common generated-design tell). `--ok`, `--warning` and `--failed` only appear where they carry a status meaning.
 - **Code blocks** stay dark in both themes (`--code-bg`, `--code-ink`, `--code-ok`), like a code editor. Highlights inside them use `--code-ok`, not `--ok`.
 
 ## Typography
@@ -63,14 +63,16 @@ Fixed from the audit:
 - The font stacks live in two tokens, `--font-serif` and `--font-mono`, declared once at `:root` (and in `assets/tools.css` for the tool pages). Use them, never write the stack out again.
 - Spacing in `margin`, `padding` and `gap` sits on a 4px scale (hairline 1px and 2px values excepted).
 - The remaining literal colours (`#fff` behind screenshots, the mask in the collapsed boxes) are tokens (`--shot-bg`, `--mask`), and the tool-row hover uses `--failed`.
+- Every heading is plain: the purple italic accent word on the home page, the tools page and the 13 tool pages was removed.
 - A plainer heading on the video page, a shorter first paragraph on the home page, and the approval post is titled "An approval flow, narrated" everywhere.
 - The two tables on the Forms post can be reached by keyboard.
+- The skip link is hidden above the screen, not 9999px to the left, and it appears on keyboard focus.
+- On screens wider than 1352px the tool pages' content is capped at 1240px and centred, like the home page.
 
 Kept on purpose, so a future audit does not undo them:
 
 - Uppercase, lightly spaced mono labels (nav, kickers, post formats, run summary). They are the Run status motif.
 - The small category labels above the tool cards, and the "About" kicker.
-- The italic accent word in the home page heading.
 - The left stripe on `.callout` and `.recreation` (a narrator's aside, see Callouts).
 - The status dots in the run summary, which mark a real state.
 - The lone "Forms pre-filled links" tile at the end of the home page tools list. The list is a grid, and 13 tools cannot fill any number of columns evenly. It resolves itself when the next tool is added. A CSS multi-column layout was tried and did not balance it.

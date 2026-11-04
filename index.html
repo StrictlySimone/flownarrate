@@ -130,13 +130,13 @@
     outline-offset:2px;
   }
   .skip-link{
-    position:absolute;left:-9999px;top:0;
+    position:absolute;left:12px;top:-200px;
     background:var(--ink);color:var(--paper);
     padding:12px 20px;z-index:100;
     font-family:var(--font-mono);font-size:0.85rem;
     text-decoration:none;
   }
-  .skip-link:focus{left:12px;top:12px;}
+  .skip-link:focus{top:12px;}
   .sr-only{
     position:absolute;width:1px;height:1px;padding:0;margin:-1px;
     overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
@@ -233,7 +233,6 @@
     max-width:760px;
     letter-spacing:-0.01em;
   }
-  h1 .accent{color:var(--succeeded);font-style:italic;}
   .hero p.sub{
     margin-top:24px;
     max-width:440px;
@@ -397,7 +396,7 @@
 
 <section class="hero">
   <div class="hero-text">
-    <h1>Most flows get built. Fewer get <span class="accent">explained</span>.</h1>
+    <h1>Most flows get built. Fewer get explained.</h1>
     <p class="sub">FlowNarrate writes down what most builders skip: the reasoning behind each step. Right now that’s mostly Power Platform and Dynamics 365, but the habit works on anything.</p>
     <div class="hero-ctas">
       <a href="narrating-an-approval-flow.html" class="btn btn-primary">Read a narration</a>
