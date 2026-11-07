@@ -47,6 +47,10 @@ The site speaks the language of a flow's run history: "Run summary", "Succeeded"
 - Every control is at least 44px tall, and keyboard focus is a visible plum outline.
 - On phones the menu button shows the word "Menu" next to the icon, and sections use 48px of vertical padding instead of 72px.
 
+## Screenshots
+
+- Screenshots in `figure img` have an 8px rounded corner, the hairline border and a soft shadow (`--shot-shadow`, stronger in dark mode). Calm and flat otherwise: no tilt, device frame or gradient. Rolled out page by page; the approval post is first.
+
 ## Video page
 
 - `video.html` uses the browser's own player with no autoplay or loop, the captions burned into the picture (no separate captions file, so nobody sees them twice), and the transcript (audio description marked in text) open by default under the player.
