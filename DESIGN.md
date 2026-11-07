@@ -49,7 +49,7 @@ The site speaks the language of a flow's run history: "Run summary", "Succeeded"
 
 ## Screenshots
 
-- Screenshots in `figure img` have an 8px rounded corner, the hairline border and a soft shadow (`--shot-shadow`, stronger in dark mode). Calm and flat otherwise: no tilt, device frame or gradient. Rolled out page by page; the approval post is first.
+- Screenshots in `figure img` have an 8px rounded corner, the hairline border and a soft shadow (`--shot-shadow`, stronger in dark mode). Calm and flat otherwise: no tilt, device frame or gradient. Used on every page with screenshots (posts, and tool pages through `assets/tools.css`).
 
 ## Video page
 
