@@ -10,6 +10,8 @@ import xml.dom.minidom as minidom
 
 ROOT = os.getcwd()
 BASE = "https://" + open("CNAME").read().strip()
+REQUIRE_ROBOTS = True  # every page has a robots meta tag
+HOME_AS_SLASH = True   # links to the homepage use "/", never index.html
 SKIP_DIRS = {".git", ".agents", ".claude", "node_modules", "anti-slop"}
 problems = []
 
@@ -57,7 +59,7 @@ for path in sorted(pages):
     robots = p.meta.get("robots", "")
     noindex = "noindex" in robots
     url = BASE + "/" + ("" if path == "index.html" else path)
-    if not robots: bad(path, "no robots meta tag")
+    if REQUIRE_ROBOTS and not robots: bad(path, "no robots meta tag")
     if not p.title.strip(): bad(path, "no <title>")
     if not p.meta.get("description"): bad(path, "no meta description")
     if noindex:
@@ -73,10 +75,10 @@ for path in sorted(pages):
         descs.setdefault(p.meta.get("description", ""), []).append(path)
     for im in p.imgs:
         if "alt" not in im: bad(path, f"image without alt: {im.get('src')}")
-    if re.search(r"https?://(?!www\.)" + re.escape(BASE.split('//www.')[-1]), html): bad(path, "uses the bare domain, not www")
+    if BASE.startswith("https://www.") and re.search(r"https?://(?!www\.)" + re.escape(BASE[len("https://www."):]), html): bad(path, "uses the bare domain, not www")
     for href in p.links:
-        if href in ("index.html", "./index.html", "/index.html"): bad(path, "links to index.html, use /")
-        if href.startswith(("http", "mailto:", "tel:", "#", "javascript:")): continue
+        if HOME_AS_SLASH and href in ("index.html", "./index.html", "/index.html"): bad(path, "links to index.html, use /")
+        if re.match(r"^([a-z][a-z0-9+.-]*:|#)", href): continue
         target = href.split("#")[0].split("?")[0]
         if not target: continue
         fs = os.path.join(os.path.dirname(path), target) if not target.startswith("/") else target.lstrip("/")
