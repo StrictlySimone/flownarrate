@@ -58,6 +58,7 @@ These run quietly in the background, so they are easy to forget. Treat them as p
 
 Run these on the branch, and fix anything they show, before asking Simone to confirm the merge:
 
+0. Run `python3 scripts/check_head.py` (head tags, one `<h1>`, canonical, sitemap, links, `alt` text). It also runs on GitHub after every push.
 1. Serve the site locally and open every changed page at 320, 375, 768 and 1280px wide, in light and dark mode: no sideways scrolling, no console errors.
 2. Run an accessibility scan (axe-core) on every changed page and fix every violation. Text contrast must be at least 4.5:1.
 3. Check that every internal link and image path still resolves, and that `sitemap.xml` and `feed.xml` parse (the command above) and list the pages you changed.
