@@ -51,6 +51,7 @@ These run quietly in the background, so they are easy to forget. Treat them as p
 - **`robots.txt`** keeps pointing at `https://www.flownarrate.com/sitemap.xml`. Do not block pages that should be indexed.
 - **`sitemap.xml`, `feed.xml`, `llms.txt`:** updated in the same commit as any page change (see the checklists above and the section below). A page missing from one of them is a bug.
 - **`_config.yml`:** repo-only files (rules, design notes, skills) stay in its `exclude` list so they are never published. Add any new repo-only file or folder there.
+- **No bookings yet:** Simone is not taking bookings, so do not add "book", "hire me", availability, pricing or booking-form wording or structured data. The only invitation is the existing LinkedIn "second pair of eyes" line.
 - **Social profiles:** only list accounts that are live and public. LinkedIn is the only social profile in `sameAs` for now. Do not mention or link TikTok or Instagram anywhere (pages, JSON-LD, `llms.txt`, feed) until Simone says they are public.
 
 ## Before you publish
