@@ -41,6 +41,18 @@ Do all of these in the same commit as the post itself.
 - **RSS feed:** every post has an `<item>`, newest first. When a post's title or description changes, update its `<item>` to match. When a post is removed, remove its `<item>`. Keep the `guid` unchanged for an existing post, or feed readers will show it again as new.
 - Both files must stay valid XML. After editing, check them with `python3 -c "import xml.dom.minidom as m; m.parse('sitemap.xml'); m.parse('feed.xml')"`.
 
+## SEO and behind-the-scenes files
+
+These run quietly in the background, so they are easy to forget. Treat them as part of every page change, not an extra.
+
+- **Per page `<head>`:** one `<title>` and one meta description that are unique to the page, a canonical URL on `https://www.flownarrate.com`, `og:*` and `twitter:*` tags, and `<meta name="robots" content="index, follow">` (`404.html` and `tools/example-form.html` are `noindex` and stay out of the sitemap). The `og:image` points at a file that exists in `images/`.
+- **One `<h1>` per page**, headings in order, descriptive `alt` text on content images (empty `alt` on decorative ones), and descriptive link text (never "click here").
+- **JSON-LD** matches the visible page: `BlogPosting` on posts, `WebApplication` and `BreadcrumbList` on tools, `ItemList` or `blogPost` on listing pages. Dates are ISO 8601 and agree with the `<time>` element and the sitemap.
+- **`robots.txt`** keeps pointing at `https://www.flownarrate.com/sitemap.xml`. Do not block pages that should be indexed.
+- **`sitemap.xml`, `feed.xml`, `llms.txt`:** updated in the same commit as any page change (see the checklists above and the section below). A page missing from one of them is a bug.
+- **`_config.yml`:** repo-only files (rules, design notes, skills) stay in its `exclude` list so they are never published. Add any new repo-only file or folder there.
+- **Social profiles:** only list accounts that are live and public. LinkedIn is the only social profile in `sameAs` for now. Do not mention or link TikTok or Instagram anywhere (pages, JSON-LD, `llms.txt`, feed) until Simone says they are public.
+
 ## Before you publish
 
 Run these on the branch, and fix anything they show, before asking Simone to confirm the merge:
